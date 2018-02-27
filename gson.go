@@ -11,7 +11,6 @@ import (
 )
 
 var (
-
 	// ErrorIndexOutOfRange represents index out of range error
 	ErrorIndexOutOfRange = errors.New("index out of range")
 
