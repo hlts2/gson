@@ -91,6 +91,13 @@ func decode(reader io.Reader, object *interface{}) error {
 	return nil
 }
 
+func isJson(object interface{}) bool {
+	if _, err := json.Marshal(object); err != nil {
+		return false
+	}
+	return true
+}
+
 // Indent converts json object to json string
 func (g *Goson) Indent(prefix, indent string) (string, error) {
 	return indentJSONString(g.jsonObject, prefix, indent)
