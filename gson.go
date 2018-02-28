@@ -369,3 +369,15 @@ func (r *Result) Bool() (bool, error) {
 		return false, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
+
+// MapInterface converts an interface{} to a map[string]interface{} and returns an error if types don't match.
+func (r *Result) MapInterface() (map[string]interface{}, error) {
+	const fn = "MapInterface"
+
+	switch r.object.(type) {
+	case map[string]interface{}:
+		return r.object.(map[string]interface{}), nil
+	default:
+		return map[string]interface{}{}, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	}
+}
