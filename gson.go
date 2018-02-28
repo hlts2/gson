@@ -418,6 +418,6 @@ func (r *Result) MapInterfaceSlice() ([]map[string]interface{}, error) {
 	case []map[string]interface{}:
 		return r.object.([]map[string]interface{}), nil
 	default:
-		return []map[string]interface{}{}, nil
+		return []map[string]interface{}{}, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
