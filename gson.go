@@ -109,6 +109,34 @@ func indentJSONString(object interface{}, prefix, indent string) (string, error)
 	return buf.String(), nil
 }
 
+// HasWithKeys returns bool if there is json value coresponding to keys
+func (g *Goson) HasWithKeys(keys ...string) bool {
+	var err error
+
+	jsonObject := g.jsonObject
+	for _, key := range keys {
+		jsonObject, err = search(jsonObject, key)
+		if err != nil {
+			return false
+		}
+	}
+	return true
+}
+
+// HasWithPath returns bool if there is json value coresponding to path
+func (g *Goson) HasWithPath(path string) bool {
+	var err error
+
+	jsonObject := g.jsonObject
+	for _, key := range strings.Split(path, ".") {
+		jsonObject, err = search(jsonObject, key)
+		if err != nil {
+			return false
+		}
+	}
+	return true
+}
+
 // Search returns json value corresponding to keys. keys represents key of hierarchy of json
 func (g *Goson) Search(keys ...string) (*Result, error) {
 	var err error
