@@ -128,7 +128,7 @@ func (g *Goson) HasWithPath(path string) bool {
 	var err error
 
 	jsonObject := g.jsonObject
-	for _, key := range strings.Split(path, ".") {
+	for _, key := range strings.Split(path, "/")[1:] {
 		jsonObject, err = search(jsonObject, key)
 		if err != nil {
 			return false
@@ -157,7 +157,7 @@ func (g *Goson) Path(path string) (*Result, error) {
 
 	jsonObject := g.jsonObject
 
-	for _, key := range strings.Split(path, ".") {
+	for _, key := range strings.Split(path, "/")[1:] {
 		if jsonObject, err = search(jsonObject, key); err != nil {
 			return nil, err
 		}
