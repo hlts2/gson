@@ -175,33 +175,22 @@ func (g *Goson) Path(path string) (*Result, error) {
 func search(object interface{}, key string) (interface{}, error) {
 	index, err := strconv.Atoi(key)
 	if err == nil {
-		switch object.(type) {
-		case []interface{}:
-		default:
-			return nil, ErrorNotArray
+		if v, ok := object.([]interface{}); ok {
+			if 0 <= index && index < len(v) {
+				return v[index], nil
+			}
+			return nil, ErrorIndexOutOfRange
 		}
-
-		v := object.([]interface{})
-
-		if 0 <= index && index < len(v) {
-			return v[index], nil
-		}
-
-		return nil, ErrorIndexOutOfRange
-	}
-
-	switch object.(type) {
-	case map[string]interface{}:
-	default:
 		return nil, ErrorNotArray
 	}
 
-	v, ok := object.(map[string]interface{})[key]
-	if !ok {
+	if m, ok := object.(map[string]interface{}); ok {
+		if v, ok := m[key]; ok {
+			return v, nil
+		}
 		return nil, ErrorInvalidJSONKey
 	}
-
-	return v, nil
+	return nil, ErrorNotMap
 }
 
 // Indent converts json object to json string
