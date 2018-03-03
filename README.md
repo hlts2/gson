@@ -1,5 +1,5 @@
 # gson
-gson is simple json parse library for go
+Simple Json Parse Library for Go
 
 ## Requirement
 Go 1.8
