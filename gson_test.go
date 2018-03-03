@@ -101,3 +101,17 @@ func TestNewGosonFromString(t *testing.T) {
 		}
 	}
 }
+
+func TestNewGosonFromByte(t *testing.T) {
+	for _, test := range newTests {
+		g, err := NewGosonFromByte([]byte(test.json))
+
+		if !test.CheckError(t, err) {
+			t.Error("")
+		}
+
+		if !test.CheckGoson(t, g) {
+			t.Error("")
+		}
+	}
+}
