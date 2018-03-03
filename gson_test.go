@@ -1,6 +1,7 @@
 package gson
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -12,7 +13,7 @@ type NewTest struct {
 
 type NewTests []NewTest
 
-func (n NewTest) CheckError(t *testing.T, err error) bool {
+func (n NewTest) CheckError(err error) bool {
 	if n.isErr && err != nil {
 		return true
 	}
@@ -24,7 +25,7 @@ func (n NewTest) CheckError(t *testing.T, err error) bool {
 	return false
 }
 
-func (n NewTest) CheckGoson(t *testing.T, g *Goson) bool {
+func (n NewTest) CheckGoson(g *Goson) bool {
 	if n.isGoson && g != nil {
 		return true
 	}
@@ -92,11 +93,11 @@ func TestNewGosonFromString(t *testing.T) {
 	for _, test := range newTests {
 		g, err := NewGosonFromString(test.json)
 
-		if !test.CheckError(t, err) {
+		if !test.CheckError(err) {
 			t.Error("")
 		}
 
-		if !test.CheckGoson(t, g) {
+		if !test.CheckGoson(g) {
 			t.Error("")
 		}
 	}
@@ -106,11 +107,25 @@ func TestNewGosonFromByte(t *testing.T) {
 	for _, test := range newTests {
 		g, err := NewGosonFromByte([]byte(test.json))
 
-		if !test.CheckError(t, err) {
+		if !test.CheckError(err) {
 			t.Error("")
 		}
 
-		if !test.CheckGoson(t, g) {
+		if !test.CheckGoson(g) {
+			t.Error("")
+		}
+	}
+}
+
+func TestNewGosonFromReader(t *testing.T) {
+	for _, test := range newTests {
+		g, err := NewGosonFromReader(strings.NewReader(test.json))
+
+		if !test.CheckError(err) {
+			t.Error("")
+		}
+
+		if !test.CheckGoson(g) {
 			t.Error("")
 		}
 	}
