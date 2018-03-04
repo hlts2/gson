@@ -1,6 +1,7 @@
 package gson
 
 import (
+	"reflect"
 	"strings"
 	"testing"
 )
@@ -8,7 +9,9 @@ import (
 type TestData struct {
 	json    string
 	isGoson bool
-	data    interface{}
+	path    string
+	keys    []string
+	object  interface{}
 	isErr   bool
 }
 
@@ -26,12 +29,23 @@ func (n TestData) CheckError(err error) bool {
 	return false
 }
 
-func (n TestData) CheckGoson(g *Goson) bool {
+func (n TestData) CheckGosonInstance(g *Goson) bool {
 	if n.isGoson && g != nil {
 		return true
 	}
 
 	if !n.isGoson && g == nil {
+		return true
+	}
+	return false
+}
+
+func (n TestData) CheckResultObject(result *Result) bool {
+	if result == nil && n.object == nil {
+		return true
+	}
+
+	if reflect.DeepEqual(n.object, result.object) {
 		return true
 	}
 	return false
@@ -98,7 +112,7 @@ func TestNewGosonFromString(t *testing.T) {
 			t.Error("")
 		}
 
-		if !test.CheckGoson(g) {
+		if !test.CheckGosonInstance(g) {
 			t.Error("")
 		}
 	}
@@ -112,7 +126,7 @@ func TestNewGosonFromByte(t *testing.T) {
 			t.Error("")
 		}
 
-		if !test.CheckGoson(g) {
+		if !test.CheckGosonInstance(g) {
 			t.Error("")
 		}
 	}
@@ -126,7 +140,103 @@ func TestNewGosonFromReader(t *testing.T) {
 			t.Error("")
 		}
 
-		if !test.CheckGoson(g) {
+		if !test.CheckGosonInstance(g) {
+			t.Error("")
+		}
+	}
+}
+
+var searchTests = TestDatas{
+	TestData{
+		json:   `{"name": "hlts2"}`,
+		keys:   []string{"name"},
+		path:   "/name",
+		object: "hlts2",
+		isErr:  false,
+	},
+	TestData{
+		json:   `[{"name": "hlts2"}]`,
+		keys:   []string{"0"},
+		path:   "/0",
+		object: map[string]interface{}{"name": "hlts2"},
+		isErr:  false,
+	},
+	TestData{
+		json:   `[{"name": "hlts2"}]`,
+		keys:   []string{"10"},
+		path:   "/10",
+		object: nil,
+		isErr:  true,
+	},
+	TestData{
+		json: `
+		{"friends": [
+      		{
+				"id": "0",
+				"name": "hiro"
+			},
+      		{
+				"id": "1",
+				"name": "hlts2"
+			}
+		]}
+		`,
+		keys:   []string{"friends"},
+		path:   "/friends",
+		object: []interface{}{map[string]interface{}{"id": "0", "name": "hiro"}, map[string]interface{}{"id": "1", "name": "hlts2"}},
+		isErr:  false,
+	},
+	TestData{
+		json: `
+		{"friends": [
+      		{
+        		"id": 0,
+				"name": "hiro"
+			},
+			{
+				"id": 1,
+				"name": "hiroto"
+			},
+			{
+				"id": 2,
+				"name": "hlts2"
+			}
+		]}
+		`,
+		keys:   []string{"friends", "100", "name"},
+		path:   "/friends/100/name",
+		object: nil,
+		isErr:  true,
+	},
+}
+
+func TestSearch(t *testing.T) {
+	for _, test := range searchTests {
+		g, _ := NewGosonFromString(test.json)
+
+		result, err := g.Search(test.keys...)
+
+		if !test.CheckError(err) {
+			t.Error("")
+		}
+
+		if !test.CheckResultObject(result) {
+			t.Error("")
+		}
+	}
+}
+
+func TestPath(t *testing.T) {
+	for _, test := range searchTests {
+		g, _ := NewGosonFromString(test.json)
+
+		result, err := g.Path(test.path)
+
+		if !test.CheckError(err) {
+			t.Error("")
+		}
+
+		if !test.CheckResultObject(result) {
 			t.Error("")
 		}
 	}
