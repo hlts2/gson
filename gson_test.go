@@ -5,15 +5,16 @@ import (
 	"testing"
 )
 
-type NewTest struct {
+type TestData struct {
 	json    string
 	isGoson bool
+	data    interface{}
 	isErr   bool
 }
 
-type NewTests []NewTest
+type TestDatas []TestData
 
-func (n NewTest) CheckError(err error) bool {
+func (n TestData) CheckError(err error) bool {
 	if n.isErr && err != nil {
 		return true
 	}
@@ -25,7 +26,7 @@ func (n NewTest) CheckError(err error) bool {
 	return false
 }
 
-func (n NewTest) CheckGoson(g *Goson) bool {
+func (n TestData) CheckGoson(g *Goson) bool {
 	if n.isGoson && g != nil {
 		return true
 	}
@@ -36,28 +37,28 @@ func (n NewTest) CheckGoson(g *Goson) bool {
 	return false
 }
 
-var newTests = NewTests{
-	NewTest{
+var newTests = TestDatas{
+	TestData{
 		json:    `1`,
 		isGoson: true,
 		isErr:   false,
 	},
-	NewTest{
+	TestData{
 		json:    `"2"`,
 		isGoson: true,
 		isErr:   false,
 	},
-	NewTest{
+	TestData{
 		json:    `{"picture": "http://hogehoge"}`,
 		isGoson: true,
 		isErr:   false,
 	},
-	NewTest{
+	TestData{
 		json:    `{afsf: adfaasf`,
 		isGoson: false,
 		isErr:   true,
 	},
-	NewTest{
+	TestData{
 		json: `
 		{"friends": [
       		{
@@ -77,12 +78,12 @@ var newTests = NewTests{
 		isGoson: true,
 		isErr:   false,
 	},
-	NewTest{
+	TestData{
 		json:    `[{"name": "little"}, {"name": "tiny"}]`,
 		isGoson: true,
 		isErr:   false,
 	},
-	NewTest{
+	TestData{
 		json:    `[{"name": "litt]`,
 		isGoson: false,
 		isErr:   true,
