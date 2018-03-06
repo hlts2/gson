@@ -382,6 +382,18 @@ func (r *Result) Complex128() (complex128, error) {
 	}
 }
 
+// String converts an interface{} to a string and returns an error if types don't match.
+func (r *Result) String() (string, error) {
+	const fn = "String"
+
+	switch r.object.(type) {
+	case string:
+		return r.object.(string), nil
+	default:
+		return "", &ResultError{fn, r.object, ErrorInvalidSyntax}
+	}
+}
+
 // Bool converts an interface{} to a bool and returns an error if types don't match.
 func (r *Result) Bool() (bool, error) {
 	const fn = "Bool"

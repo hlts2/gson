@@ -243,5 +243,4 @@ func TestPath(t *testing.T) {
 }
 
 func TestResult(t *testing.T) {
-
 }
