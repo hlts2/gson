@@ -11,7 +11,7 @@ type TestData struct {
 	isGoson bool
 	path    string
 	keys    []string
-	object  interface{}
+	result  *Result
 	isErr   bool
 }
 
@@ -41,11 +41,11 @@ func (n TestData) CheckGosonInstance(g *Goson) bool {
 }
 
 func (n TestData) CheckResultObject(result *Result) bool {
-	if result == nil && n.object == nil {
+	if result == nil && n.result == nil {
 		return true
 	}
 
-	if reflect.DeepEqual(n.object, result.object) {
+	if reflect.DeepEqual(n.result.object, result.object) {
 		return true
 	}
 	return false
@@ -151,21 +151,21 @@ var searchTests = TestDatas{
 		json:   `{"name": "hlts2"}`,
 		keys:   []string{"name"},
 		path:   "/name",
-		object: "hlts2",
+		result: &Result{"hlts2"},
 		isErr:  false,
 	},
 	TestData{
 		json:   `[{"name": "hlts2"}]`,
 		keys:   []string{"0"},
 		path:   "/0",
-		object: map[string]interface{}{"name": "hlts2"},
+		result: &Result{map[string]interface{}{"name": "hlts2"}},
 		isErr:  false,
 	},
 	TestData{
 		json:   `[{"name": "hlts2"}]`,
 		keys:   []string{"10"},
 		path:   "/10",
-		object: nil,
+		result: &Result{nil},
 		isErr:  true,
 	},
 	TestData{
@@ -183,7 +183,7 @@ var searchTests = TestDatas{
 		`,
 		keys:   []string{"friends"},
 		path:   "/friends",
-		object: []interface{}{map[string]interface{}{"id": "0", "name": "hiro"}, map[string]interface{}{"id": "1", "name": "hlts2"}},
+		result: &Result{[]interface{}{map[string]interface{}{"id": "0", "name": "hiro"}, map[string]interface{}{"id": "1", "name": "hlts2"}}},
 		isErr:  false,
 	},
 	TestData{
@@ -205,7 +205,7 @@ var searchTests = TestDatas{
 		`,
 		keys:   []string{"friends", "100", "name"},
 		path:   "/friends/100/name",
-		object: nil,
+		result: &Result{nil},
 		isErr:  true,
 	},
 }
@@ -240,6 +240,10 @@ func TestPath(t *testing.T) {
 			t.Error("")
 		}
 	}
+}
+
+var resultTests = TestDatas{
+	TestData{},
 }
 
 func TestResult(t *testing.T) {
