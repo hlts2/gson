@@ -207,11 +207,10 @@ func (r *Result) Uint8() (uint8, error) {
 	const fn = "Uint8"
 
 	switch r.object.(type) {
-	case uint8:
-		return r.object.(uint8), nil
-	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case int:
+		return uint8(r.object.(int)), nil
 	}
+	return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 }
 
 // Uint16 converts an interface{} to a uint16 and returns an error if types don't match.
@@ -219,8 +218,8 @@ func (r *Result) Uint16() (uint16, error) {
 	const fn = "Uint16"
 
 	switch r.object.(type) {
-	case uint16:
-		return r.object.(uint16), nil
+	case int:
+		return uint16(r.object.(int)), nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -231,8 +230,8 @@ func (r *Result) Uint32() (uint32, error) {
 	const fn = "Uint32"
 
 	switch r.object.(type) {
-	case uint32:
-		return r.object.(uint32), nil
+	case int:
+		return uint32(r.object.(int)), nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -243,8 +242,8 @@ func (r *Result) Uint64() (uint64, error) {
 	const fn = "Uint64"
 
 	switch r.object.(type) {
-	case uint64:
-		return r.object.(uint64), nil
+	case int:
+		return uint64(r.object.(int)), nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -255,8 +254,8 @@ func (r *Result) Int8() (int8, error) {
 	const fn = "Int8"
 
 	switch r.object.(type) {
-	case int8:
-		return r.object.(int8), nil
+	case int:
+		return int8(r.object.(int)), nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -267,8 +266,8 @@ func (r *Result) Int16() (int16, error) {
 	const fn = "Int16"
 
 	switch r.object.(type) {
-	case int16:
-		return r.object.(int16), nil
+	case int:
+		return int16(r.object.(int)), nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -279,8 +278,8 @@ func (r *Result) Int32() (int32, error) {
 	const fn = "Int32"
 
 	switch r.object.(type) {
-	case int32:
-		return r.object.(int32), nil
+	case int:
+		return int32(r.object.(int)), nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -291,8 +290,8 @@ func (r *Result) Int64() (int64, error) {
 	const fn = "Int64"
 
 	switch r.object.(type) {
-	case int64:
-		return r.object.(int64), nil
+	case int:
+		return int64(r.object.(int)), nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}

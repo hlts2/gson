@@ -361,6 +361,8 @@ func TestResult(t *testing.T) {
 			err = test.CheckResultConvert()
 
 			if !test.CheckError(err) {
+				fmt.Println(test.result)
+				fmt.Println(err)
 				t.Error("")
 			}
 		}
