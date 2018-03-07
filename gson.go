@@ -314,8 +314,8 @@ func (r *Result) Float32() (float32, error) {
 	const fn = "Float32"
 
 	switch r.object.(type) {
-	case float32:
-		return r.object.(float32), nil
+	case float64:
+		return float32(r.object.(float64)), nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -362,8 +362,8 @@ func (r *Result) Complex64() (complex64, error) {
 	const fn = "Complex64"
 
 	switch r.object.(type) {
-	case complex64:
-		return r.object.(complex64), nil
+	case complex128:
+		return complex64(r.object.(complex128)), nil
 	default:
 		return 0 + 0i, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}

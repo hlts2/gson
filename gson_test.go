@@ -354,17 +354,13 @@ var resultTests = TestDatas{
 
 func TestResult(t *testing.T) {
 
-	/*
-		var err error
+	var err error
 
-		for _, test := range resultTests {
-			err = test.CheckResultConvert()
+	for _, test := range resultTests {
+		err = test.CheckResultConvert()
 
-			if !test.CheckError(err) {
-				fmt.Println(test.result)
-				fmt.Println(err)
-				t.Error("")
-			}
+		if !test.CheckError(err) {
+			t.Error("")
 		}
-	*/
+	}
 }
