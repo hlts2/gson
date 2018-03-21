@@ -160,11 +160,17 @@ func (g *Goson) Search(keys ...string) (*Result, error) {
 
 // Path returns json value corresponding to path.
 func (g *Goson) Path(path string) (*Result, error) {
-	var err error
+	keys := strings.Split(path, "/")[1:]
 
+	//when accessed by "/"
+	if len(keys) == 1 && keys[0] == "" {
+		return &Result{g.jsonObject}, nil
+	}
+
+	var err error
 	jsonObject := g.jsonObject
 
-	for _, key := range strings.Split(path, "/")[1:] {
+	for _, key := range keys {
 		if jsonObject, err = search(jsonObject, key); err != nil {
 			return nil, err
 		}
