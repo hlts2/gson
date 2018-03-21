@@ -46,3 +46,5 @@ if g.HasWithPath(path) {
     fmt.Println(str)
 }
 ```
+
+Get Value（By Search）
