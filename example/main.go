@@ -8,7 +8,7 @@ import (
 )
 
 var jsonString = `
-{"name": "hlts2"}
+{"friends": [{"id": "1111", "name": "hlts2", "like": ["apple", "strawberry", "pineapple"]}, {"id": "2121", "name": "hiroto", "like": ["watermelon"]}]}
 `
 
 func main() {
@@ -17,9 +17,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	result, err := g.Path("/")
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(result)
+	result, _ := g.Path("/friends/1/like/0")
+	str, _ := result.String()
+	fmt.Println(str)
+
+	result, _ = g.Path("/friends")
+	fmt.Println(result.Indent("", " "))
 }
