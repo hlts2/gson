@@ -52,7 +52,7 @@ func (n TestData) CheckResultObject(result *Result) bool {
 	return false
 }
 
-func (n TestData) CheckResultConvert() error {
+func (n TestData) CheckTypeConversionOfResultObject() error {
 	var err error
 
 	switch n.objectType {
@@ -356,7 +356,7 @@ func TestResult(t *testing.T) {
 	var err error
 
 	for _, test := range resultTests {
-		err = test.CheckResultConvert()
+		err = test.CheckTypeConversionOfResultObject()
 
 		if !test.CheckError(err) {
 			t.Error("")
