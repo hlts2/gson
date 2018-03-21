@@ -353,7 +353,6 @@ var resultTests = TestDatas{
 }
 
 func TestResult(t *testing.T) {
-
 	var err error
 
 	for _, test := range resultTests {
