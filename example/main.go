@@ -17,8 +17,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	result, _ := g.Path("/friends/1/like/0")
-	str, _ := result.String()
+	result, err := g.Path("/friends/1/like/0")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	str, err := result.String()
+	if err != nil {
+		log.Fatal(err)
+	}
 	fmt.Println(str)
 
 	result, _ = g.Path("/friends")
