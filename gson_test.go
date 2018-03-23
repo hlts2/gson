@@ -146,7 +146,7 @@ func TestNewGosonFromString(t *testing.T) {
 		g, err := NewGosonFromString(test.json)
 
 		if !test.CheckError(err) {
-			t.Error("")
+			t.Error(err)
 		}
 
 		if !test.CheckGosonInstance(g) {
@@ -254,7 +254,7 @@ func TestSearch(t *testing.T) {
 		result, err := g.Search(test.keys...)
 
 		if !test.CheckError(err) {
-			t.Error("")
+			t.Error(err)
 		}
 
 		if !test.CheckResultObject(result) {
@@ -270,7 +270,7 @@ func TestPath(t *testing.T) {
 		result, err := g.Path(test.path)
 
 		if !test.CheckError(err) {
-			t.Error("")
+			t.Error(err)
 		}
 
 		if !test.CheckResultObject(result) {
