@@ -35,7 +35,7 @@ type ResultError struct {
 }
 
 func (e *ResultError) Error() string {
-	return "goson." + e.Fn + ": parsing " + Quote(e.Object) + ": " + e.Err.Error()
+	return "Gson." + e.Fn + ": parsing " + Quote(e.Object) + ": " + e.Err.Error()
 }
 
 // Quote returns quoted object string
@@ -48,14 +48,14 @@ type Result struct {
 	object interface{}
 }
 
-// Goson is goson base struct
-type Goson struct {
+// Gson is gson base struct
+type Gson struct {
 	jsonObject interface{}
 }
 
-// NewGosonFromByte returns Goson instance created from byte array
-func NewGosonFromByte(data []byte) (*Goson, error) {
-	g := new(Goson)
+// NewGsonFromByte returns Gson instance created from byte array
+func NewGsonFromByte(data []byte) (*Gson, error) {
+	g := new(Gson)
 
 	if err := decode(bytes.NewReader(data), &g.jsonObject); err != nil {
 		return nil, err
@@ -63,9 +63,9 @@ func NewGosonFromByte(data []byte) (*Goson, error) {
 	return g, nil
 }
 
-// NewGosonFromString returns Goson instance created from string
-func NewGosonFromString(data string) (*Goson, error) {
-	g := new(Goson)
+// NewGsonFromString returns Gson instance created from string
+func NewGsonFromString(data string) (*Gson, error) {
+	g := new(Gson)
 
 	if err := decode(strings.NewReader(data), &g.jsonObject); err != nil {
 		return nil, err
@@ -73,9 +73,9 @@ func NewGosonFromString(data string) (*Goson, error) {
 	return g, nil
 }
 
-// NewGosonFromReader returns Goson instance created from io.Reader
-func NewGosonFromReader(reader io.Reader) (*Goson, error) {
-	g := new(Goson)
+// NewGsonFromReader returns Gson instance created from io.Reader
+func NewGsonFromReader(reader io.Reader) (*Gson, error) {
+	g := new(Gson)
 
 	if err := decode(reader, &g.jsonObject); err != nil {
 		return nil, err
@@ -99,7 +99,7 @@ func isJSON(object interface{}) bool {
 }
 
 // Indent converts json object to json string
-func (g *Goson) Indent(prefix, indent string) (string, error) {
+func (g *Gson) Indent(prefix, indent string) (string, error) {
 	return indentJSONString(g.jsonObject, prefix, indent)
 }
 
@@ -117,7 +117,7 @@ func indentJSONString(object interface{}, prefix, indent string) (string, error)
 }
 
 // HasWithKeys returns bool if there is json value coresponding to keys
-func (g *Goson) HasWithKeys(keys ...string) bool {
+func (g *Gson) HasWithKeys(keys ...string) bool {
 	var err error
 
 	jsonObject := g.jsonObject
@@ -131,7 +131,7 @@ func (g *Goson) HasWithKeys(keys ...string) bool {
 }
 
 // HasWithPath returns bool if there is json value coresponding to path
-func (g *Goson) HasWithPath(path string) bool {
+func (g *Gson) HasWithPath(path string) bool {
 	var err error
 
 	jsonObject := g.jsonObject
@@ -145,7 +145,7 @@ func (g *Goson) HasWithPath(path string) bool {
 }
 
 // Search returns json value corresponding to keys. keys represents key of hierarchy of json
-func (g *Goson) Search(keys ...string) (*Result, error) {
+func (g *Gson) Search(keys ...string) (*Result, error) {
 	var err error
 
 	jsonObject := g.jsonObject
@@ -159,7 +159,7 @@ func (g *Goson) Search(keys ...string) (*Result, error) {
 }
 
 // Path returns json value corresponding to path.
-func (g *Goson) Path(path string) (*Result, error) {
+func (g *Gson) Path(path string) (*Result, error) {
 	keys := strings.Split(path, "/")[1:]
 
 	//when accessed by "/"
