@@ -241,6 +241,33 @@ func TestHasWithPath(t *testing.T) {
 			path: "1",
 			has:  true,
 		},
+		{
+			json: `
+				{"friends": [
+      				{
+        				"id": 0,
+						"name": "hiro"
+					},
+					{
+						"id": 1,
+						"name": "hiroto"
+					},
+					{
+						"id": 2,
+						"name": "hlts2"
+					}
+				]}
+			`,
+			path: "/friends/2/id",
+			has:  true,
+		},
+		{
+			json: `
+				{"name": "hlts2"}
+			`,
+			path: "/nameeeee",
+			has:  false,
+		},
 	}
 
 	for _, test := range tests {
