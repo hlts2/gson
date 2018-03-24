@@ -229,3 +229,27 @@ func TestSearch(t *testing.T) {
 		}
 	}
 }
+
+func TestHasWithPath(t *testing.T) {
+	tests := []struct {
+		json string
+		path string
+		has  bool
+	}{
+		{
+			json: `1`,
+			path: "1",
+			has:  true,
+		},
+	}
+
+	for _, test := range tests {
+		g, _ := NewGsonFromString(test.json)
+
+		has := g.HasWithPath(test.path)
+
+		if test.has != has {
+			t.Errorf("HasWithPath(%v) Expected: %v, got: %v", test.path, test.has, has)
+		}
+	}
+}
