@@ -280,3 +280,75 @@ func TestHasWithPath(t *testing.T) {
 		}
 	}
 }
+
+func TestHasWithKeys(t *testing.T) {
+	tests := []struct {
+		json string
+		keys []string
+		has  bool
+	}{
+		{
+			json: `1`,
+			keys: []string{"1"},
+			has:  true,
+		},
+		{
+			json: `
+				{"friends": [
+      				{
+        				"id": 0,
+						"name": "hiro"
+					},
+					{
+						"id": 1,
+						"name": "hiroto"
+					},
+					{
+						"id": 2,
+						"name": "hlts2"
+					}
+				]}
+			`,
+			keys: []string{"friends", "2", "id"},
+			has:  true,
+		},
+		{
+			json: `
+				{"name": "hlts2"}
+			`,
+			keys: []string{"nameeeee"},
+			has:  false,
+		},
+	}
+
+	for _, test := range tests {
+		g, _ := NewGsonFromString(test.json)
+
+		has := g.HasWithKeys(test.keys...)
+
+		if test.has != has {
+			t.Errorf("HasWithKeys(%v) Expected: %v, got: %v", test.keys, test.has, has)
+		}
+	}
+}
+
+func TestIndent(t *testing.T) {
+	jsonString := `{"friends": [{"name": "hlts2"}, {"name": "hiroto"}]}`
+	expectedJSONString := `{
+"friends": [
+   {
+    "name": "hlts2"
+   },
+   {
+    "name": "hiroto"
+   }
+  ]
+}
+	`
+	g, _ := NewGsonFromString(jsonString)
+
+	actualJSONString, _ := g.Indent("", " ")
+	if expectedJSONString != actualJSONString {
+		t.Errorf("expected: %v, got: %v", expectedJSONString, actualJSONString)
+	}
+}
