@@ -346,8 +346,8 @@ func TestIndent(t *testing.T) {
 }`
 	g, _ := NewGsonFromString(jsonString)
 
-	actualJSONString, _ := g.Indent("", " ")
-	if expectedJSONString != actualJSONString {
-		t.Errorf("expected: %v, got: %v", expectedJSONString, actualJSONString)
+	gotJSONString, _ := g.Indent("", " ")
+	if expectedJSONString != gotJSONString {
+		t.Errorf("expected: %v, got: %v", expectedJSONString, gotJSONString)
 	}
 }
