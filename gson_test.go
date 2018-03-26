@@ -239,7 +239,7 @@ func TestHasWithPath(t *testing.T) {
 		{
 			json: `1`,
 			path: "1",
-			has:  true,
+			has:  false,
 		},
 		{
 			json: `
@@ -258,14 +258,14 @@ func TestHasWithPath(t *testing.T) {
 					}
 				]}
 			`,
-			path: "/friends/2/id",
+			path: "friends.2.id",
 			has:  true,
 		},
 		{
 			json: `
 				{"name": "hlts2"}
 			`,
-			path: "/nameeeee",
+			path: "nameeeee",
 			has:  false,
 		},
 	}
@@ -290,7 +290,7 @@ func TestHasWithKeys(t *testing.T) {
 		{
 			json: `1`,
 			keys: []string{"1"},
-			has:  true,
+			has:  false,
 		},
 		{
 			json: `
@@ -335,16 +335,15 @@ func TestHasWithKeys(t *testing.T) {
 func TestIndent(t *testing.T) {
 	jsonString := `{"friends": [{"name": "hlts2"}, {"name": "hiroto"}]}`
 	expectedJSONString := `{
-"friends": [
-   {
-    "name": "hlts2"
-   },
-   {
-    "name": "hiroto"
-   }
-  ]
-}
-	`
+ "friends": [
+  {
+   "name": "hlts2"
+  },
+  {
+   "name": "hiroto"
+  }
+ ]
+}`
 	g, _ := NewGsonFromString(jsonString)
 
 	actualJSONString, _ := g.Indent("", " ")
