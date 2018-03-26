@@ -276,7 +276,7 @@ func TestHasWithPath(t *testing.T) {
 		has := g.HasWithPath(test.path)
 
 		if test.has != has {
-			t.Errorf("HasWithPath(%v) Expected: %v, got: %v", test.path, test.has, has)
+			t.Errorf("HasWithPath(%v) expected: %v, got: %v", test.path, test.has, has)
 		}
 	}
 }
@@ -327,7 +327,7 @@ func TestHasWithKeys(t *testing.T) {
 		has := g.HasWithKeys(test.keys...)
 
 		if test.has != has {
-			t.Errorf("HasWithKeys(%v) Expected: %v, got: %v", test.keys, test.has, has)
+			t.Errorf("HasWithKeys(%v) expected: %v, got: %v", test.keys, test.has, has)
 		}
 	}
 }
