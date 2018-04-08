@@ -122,7 +122,7 @@ func (g *Gson) HasWithKeys(keys ...string) bool {
 
 	jsonObject := g.jsonObject
 	for _, key := range keys {
-		jsonObject, err = search(jsonObject, key)
+		jsonObject, err = getByKey(jsonObject, key)
 		if err != nil {
 			return false
 		}
@@ -136,7 +136,7 @@ func (g *Gson) HasWithPath(path string) bool {
 
 	jsonObject := g.jsonObject
 	for _, key := range strings.Split(path, ".") {
-		jsonObject, err = search(jsonObject, key)
+		jsonObject, err = getByKey(jsonObject, key)
 		if err != nil {
 			return false
 		}
@@ -150,7 +150,7 @@ func (g *Gson) GetByKeys(keys ...string) (*Result, error) {
 	jsonObject := g.jsonObject
 
 	for _, key := range keys {
-		if jsonObject, err = search(jsonObject, key); err != nil {
+		if jsonObject, err = getByKey(jsonObject, key); err != nil {
 			return nil, err
 		}
 	}
@@ -165,14 +165,14 @@ func (g *Gson) GetByPath(path string) (*Result, error) {
 	jsonObject := g.jsonObject
 
 	for _, key := range keys {
-		if jsonObject, err = search(jsonObject, key); err != nil {
+		if jsonObject, err = getByKey(jsonObject, key); err != nil {
 			return nil, err
 		}
 	}
 	return &Result{jsonObject}, nil
 }
 
-func search(object interface{}, key string) (interface{}, error) {
+func getByKey(object interface{}, key string) (interface{}, error) {
 	index, err := strconv.Atoi(key)
 	if err == nil {
 		if v, ok := object.([]interface{}); ok {
