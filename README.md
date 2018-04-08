@@ -11,31 +11,24 @@ go get github.com/hlts2/gson
 ## Example
 
 ### Get Value（By Path）
-Get searches json for specified path. A path is in "." syntax such as "friends".
+Get searches json for specified path. A path is in "." syntax such as "created_at.date".
 
-And for arrays, access by numbers such as "friends.0".
+And for arrays, access by numbers such as "likes.0".
 
 ```go
 var jsonString = `
 {
-    "friends": [
-        {
-            "id": "1111",
-            "name": "hlts2",
-            "like": [
-                "apple",
-                "strawberry",
-                "pineapple"
-            ]
-        },
-        {
-            "id": "2121",
-            "name": "hiroto",
-            "like": [
-                "watermelon"
-            ]
-        }
-    ]
+    "id": "1111",
+    "name": "hlts2",
+    "likes": [
+        "apple",
+        "strawberry",
+        "pineapple"
+    ],
+    "created_at": {
+        "date": "2017-05-10 12:54:18",
+        "timezone": "UTC"
+    }
 }
 `
 g, _ := gson.NewGosonFromString(jsonString)
