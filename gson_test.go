@@ -8,7 +8,6 @@ import (
 func TestNewGsonFromString(t *testing.T) {
 	tests := []struct {
 		json    string
-		want    *Gson
 		isError bool
 	}{
 		{
@@ -158,19 +157,13 @@ func TestGetByPath(t *testing.T) {
 	}{
 		{
 			json:     `{"name": "hlts2"}`,
-			path:     "/name",
+			path:     "name",
 			expected: &Result{"hlts2"},
 			isError:  false,
 		},
 		{
 			json:     `[{"name": "hlts2"}]`,
-			path:     "/0",
-			expected: &Result{map[string]interface{}{"name": "hlts2"}},
-			isError:  false,
-		},
-		{
-			json:     `[{"name": "hlts2"}]`,
-			path:     "/10",
+			path:     "10",
 			expected: nil,
 			isError:  true,
 		},
@@ -187,7 +180,7 @@ func TestGetByPath(t *testing.T) {
 					}
 				]}
 			`,
-			path: "/friends",
+			path: "friends",
 			expected: &Result{[]interface{}{
 				map[string]interface{}{"id": "0", "name": "hiro"},
 				map[string]interface{}{"id": "1", "name": "hlts2"}},
@@ -211,7 +204,7 @@ func TestGetByPath(t *testing.T) {
 					}
 				]}
 			`,
-			path:     "/friends/100/name",
+			path:     "friends.100.name",
 			expected: nil,
 			isError:  true,
 		},

@@ -147,7 +147,6 @@ func (g *Gson) HasWithPath(path string) bool {
 // GetByKeys returns json value corresponding to keys. keys represents key of hierarchy of json
 func (g *Gson) GetByKeys(keys ...string) (*Result, error) {
 	var err error
-
 	jsonObject := g.jsonObject
 
 	for _, key := range keys {
