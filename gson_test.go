@@ -68,7 +68,7 @@ func TestNewGsonFromString(t *testing.T) {
 	}
 }
 
-func TestPath(t *testing.T) {
+func TestGetByKeys(t *testing.T) {
 	tests := []struct {
 		json     string
 		keys     []string
@@ -139,17 +139,17 @@ func TestPath(t *testing.T) {
 	for _, test := range tests {
 		g, _ := NewGsonFromString(test.json)
 
-		result, err := g.SearchByKeys(test.keys...)
+		result, err := g.GetByKeys(test.keys...)
 
 		isError := !(err == nil)
 
 		if test.isError != isError && reflect.DeepEqual(test.expected, result) {
-			t.Errorf("Search(%v) isExpectedError: %v, expected: %v, got: %v", test.keys, test.isError, test.expected, result)
+			t.Errorf("Search(%v) isExpectedError: %v, expected object: %v, got: %v", test.keys, test.isError, test.expected, result)
 		}
 	}
 }
 
-func TestSearch(t *testing.T) {
+func TestGetByPath(t *testing.T) {
 	tests := []struct {
 		json     string
 		path     string
@@ -220,12 +220,12 @@ func TestSearch(t *testing.T) {
 	for _, test := range tests {
 		g, _ := NewGsonFromString(test.json)
 
-		result, err := g.SearchByPath(test.path)
+		result, err := g.GetByPath(test.path)
 
 		isError := !(err == nil)
 
 		if test.isError != isError && reflect.DeepEqual(test.expected, result) {
-			t.Errorf("Search(%v) isExpectedError: %v, expected: %v, got: %v", test.path, test.isError, test.expected, result)
+			t.Errorf("Search(%v) isExpectedError: %v, expected object: %v, got: %v", test.path, test.isError, test.expected, result)
 		}
 	}
 }
@@ -335,15 +335,15 @@ func TestHasWithKeys(t *testing.T) {
 func TestIndent(t *testing.T) {
 	jsonString := `{"friends": [{"name": "hlts2"}, {"name": "hiroto"}]}`
 	expectedJSONString := `{
- "friends": [
-  {
-   "name": "hlts2"
-  },
-  {
-   "name": "hiroto"
-  }
- ]
-}`
+		"friends": [
+			{
+   				"name": "hlts2"
+  			},
+  			{
+   				"name": "hiroto"
+  			}
+ 		]
+	}`
 	g, _ := NewGsonFromString(jsonString)
 
 	gotJSONString, _ := g.Indent("", " ")

@@ -144,8 +144,8 @@ func (g *Gson) HasWithPath(path string) bool {
 	return true
 }
 
-// SearchByKeys returns json value corresponding to keys. keys represents key of hierarchy of json
-func (g *Gson) SearchByKeys(keys ...string) (*Result, error) {
+// GetByKeys returns json value corresponding to keys. keys represents key of hierarchy of json
+func (g *Gson) GetByKeys(keys ...string) (*Result, error) {
 	var err error
 
 	jsonObject := g.jsonObject
@@ -158,8 +158,8 @@ func (g *Gson) SearchByKeys(keys ...string) (*Result, error) {
 	return &Result{jsonObject}, nil
 }
 
-// SearchByKeys returns json value corresponding to path.
-func (g *Gson) SearchByPath(path string) (*Result, error) {
+// GetByPath returns json value corresponding to path.
+func (g *Gson) GetByPath(path string) (*Result, error) {
 	keys := strings.Split(path, ".")
 
 	var err error
