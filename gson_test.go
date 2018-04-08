@@ -335,15 +335,15 @@ func TestHasWithKeys(t *testing.T) {
 func TestIndent(t *testing.T) {
 	jsonString := `{"friends": [{"name": "hlts2"}, {"name": "hiroto"}]}`
 	expectedJSONString := `{
-		"friends": [
-			{
-   				"name": "hlts2"
-  			},
-  			{
-   				"name": "hiroto"
-  			}
- 		]
-	}`
+ "friends": [
+  {
+   "name": "hlts2"
+  },
+  {
+   "name": "hiroto"
+  }
+ ]
+}`
 	g, _ := NewGsonFromString(jsonString)
 
 	gotJSONString, _ := g.Indent("", " ")
