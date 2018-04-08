@@ -11,8 +11,9 @@ go get github.com/hlts2/gson
 ## Example
 
 ### Get Value（By Path）
-Get searches json for specified path. A path is in "/" syntax such as "/friends".
-And for arrays, access by numbers such as "/friends/0".
+Get searches json for specified path. A path is in "." syntax such as "friends".
+
+And for arrays, access by numbers such as "friends.0".
 
 ```go
 var jsonString = `
@@ -39,7 +40,7 @@ var jsonString = `
 `
 g, _ := gson.NewGosonFromString(jsonString)
 
-path := "/friends/1/like/0"
+path := "friends.1.like.0"
 if g.HasWithPath(path) {
     result, _ := g.Path(path)
     str, _ := result.String()

@@ -139,7 +139,7 @@ func TestPath(t *testing.T) {
 	for _, test := range tests {
 		g, _ := NewGsonFromString(test.json)
 
-		result, err := g.Search(test.keys...)
+		result, err := g.SearchByKeys(test.keys...)
 
 		isError := !(err == nil)
 
@@ -220,7 +220,7 @@ func TestSearch(t *testing.T) {
 	for _, test := range tests {
 		g, _ := NewGsonFromString(test.json)
 
-		result, err := g.Path(test.path)
+		result, err := g.SearchByPath(test.path)
 
 		isError := !(err == nil)
 
