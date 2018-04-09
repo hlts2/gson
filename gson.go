@@ -176,7 +176,7 @@ func getByKey(object interface{}, key string) (interface{}, error) {
 	index, err := strconv.Atoi(key)
 	if err == nil {
 		if v, ok := object.([]interface{}); ok {
-			if 0 <= index && index < len(v) {
+			if index >= 0 && index < len(v) {
 				return v[index], nil
 			}
 			return nil, ErrorIndexOutOfRange
