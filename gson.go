@@ -333,54 +333,6 @@ func (r *Result) Float64() (float64, error) {
 	}
 }
 
-// Byte converts an interface{} to a byte and returns an error if types don't match.
-func (r *Result) Byte() (byte, error) {
-	const fn = "Byte"
-
-	switch r.object.(type) {
-	case byte:
-		return r.object.(byte), nil
-	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
-	}
-}
-
-// Rune converts an interface{} to a rune and returns an error if types don't match.
-func (r *Result) Rune() (rune, error) {
-	const fn = "Rune"
-
-	switch r.object.(type) {
-	case rune:
-		return r.object.(rune), nil
-	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
-	}
-}
-
-// Complex64 converts an interface{} to a complex64 and returns an error if types don't match.
-func (r *Result) Complex64() (complex64, error) {
-	const fn = "Complex64"
-
-	switch r.object.(type) {
-	case complex128:
-		return complex64(r.object.(complex128)), nil
-	default:
-		return 0 + 0i, &ResultError{fn, r.object, ErrorInvalidSyntax}
-	}
-}
-
-// Complex128 converts an interface{} to a complexa128 and returns an error if types don't match.
-func (r *Result) Complex128() (complex128, error) {
-	const fn = "Complex128"
-
-	switch r.object.(type) {
-	case complex128:
-		return r.object.(complex128), nil
-	default:
-		return 0 + 0i, &ResultError{fn, r.object, ErrorInvalidSyntax}
-	}
-}
-
 // String converts an interface{} to a string and returns an error if types don't match.
 func (r *Result) String() (string, error) {
 	const fn = "String"
