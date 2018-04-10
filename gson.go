@@ -206,20 +206,123 @@ func (r *Result) Indent(prefix, indent string) string {
 func (r *Result) Uint8() (uint8, error) {
 	const fn = "Uint8"
 
-	switch r.object.(type) {
+	switch v := r.object.(type) {
 	case int:
-		return uint8(r.object.(int)), nil
+		if v < 0 {
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		}
+		return uint8(v), nil
+	case int8:
+		if v < 0 {
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		}
+		return uint8(v), nil
+	case int16:
+		if v < 0 {
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		}
+		return uint8(v), nil
+	case int32:
+		if v < 0 {
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		}
+		return uint8(v), nil
+	case int64:
+		if v < 0 {
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		}
+		return uint8(v), nil
+	case uint:
+		return uint8(v), nil
+	case uint8:
+		return v, nil
+	case uint16:
+		return uint8(v), nil
+	case uint32:
+		return uint8(v), nil
+	case uint64:
+		return uint8(v), nil
+	case float32:
+		if v < 0 {
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		}
+		return uint8(v), nil
+	case float64:
+		if v < 0 {
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		}
+		return uint8(v), nil
+	case bool:
+		if v {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		u, err := strconv.ParseUint(v, 0, 8)
+		if err == nil {
+			return uint8(u), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case nil:
+		return 0, nil
+	default:
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
-	return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 }
 
 // Uint16 converts an interface{} to a uint16 and returns an error if types don't match.
 func (r *Result) Uint16() (uint16, error) {
 	const fn = "Uint16"
 
-	switch r.object.(type) {
+	switch v := r.object.(type) {
 	case int:
-		return uint16(r.object.(int)), nil
+		if v < 0 {
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		}
+		return uint16(v), nil
+	case int8:
+		if v < 0 {
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		}
+		return uint16(v), nil
+	case int16:
+		if v < 0 {
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		}
+		return uint16(v), nil
+	case int32:
+		if v < 0 {
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		}
+		return uint16(v), nil
+	case int64:
+		if v < 0 {
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		}
+		return uint16(v), nil
+	case uint:
+		return uint16(v), nil
+	case uint8:
+		return uint16(v), nil
+	case uint16:
+		return v, nil
+	case uint32:
+		return uint16(v), nil
+	case uint64:
+		return uint16(v), nil
+	case bool:
+		if v {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		s, err := strconv.ParseUint(v, 0, 16)
+		if err == nil {
+			return uint16(s), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case nil:
+		return 0, nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -229,9 +332,55 @@ func (r *Result) Uint16() (uint16, error) {
 func (r *Result) Uint32() (uint32, error) {
 	const fn = "Uint32"
 
-	switch r.object.(type) {
+	switch v := r.object.(type) {
 	case int:
-		return uint32(r.object.(int)), nil
+		if v < 0 {
+			return uint32(v), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case int8:
+		if v < 0 {
+			return uint32(v), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case int16:
+		if v < 0 {
+			return uint32(v), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case int32:
+		if v < 0 {
+			return uint32(v), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case int64:
+		if v < 0 {
+			return uint32(v), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case uint:
+		return uint32(v), nil
+	case uint8:
+		return uint32(v), nil
+	case uint16:
+		return uint32(v), nil
+	case uint32:
+		return v, nil
+	case uint64:
+		return uint32(v), nil
+	case bool:
+		if v {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		u, err := strconv.ParseUint(v, 0, 32)
+		if err == nil {
+			return uint32(u), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case nil:
+		return 0, nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -241,9 +390,55 @@ func (r *Result) Uint32() (uint32, error) {
 func (r *Result) Uint64() (uint64, error) {
 	const fn = "Uint64"
 
-	switch r.object.(type) {
+	switch v := r.object.(type) {
 	case int:
-		return uint64(r.object.(int)), nil
+		if v < 0 {
+			return uint64(v), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case int8:
+		if v < 0 {
+			return uint64(v), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case int16:
+		if v < 0 {
+			return uint64(v), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case int32:
+		if v < 0 {
+			return uint64(v), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case int64:
+		if v < 0 {
+			return uint64(v), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case uint:
+		return uint64(v), nil
+	case uint8:
+		return uint64(v), nil
+	case uint16:
+		return uint64(v), nil
+	case uint32:
+		return uint64(v), nil
+	case uint64:
+		return v, nil
+	case bool:
+		if v {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		u, err := strconv.ParseUint(v, 0, 64)
+		if err == nil {
+			return u, nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case nil:
+		return 0, nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -253,9 +448,40 @@ func (r *Result) Uint64() (uint64, error) {
 func (r *Result) Int8() (int8, error) {
 	const fn = "Int8"
 
-	switch r.object.(type) {
+	switch v := r.object.(type) {
 	case int:
-		return int8(r.object.(int)), nil
+		return int8(v), nil
+	case int8:
+		return int8(v), nil
+	case int16:
+		return int8(v), nil
+	case int32:
+		return int8(v), nil
+	case int64:
+		return int8(v), nil
+	case uint:
+		return int8(v), nil
+	case uint8:
+		return int8(v), nil
+	case uint16:
+		return int8(v), nil
+	case uint32:
+		return int8(v), nil
+	case uint64:
+		return int8(v), nil
+	case bool:
+		if v {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		i, err := strconv.ParseInt(v, 0, 8)
+		if err == nil {
+			return int8(i), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case nil:
+		return 0, nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -265,9 +491,40 @@ func (r *Result) Int8() (int8, error) {
 func (r *Result) Int16() (int16, error) {
 	const fn = "Int16"
 
-	switch r.object.(type) {
+	switch v := r.object.(type) {
 	case int:
-		return int16(r.object.(int)), nil
+		return int16(v), nil
+	case int8:
+		return int16(v), nil
+	case int16:
+		return int16(v), nil
+	case int32:
+		return int16(v), nil
+	case int64:
+		return int16(v), nil
+	case uint:
+		return int16(v), nil
+	case uint8:
+		return int16(v), nil
+	case uint16:
+		return int16(v), nil
+	case uint32:
+		return int16(v), nil
+	case uint64:
+		return int16(v), nil
+	case bool:
+		if v {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		i, err := strconv.ParseInt(v, 0, 16)
+		if err == nil {
+			return int16(i), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case nil:
+		return 0, nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -277,9 +534,40 @@ func (r *Result) Int16() (int16, error) {
 func (r *Result) Int32() (int32, error) {
 	const fn = "Int32"
 
-	switch r.object.(type) {
+	switch v := r.object.(type) {
 	case int:
-		return int32(r.object.(int)), nil
+		return int32(v), nil
+	case int8:
+		return int32(v), nil
+	case int16:
+		return int32(v), nil
+	case int32:
+		return int32(v), nil
+	case int64:
+		return int32(v), nil
+	case uint:
+		return int32(v), nil
+	case uint8:
+		return int32(v), nil
+	case uint16:
+		return int32(v), nil
+	case uint32:
+		return int32(v), nil
+	case uint64:
+		return int32(v), nil
+	case bool:
+		if v {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		i, err := strconv.ParseInt(v, 0, 32)
+		if err == nil {
+			return int32(i), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case nil:
+		return 0, nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -289,9 +577,40 @@ func (r *Result) Int32() (int32, error) {
 func (r *Result) Int64() (int64, error) {
 	const fn = "Int64"
 
-	switch r.object.(type) {
+	switch v := r.object.(type) {
 	case int:
-		return int64(r.object.(int)), nil
+		return int64(v), nil
+	case int8:
+		return int64(v), nil
+	case int16:
+		return int64(v), nil
+	case int32:
+		return int64(v), nil
+	case int64:
+		return int64(v), nil
+	case uint:
+		return int64(v), nil
+	case uint8:
+		return int64(v), nil
+	case uint16:
+		return int64(v), nil
+	case uint32:
+		return int64(v), nil
+	case uint64:
+		return int64(v), nil
+	case bool:
+		if v {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		i, err := strconv.ParseInt(v, 0, 64)
+		if err == nil {
+			return i, nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case nil:
+		return 0, nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -301,9 +620,40 @@ func (r *Result) Int64() (int64, error) {
 func (r *Result) Int() (int, error) {
 	const fn = "Int"
 
-	switch r.object.(type) {
+	switch v := r.object.(type) {
 	case int:
-		return r.object.(int), nil
+		return int(v), nil
+	case int8:
+		return int(v), nil
+	case int16:
+		return int(v), nil
+	case int32:
+		return int(v), nil
+	case int64:
+		return int(v), nil
+	case uint:
+		return int(v), nil
+	case uint8:
+		return int(v), nil
+	case uint16:
+		return int(v), nil
+	case uint32:
+		return int(v), nil
+	case uint64:
+		return int(v), nil
+	case bool:
+		if v {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		i, err := strconv.ParseInt(v, 0, 0)
+		if err == nil {
+			return int(i), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case nil:
+		return 0, nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -313,9 +663,40 @@ func (r *Result) Int() (int, error) {
 func (r *Result) Float32() (float32, error) {
 	const fn = "Float32"
 
-	switch r.object.(type) {
-	case float64:
-		return float32(r.object.(float64)), nil
+	switch v := r.object.(type) {
+	case int:
+		return float32(v), nil
+	case int8:
+		return float32(v), nil
+	case int16:
+		return float32(v), nil
+	case int32:
+		return float32(v), nil
+	case int64:
+		return float32(v), nil
+	case uint:
+		return float32(v), nil
+	case uint8:
+		return float32(v), nil
+	case uint16:
+		return float32(v), nil
+	case uint32:
+		return float32(v), nil
+	case uint64:
+		return float32(v), nil
+	case bool:
+		if v {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		i, err := strconv.ParseFloat(v, 32)
+		if err == nil {
+			return float32(i), nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case nil:
+		return 0, nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -325,9 +706,40 @@ func (r *Result) Float32() (float32, error) {
 func (r *Result) Float64() (float64, error) {
 	const fn = "Float64"
 
-	switch r.object.(type) {
-	case float64:
-		return r.object.(float64), nil
+	switch v := r.object.(type) {
+	case int:
+		return float64(v), nil
+	case int8:
+		return float64(v), nil
+	case int16:
+		return float64(v), nil
+	case int32:
+		return float64(v), nil
+	case int64:
+		return float64(v), nil
+	case uint:
+		return float64(v), nil
+	case uint8:
+		return float64(v), nil
+	case uint16:
+		return float64(v), nil
+	case uint32:
+		return float64(v), nil
+	case uint64:
+		return float64(v), nil
+	case bool:
+		if v {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		i, err := strconv.ParseFloat(v, 64)
+		if err == nil {
+			return i, nil
+		}
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	case nil:
+		return 0, nil
 	default:
 		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -337,9 +749,32 @@ func (r *Result) Float64() (float64, error) {
 func (r *Result) String() (string, error) {
 	const fn = "String"
 
-	switch r.object.(type) {
+	switch v := r.object.(type) {
+	case int:
+		return strconv.Itoa(v), nil
+	case int16:
+		return strconv.FormatInt(int64(v), 10), nil
+	case int32:
+		return strconv.FormatInt(int64(v), 10), nil
+	case int64:
+		return strconv.FormatInt(v, 10), nil
+	case uint:
+		return strconv.FormatUint(uint64(v), 10), nil
+	case uint8:
+		return strconv.FormatUint(uint64(v), 10), nil
+	case uint16:
+		return strconv.FormatUint(uint64(v), 10), nil
+	case uint32:
+		return strconv.FormatUint(uint64(v), 10), nil
+	case uint64:
+		return strconv.FormatUint(v, 10), nil
+	case bool:
+		if v {
+			return "true", nil
+		}
+		return "false", nil
 	case string:
-		return r.object.(string), nil
+		return v, nil
 	default:
 		return "", &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
@@ -349,9 +784,17 @@ func (r *Result) String() (string, error) {
 func (r *Result) Bool() (bool, error) {
 	const fn = "Bool"
 
-	switch r.object.(type) {
+	switch v := r.object.(type) {
 	case bool:
-		return r.object.(bool), nil
+		return v, nil
+	case nil:
+		return false, nil
+	case string:
+		b, err := strconv.ParseBool(v)
+		if err == nil {
+			return b, nil
+		}
+		return false, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	default:
 		return false, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}

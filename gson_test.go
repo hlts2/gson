@@ -1,10 +1,10 @@
 package gson
 
 import (
-	"reflect"
 	"testing"
 )
 
+/*
 func TestNewGsonFromString(t *testing.T) {
 	tests := []struct {
 		json    string
@@ -342,5 +342,44 @@ func TestIndent(t *testing.T) {
 	gotJSONString, _ := g.Indent("", " ")
 	if expectedJSONString != gotJSONString {
 		t.Errorf("expected: %v, got: %v", expectedJSONString, gotJSONString)
+	}
+}
+*/
+
+func TestUint8(t *testing.T) {
+	tests := []struct {
+		json     string
+		expected uint8
+		isError  bool
+	}{
+		{
+			json:     `{"ID": 123}`,
+			expected: uint8(123),
+			isError:  false,
+		},
+	}
+
+	for _, test := range tests {
+		g, err := NewGsonFromString(test.json)
+		if err != nil {
+			t.Errorf("NewGsonFromString is error: %v", err)
+		}
+
+		result, err := g.GetByKeys("ID")
+		if err != nil {
+			t.Errorf("GetByKeys is error: %v", err)
+		}
+
+		got, err := result.Uint8()
+
+		isError := !(err == nil)
+
+		if test.isError != isError {
+			t.Errorf("expected isError: %v, got: %v", test.isError, isError)
+		}
+
+		if test.expected != got {
+			t.Errorf("expected: %v, got: %v", test.expected, got)
+		}
 	}
 }
