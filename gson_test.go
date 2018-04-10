@@ -1,10 +1,10 @@
 package gson
 
 import (
+	"reflect"
 	"testing"
 )
 
-/*
 func TestNewGsonFromString(t *testing.T) {
 	tests := []struct {
 		json    string
@@ -136,7 +136,10 @@ func TestGetByKeys(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		g, _ := NewGsonFromString(test.json)
+		g, err := NewGsonFromString(test.json)
+		if err != nil {
+			t.Errorf("NewGsonFromString is error: %v", err)
+		}
 
 		result, err := g.GetByKeys(test.keys...)
 
@@ -211,7 +214,10 @@ func TestGetByPath(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		g, _ := NewGsonFromString(test.json)
+		g, err := NewGsonFromString(test.json)
+		if err != nil {
+			t.Errorf("NewGsonFromString(%s) is error: %v", test.json, err)
+		}
 
 		result, err := g.GetByPath(test.path)
 
@@ -264,7 +270,10 @@ func TestHasWithPath(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		g, _ := NewGsonFromString(test.json)
+		g, err := NewGsonFromString(test.json)
+		if err != nil {
+			t.Errorf("NewGsonFromString(%s) is error: %v", test.json, err)
+		}
 
 		has := g.HasWithPath(test.path)
 
@@ -315,7 +324,10 @@ func TestHasWithKeys(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		g, _ := NewGsonFromString(test.json)
+		g, err := NewGsonFromString(test.json)
+		if err != nil {
+			t.Errorf("NewGsonFromString(%s) is error: %v", test.json, err)
+		}
 
 		has := g.HasWithKeys(test.keys...)
 
@@ -344,7 +356,6 @@ func TestIndent(t *testing.T) {
 		t.Errorf("expected: %v, got: %v", expectedJSONString, gotJSONString)
 	}
 }
-*/
 
 func TestUint8(t *testing.T) {
 	tests := []struct {
@@ -362,7 +373,7 @@ func TestUint8(t *testing.T) {
 	for _, test := range tests {
 		g, err := NewGsonFromString(test.json)
 		if err != nil {
-			t.Errorf("NewGsonFromString is error: %v", err)
+			t.Errorf("NewGsonFromString(%s) is error: %v", test.json, err)
 		}
 
 		result, err := g.GetByKeys("ID")
