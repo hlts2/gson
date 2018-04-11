@@ -34,7 +34,7 @@ Create gson object from a io.Reader. Returns an error if the resp.Body are not v
 g, err := gson.NewGsonFromReader(resp.Body)
 ```
 
-### GetValue by path
+### Get value by path
 
 `GetByPath` gets json value for specified path. The path is in "." syntax such as "created_at.date".And for arrays, access by numbers such as "likes.0".
 
@@ -98,3 +98,29 @@ fmt.Println(str) //strawberry
 ```
 
 ### Indent String
+
+`Indent` returns the formatted json string
+
+```go
+/*
+json := `{"Accounts": [{"ID": "1111"}, {"ID": "2222"}]}`
+*/
+
+str, _  := g.Indent("", " ")
+
+fmt.Println(str)
+/*
+{
+    "IDs": [
+        {
+            "ID": "1111"
+        },
+        {
+            "ID": "2222"
+        }
+    ]
+}
+*/
+
+
+```
