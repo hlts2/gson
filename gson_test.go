@@ -3,9 +3,10 @@ package gson
 import (
 	"reflect"
 	"testing"
+	"unsafe"
 )
 
-func TestNewGsonFromString(t *testing.T) {
+func TestNewGsonFromByte(t *testing.T) {
 	tests := []struct {
 		json     string
 		expected *Gson
@@ -90,7 +91,7 @@ func TestNewGsonFromString(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		_, err := NewGsonFromString(test.json)
+		_, err := NewGsonFromByte(*(*[]byte)(unsafe.Pointer(&test.json)))
 
 		isError := !(err == nil)
 
@@ -173,7 +174,7 @@ func TestGetByKeys(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		g, err := NewGsonFromString(test.json)
+		g, err := NewGsonFromByte([]byte(test.json))
 		if err != nil {
 			t.Errorf("NewGsonFromString(json) is error: %v", err)
 		}
@@ -259,7 +260,7 @@ func TestGetByPath(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromString(test.json)
+		g, err := NewGsonFromByte([]byte(test.json))
 		if err != nil {
 			t.Errorf("i = %d NewGsonFromString() is error: %v", i, err)
 		}
@@ -323,7 +324,7 @@ func TestHasWithPath(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromString(test.json)
+		g, err := NewGsonFromByte([]byte(test.json))
 		if err != nil {
 			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
 		}
@@ -381,7 +382,7 @@ func TestHasWithKeys(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromString(test.json)
+		g, err := NewGsonFromByte([]byte(test.json))
 		if err != nil {
 			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
 		}
@@ -412,7 +413,7 @@ func TestUint8(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromString(test.json)
+		g, err := NewGsonFromByte([]byte(test.json))
 		if err != nil {
 			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
 		}
@@ -452,7 +453,7 @@ func TestSlice(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromString(test.json)
+		g, err := NewGsonFromByte([]byte(test.json))
 		if err != nil {
 			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
 		}
@@ -483,7 +484,7 @@ func TestMap(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromString(test.json)
+		g, err := NewGsonFromByte([]byte(test.json))
 		if err != nil {
 			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
 		}

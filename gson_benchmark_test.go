@@ -37,7 +37,7 @@ func BenchmarkTestGetByKeys(b *testing.B) {
 			}
 		]}`
 
-	g, _ := NewGsonFromString(json)
+	g, _ := NewGsonFromByte([]byte(json))
 
 	b.ResetTimer()
 
@@ -82,7 +82,7 @@ func BenchmarkTestGetByPath(b *testing.B) {
 			}
 		]}`
 
-	g, _ := NewGsonFromString(json)
+	g, _ := NewGsonFromByte([]byte(json))
 
 	b.ResetTimer()
 

@@ -8,6 +8,8 @@ import (
 	"io"
 	"strconv"
 	"strings"
+
+	"github.com/pquerna/ffjson/ffjson"
 )
 
 var (
@@ -47,19 +49,10 @@ type Gson struct {
 func NewGsonFromByte(data []byte) (*Gson, error) {
 	g := new(Gson)
 
-	if err := decode(bytes.NewReader(data), &g.jsonObject); err != nil {
+	if err := ffjson.Unmarshal(data, &g.jsonObject); err != nil {
 		return nil, err
 	}
-	return g, nil
-}
 
-// NewGsonFromString returns Gson instance created from string
-func NewGsonFromString(data string) (*Gson, error) {
-	g := new(Gson)
-
-	if err := decode(strings.NewReader(data), &g.jsonObject); err != nil {
-		return nil, err
-	}
 	return g, nil
 }
 
@@ -67,21 +60,15 @@ func NewGsonFromString(data string) (*Gson, error) {
 func NewGsonFromReader(reader io.Reader) (*Gson, error) {
 	g := new(Gson)
 
-	if err := decode(reader, &g.jsonObject); err != nil {
+	if err := ffjson.NewDecoder().DecodeReader(reader, &g.jsonObject); err != nil {
 		return nil, err
 	}
+
 	return g, nil
 }
 
-func decode(reader io.Reader, object *interface{}) error {
-	if err := json.NewDecoder(reader).Decode(object); err != nil {
-		return err
-	}
-	return nil
-}
-
 func isJSON(object interface{}) bool {
-	if _, err := json.Marshal(object); err != nil {
+	if _, err := ffjson.Marshal(object); err != nil {
 		return false
 	}
 	return true
@@ -93,7 +80,7 @@ func (g *Gson) Indent(prefix, indent string) (string, error) {
 }
 
 func indentJSONString(object interface{}, prefix, indent string) (string, error) {
-	data, err := json.Marshal(object)
+	data, err := ffjson.Marshal(object)
 	if err != nil {
 		return "", err
 	}
