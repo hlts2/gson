@@ -800,6 +800,43 @@ func (r *Result) Bool() (bool, error) {
 	}
 }
 
+// Slice converts an Result pointer slice and returns an error if types don't match.
+func (r *Result) Slice() ([]*Result, error) {
+	const fn = "Slice"
+
+	switch slice := r.object.(type) {
+	case []interface{}:
+		results := make([]*Result, 0, len(slice))
+
+		for _, val := range slice {
+			results = append(results, &Result{object: val})
+		}
+
+		return results, nil
+	default:
+		return nil, &ResultError{fn, r.object, ErrorInvalidSyntax}
+	}
+}
+
+// Map converts an Result pointer slice and returns an error if types don't match.
+func (r *Result) Map() (map[string]*Result, error) {
+	const fn = "Map"
+
+	switch m := r.object.(type) {
+	case map[string]interface{}:
+		rMap := make(map[string]*Result, len(m))
+
+		for key, val := range m {
+			rMap[key] = &Result{object: val}
+		}
+
+		return rMap, nil
+	default:
+		return nil, &ResultError{fn, r.object, ErrorInvalidSyntax}
+
+	}
+}
+
 // MapInterface converts an interface{} to a map[string]interface{} and returns an error if types don't match.
 func (r *Result) MapInterface() (map[string]interface{}, error) {
 	const fn = "MapInterface"

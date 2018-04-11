@@ -439,3 +439,68 @@ func TestUint8(t *testing.T) {
 		}
 	}
 }
+
+func TestSlice(t *testing.T) {
+	tests := []struct {
+		json    string
+		isError bool
+	}{
+		{
+			json:    `{"IDs": [{"ID": "1111"}, {"ID": "2222"}]}`,
+			isError: false,
+		},
+	}
+
+	for i, test := range tests {
+		g, err := NewGsonFromString(test.json)
+		if err != nil {
+			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
+		}
+
+		if g == nil {
+			t.Errorf("i = %d NewGsonFromString(json) g is nil", i)
+		}
+
+		result, err := g.GetByKeys("IDs")
+		if err != nil {
+			t.Errorf("i = %d GetByKeys(keys) is error: %v", i, err)
+		}
+
+		// TODO assertion
+		result.Slice()
+	}
+}
+
+func TestMap(t *testing.T) {
+	tests := []struct {
+		json    string
+		isError bool
+	}{
+		{
+			json:    `{"Accounts": [{"ID": "1111", "Name": "hlts2"}]}`,
+			isError: false,
+		},
+	}
+
+	for i, test := range tests {
+		g, err := NewGsonFromString(test.json)
+		if err != nil {
+			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
+		}
+
+		if g == nil {
+			t.Errorf("i = %d NewGsonFromString(json) g is nil", i)
+		}
+
+		result, err := g.GetByKeys("Accounts", "0")
+
+		isError := !(err == nil)
+
+		if test.isError != isError {
+			t.Errorf("i = %d GetByKeys(keys) expected isError: %v, got: %v", i, test.isError, isError)
+		}
+
+		// TODO assertion
+		result.Map()
+	}
+}
