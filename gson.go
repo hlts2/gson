@@ -43,7 +43,7 @@ type Gson struct {
 	jsonObject interface{}
 }
 
-// NewGsonFromByte returns Gson instance created from byte array
+// NewGsonFromByte returns Gson instance created from byte slice
 func NewGsonFromByte(data []byte) (*Gson, error) {
 	g := new(Gson)
 
