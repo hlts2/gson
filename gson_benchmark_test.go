@@ -5,8 +5,6 @@ import (
 )
 
 func BenchmarkTestGetByKeys(b *testing.B) {
-	b.StopTimer()
-
 	json := `
 		{"friends": [
 			{
@@ -41,21 +39,17 @@ func BenchmarkTestGetByKeys(b *testing.B) {
 
 	g, _ := NewGsonFromString(json)
 
-	for i := 0; i < b.N; i++ {
-		b.StartTimer()
+	b.ResetTimer()
 
+	for i := 0; i < b.N; i++ {
 		_, err := g.GetByKeys("friends", "0", "repositories", "0", "created_at", "timezone")
 		if err != nil {
 			b.Fatal(err)
 		}
-
-		b.StopTimer()
 	}
 }
 
 func BenchmarkTestGetByPath(b *testing.B) {
-	b.StopTimer()
-
 	json := `
 		{"friends": [
 			{
@@ -90,14 +84,12 @@ func BenchmarkTestGetByPath(b *testing.B) {
 
 	g, _ := NewGsonFromString(json)
 
-	for i := 0; i < b.N; i++ {
-		b.StartTimer()
+	b.ResetTimer()
 
+	for i := 0; i < b.N; i++ {
 		_, err := g.GetByPath("friends.0.repositories.0.created_at.timezone")
 		if err != nil {
 			b.Fatal(err)
 		}
-
-		b.StopTimer()
 	}
 }
