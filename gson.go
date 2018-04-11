@@ -192,6 +192,11 @@ func (r *Result) Indent(prefix, indent string) string {
 	return str
 }
 
+// Interface returns json object of Result
+func (r *Result) Interface() interface{} {
+	return r.object
+}
+
 // Uint8 converts an interface{} to a uint8 and returns an error if types don't match.
 func (r *Result) Uint8() (uint8, error) {
 	const fn = "Uint8"
