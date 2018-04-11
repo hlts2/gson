@@ -106,7 +106,7 @@ fmt.Println(str) //strawberry
 json := `{"Accounts": [{"ID": "1111"}, {"ID": "2222"}]}`
 */
 
-str, _  := g.Indent("", " ")
+str, _  := g.Indent("", "  ")
 
 fmt.Println(str)
 /*
