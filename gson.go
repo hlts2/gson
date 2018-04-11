@@ -25,23 +25,13 @@ var (
 
 	// ErrorInvalidSyntax represents invaild syntax error
 	ErrorInvalidSyntax = errors.New("invalid syntax")
+
+	// ErrorInvalidNumber represents invalid number
+	ErrorInvalidNumber = errors.New("invalid number")
+
+	// ErrorInvalidObject represents invalid object
+	ErrorInvalidObject = errors.New("invalid object")
 )
-
-// ResultError represents a conversion error
-type ResultError struct {
-	Fn     string
-	Object interface{}
-	Err    error
-}
-
-func (e *ResultError) Error() string {
-	return "Result." + e.Fn + ": parsing " + Quote(e.Object) + ": " + e.Err.Error()
-}
-
-// Quote returns quoted object string
-func Quote(object interface{}) string {
-	return fmt.Sprintf("\"%v\"", object)
-}
 
 // Result represents a json value that is returned from GetByPath() and GetByKeys().
 type Result struct {
@@ -209,27 +199,27 @@ func (r *Result) Uint8() (uint8, error) {
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
-			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+			return 0, ErrorInvalidNumber
 		}
 		return uint8(v), nil
 	case int8:
 		if v < 0 {
-			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+			return 0, ErrorInvalidNumber
 		}
 		return uint8(v), nil
 	case int16:
 		if v < 0 {
-			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+			return 0, ErrorInvalidNumber
 		}
 		return uint8(v), nil
 	case int32:
 		if v < 0 {
-			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+			return 0, ErrorInvalidNumber
 		}
 		return uint8(v), nil
 	case int64:
 		if v < 0 {
-			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+			return 0, ErrorInvalidNumber
 		}
 		return uint8(v), nil
 	case uint:
@@ -244,12 +234,12 @@ func (r *Result) Uint8() (uint8, error) {
 		return uint8(v), nil
 	case float32:
 		if v < 0 {
-			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+			return 0, ErrorInvalidNumber
 		}
 		return uint8(v), nil
 	case float64:
 		if v < 0 {
-			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+			return 0, ErrorInvalidNumber
 		}
 		return uint8(v), nil
 	case bool:
@@ -262,11 +252,11 @@ func (r *Result) Uint8() (uint8, error) {
 		if err == nil {
 			return uint8(u), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, err
 	case nil:
 		return 0, nil
 	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidObject
 	}
 }
 
@@ -277,27 +267,27 @@ func (r *Result) Uint16() (uint16, error) {
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
-			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+			return 0, ErrorInvalidNumber
 		}
 		return uint16(v), nil
 	case int8:
 		if v < 0 {
-			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+			return 0, ErrorInvalidNumber
 		}
 		return uint16(v), nil
 	case int16:
 		if v < 0 {
-			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+			return 0, ErrorInvalidNumber
 		}
 		return uint16(v), nil
 	case int32:
 		if v < 0 {
-			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+			return 0, ErrorInvalidNumber
 		}
 		return uint16(v), nil
 	case int64:
 		if v < 0 {
-			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+			return 0, ErrorInvalidNumber
 		}
 		return uint16(v), nil
 	case uint:
@@ -320,11 +310,11 @@ func (r *Result) Uint16() (uint16, error) {
 		if err == nil {
 			return uint16(s), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, err
 	case nil:
 		return 0, nil
 	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidObject
 	}
 }
 
@@ -337,27 +327,27 @@ func (r *Result) Uint32() (uint32, error) {
 		if v < 0 {
 			return uint32(v), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidNumber
 	case int8:
 		if v < 0 {
 			return uint32(v), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidNumber
 	case int16:
 		if v < 0 {
 			return uint32(v), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidNumber
 	case int32:
 		if v < 0 {
 			return uint32(v), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidNumber
 	case int64:
 		if v < 0 {
 			return uint32(v), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidNumber
 	case uint:
 		return uint32(v), nil
 	case uint8:
@@ -378,11 +368,11 @@ func (r *Result) Uint32() (uint32, error) {
 		if err == nil {
 			return uint32(u), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, err
 	case nil:
 		return 0, nil
 	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidObject
 	}
 }
 
@@ -395,27 +385,27 @@ func (r *Result) Uint64() (uint64, error) {
 		if v < 0 {
 			return uint64(v), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidNumber
 	case int8:
 		if v < 0 {
 			return uint64(v), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidNumber
 	case int16:
 		if v < 0 {
 			return uint64(v), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidNumber
 	case int32:
 		if v < 0 {
 			return uint64(v), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidNumber
 	case int64:
 		if v < 0 {
 			return uint64(v), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidNumber
 	case uint:
 		return uint64(v), nil
 	case uint8:
@@ -436,11 +426,11 @@ func (r *Result) Uint64() (uint64, error) {
 		if err == nil {
 			return u, nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, err
 	case nil:
 		return 0, nil
 	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidObject
 	}
 }
 
@@ -479,11 +469,11 @@ func (r *Result) Int8() (int8, error) {
 		if err == nil {
 			return int8(i), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, err
 	case nil:
 		return 0, nil
 	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidObject
 	}
 }
 
@@ -522,11 +512,11 @@ func (r *Result) Int16() (int16, error) {
 		if err == nil {
 			return int16(i), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, err
 	case nil:
 		return 0, nil
 	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidObject
 	}
 }
 
@@ -565,11 +555,11 @@ func (r *Result) Int32() (int32, error) {
 		if err == nil {
 			return int32(i), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, err
 	case nil:
 		return 0, nil
 	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidObject
 	}
 }
 
@@ -608,11 +598,11 @@ func (r *Result) Int64() (int64, error) {
 		if err == nil {
 			return i, nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, err
 	case nil:
 		return 0, nil
 	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidObject
 	}
 }
 
@@ -651,11 +641,11 @@ func (r *Result) Int() (int, error) {
 		if err == nil {
 			return int(i), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, err
 	case nil:
 		return 0, nil
 	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidObject
 	}
 }
 
@@ -694,11 +684,11 @@ func (r *Result) Float32() (float32, error) {
 		if err == nil {
 			return float32(i), nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, err
 	case nil:
 		return 0, nil
 	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidObject
 	}
 }
 
@@ -737,11 +727,11 @@ func (r *Result) Float64() (float64, error) {
 		if err == nil {
 			return i, nil
 		}
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, err
 	case nil:
 		return 0, nil
 	default:
-		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return 0, ErrorInvalidObject
 	}
 }
 
@@ -776,7 +766,7 @@ func (r *Result) String() (string, error) {
 	case string:
 		return v, nil
 	default:
-		return "", &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return "", ErrorInvalidObject
 	}
 }
 
@@ -794,9 +784,9 @@ func (r *Result) Bool() (bool, error) {
 		if err == nil {
 			return b, nil
 		}
-		return false, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return false, err
 	default:
-		return false, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return false, ErrorInvalidObject
 	}
 }
 
@@ -814,7 +804,7 @@ func (r *Result) Slice() ([]*Result, error) {
 
 		return results, nil
 	default:
-		return nil, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return nil, ErrorInvalidObject
 	}
 }
 
@@ -832,8 +822,7 @@ func (r *Result) Map() (map[string]*Result, error) {
 
 		return rMap, nil
 	default:
-		return nil, &ResultError{fn, r.object, ErrorInvalidSyntax}
-
+		return nil, ErrorInvalidObject
 	}
 }
 
@@ -845,7 +834,7 @@ func (r *Result) MapInterface() (map[string]interface{}, error) {
 	case map[string]interface{}:
 		return r.object.(map[string]interface{}), nil
 	default:
-		return map[string]interface{}{}, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return map[string]interface{}{}, ErrorInvalidObject
 	}
 }
 
@@ -857,6 +846,6 @@ func (r *Result) MapInterfaceSlice() ([]map[string]interface{}, error) {
 	case []map[string]interface{}:
 		return r.object.([]map[string]interface{}), nil
 	default:
-		return []map[string]interface{}{}, &ResultError{fn, r.object, ErrorInvalidSyntax}
+		return []map[string]interface{}{}, ErrorInvalidObject
 	}
 }
