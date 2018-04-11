@@ -809,7 +809,7 @@ func (r *Result) Slice() ([]*Result, error) {
 }
 
 // Map converts an Result pointer slice and returns an error if types don't match.
-func (r *Result) Map() (map[string]*Result, error) {
+func (r *Result) Map() map[string]*Result {
 	const fn = "Map"
 
 	switch m := r.object.(type) {
@@ -820,9 +820,9 @@ func (r *Result) Map() (map[string]*Result, error) {
 			rMap[key] = &Result{object: val}
 		}
 
-		return rMap, nil
+		return rMap
 	default:
-		return nil, ErrorInvalidObject
+		return nil
 	}
 }
 
