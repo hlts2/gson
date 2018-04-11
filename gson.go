@@ -27,7 +27,7 @@ var (
 	ErrorInvalidSyntax = errors.New("invalid syntax")
 )
 
-// Result represents a json value that is returned from Search() and Path().
+// Result represents a json value that is returned from GetByPath() and GetByKeys().
 type Result struct {
 	object interface{}
 }
