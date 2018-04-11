@@ -18,14 +18,6 @@ Create gson object from `[]byte`. Returns an error if the bytes are not valid js
 g, err := gson.NewGsonFromByte(data)
 ```
 
-### Create from string
-
-Create gson object from `string`. Returns an error if the string are not valid json.
-
-```go
-g, err := gson.NewGsonFromString(str)
-```
-
 ### Create from io.Reader
 
 Create gson object from a `io.Reader`. Returns an error if the resp.Body are not valid json.
