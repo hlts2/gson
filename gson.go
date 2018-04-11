@@ -27,22 +27,6 @@ var (
 	ErrorInvalidSyntax = errors.New("invalid syntax")
 )
 
-// ResultError represents a conversion error
-type ResultError struct {
-	Fn     string
-	Object interface{}
-	Err    error
-}
-
-func (e *ResultError) Error() string {
-	return "Gson." + e.Fn + ": parsing " + Quote(e.Object) + ": " + e.Err.Error()
-}
-
-// Quote returns quoted object string
-func Quote(object interface{}) string {
-	return fmt.Sprintf("\"%v\"", object)
-}
-
 // Result represents a json value that is returned from Search() and Path().
 type Result struct {
 	object interface{}
@@ -84,8 +68,7 @@ func NewGsonFromReader(reader io.Reader) (*Gson, error) {
 }
 
 func decode(reader io.Reader, object *interface{}) error {
-	dec := json.NewDecoder(reader)
-	if err := dec.Decode(object); err != nil {
+	if err := json.NewDecoder(reader).Decode(object); err != nil {
 		return err
 	}
 	return nil
@@ -113,6 +96,7 @@ func indentJSONString(object interface{}, prefix, indent string) (string, error)
 	if err := json.Indent(&buf, data, prefix, indent); err != nil {
 		return "", err
 	}
+
 	return buf.String(), nil
 }
 

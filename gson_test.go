@@ -402,10 +402,12 @@ func TestUint8(t *testing.T) {
 	tests := []struct {
 		json     string
 		expected uint8
+		isError  bool
 	}{
 		{
 			json:     `{"ID": 123}`,
 			expected: uint8(123),
+			isError:  false,
 		},
 	}
 
@@ -427,7 +429,7 @@ func TestUint8(t *testing.T) {
 		got := result.Uint8()
 
 		if test.expected != got {
-			t.Errorf("i = %d Uint8() expected: %v, got: %v", i, test.expected, got)
+			t.Errorf("i = %d GetByKeys(keys) expected: %v, got: %v", i, test.expected, got)
 		}
 	}
 }
