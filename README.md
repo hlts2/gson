@@ -36,7 +36,7 @@ g, err := gson.NewGsonFromReader(resp.Body)
 
 ### Get value by path
 
-`GetByPath` gets json value for specified path. The path is in "." syntax such as "created_at.date".And for arrays, access by numbers such as "likes.0".
+`GetByPath` gets json value for specified path. The path is in "." syntax such as "created_at.date". And if you want to get the elements of json array, please put number in keys such as "likes.0".
 
 ```go
 
