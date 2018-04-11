@@ -196,12 +196,7 @@ func TestGetByKeys(t *testing.T) {
 			t.Errorf("GetByKeys(keys) expected isError: %v, got: %v", test.isError, isError)
 		}
 
-		//test.expected == nil && result == nil
-		if test.expected == result {
-			continue
-		}
-
-		if !reflect.DeepEqual(test.expected.object, result.object) {
+		if !reflect.DeepEqual(test.expected, result) {
 			t.Errorf("GetByKeys(keys) expected: %v, got: %v", test.expected, result)
 		}
 	}
@@ -285,11 +280,6 @@ func TestGetByPath(t *testing.T) {
 
 		if test.isError != isError {
 			t.Errorf("i = %d GetByPath(path) expected isError: %v, got: %v", i, test.isError, isError)
-		}
-
-		// test.expected == nil && result == nil
-		if test.expected == result {
-			continue
 		}
 
 		if !reflect.DeepEqual(test.expected, result) {
