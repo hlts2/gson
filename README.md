@@ -1,5 +1,5 @@
 # gson
-Simple Json Parse Library for Go
+Simple json parse library for go.
 
 ## Requirement
 Go 1.8
@@ -12,7 +12,7 @@ go get github.com/hlts2/gson
 
 ### Create from byte
 
-Create gson object from bytes. Returns an error if the bytes are not valid JSON.
+Create gson object from `[]byte`. Returns an error if the bytes are not valid json.
 
 ```go
 g, err := gson.NewGsonFromByte(data)
@@ -20,7 +20,7 @@ g, err := gson.NewGsonFromByte(data)
 
 ### Create from string
 
-Create gson object from string. Returns an error if the string are not valid JSON.
+Create gson object from `string`. Returns an error if the string are not valid json.
 
 ```go
 g, err := gson.NewGsonFromString(str)
@@ -28,7 +28,7 @@ g, err := gson.NewGsonFromString(str)
 
 ### Create from io.Reader
 
-Create gson object from a io.Reader. Returns an error if the resp.Body are not valid JSON.
+Create gson object from a `io.Reader`. Returns an error if the resp.Body are not valid json.
 
 ```go
 g, err := gson.NewGsonFromReader(resp.Body)
