@@ -35,7 +35,7 @@ type ResultError struct {
 }
 
 func (e *ResultError) Error() string {
-	return "Gson." + e.Fn + ": parsing " + Quote(e.Object) + ": " + e.Err.Error()
+	return "Result." + e.Fn + ": parsing " + Quote(e.Object) + ": " + e.Err.Error()
 }
 
 // Quote returns quoted object string
