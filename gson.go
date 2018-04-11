@@ -27,6 +27,22 @@ var (
 	ErrorInvalidSyntax = errors.New("invalid syntax")
 )
 
+// ResultError represents a conversion error
+type ResultError struct {
+	Fn     string
+	Object interface{}
+	Err    error
+}
+
+func (e *ResultError) Error() string {
+	return "Gson." + e.Fn + ": parsing " + Quote(e.Object) + ": " + e.Err.Error()
+}
+
+// Quote returns quoted object string
+func Quote(object interface{}) string {
+	return fmt.Sprintf("\"%v\"", object)
+}
+
 // Result represents a json value that is returned from GetByPath() and GetByKeys().
 type Result struct {
 	object interface{}
@@ -186,594 +202,624 @@ func (r *Result) Indent(prefix, indent string) string {
 	return str
 }
 
-// Uint8 converts an interface{} of Result object to a uint8
-func (r *Result) Uint8() uint8 {
+// Uint8 converts an interface{} to a uint8 and returns an error if types don't match.
+func (r *Result) Uint8() (uint8, error) {
+	const fn = "Uint8"
+
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
-			return 0
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 		}
-		return uint8(v)
+		return uint8(v), nil
 	case int8:
 		if v < 0 {
-			return 0
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 		}
-		return uint8(v)
+		return uint8(v), nil
 	case int16:
 		if v < 0 {
-			return 0
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 		}
-		return uint8(v)
+		return uint8(v), nil
 	case int32:
 		if v < 0 {
-			return 0
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 		}
-		return uint8(v)
+		return uint8(v), nil
 	case int64:
 		if v < 0 {
-			return 0
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 		}
-		return uint8(v)
+		return uint8(v), nil
 	case uint:
-		return uint8(v)
+		return uint8(v), nil
 	case uint8:
-		return v
+		return v, nil
 	case uint16:
-		return uint8(v)
+		return uint8(v), nil
 	case uint32:
-		return uint8(v)
+		return uint8(v), nil
 	case uint64:
-		return uint8(v)
+		return uint8(v), nil
 	case float32:
 		if v < 0 {
-			return 0
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 		}
-		return uint8(v)
+		return uint8(v), nil
 	case float64:
 		if v < 0 {
-			return 0
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 		}
-		return uint8(v)
+		return uint8(v), nil
 	case bool:
 		if v {
-			return 1
+			return 1, nil
 		}
-		return 0
+		return 0, nil
 	case string:
 		u, err := strconv.ParseUint(v, 0, 8)
 		if err == nil {
-			return uint8(u)
+			return uint8(u), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case nil:
-		return 0
+		return 0, nil
 	default:
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// Uint16 converts an interface{} of Result object to a uint16
-func (r *Result) Uint16() uint16 {
+// Uint16 converts an interface{} to a uint16 and returns an error if types don't match.
+func (r *Result) Uint16() (uint16, error) {
+	const fn = "Uint16"
+
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
-			return 0
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 		}
-		return uint16(v)
+		return uint16(v), nil
 	case int8:
 		if v < 0 {
-			return 0
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 		}
-		return uint16(v)
+		return uint16(v), nil
 	case int16:
 		if v < 0 {
-			return 0
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 		}
-		return uint16(v)
+		return uint16(v), nil
 	case int32:
 		if v < 0 {
-			return 0
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 		}
-		return uint16(v)
+		return uint16(v), nil
 	case int64:
 		if v < 0 {
-			return 0
+			return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 		}
-		return uint16(v)
+		return uint16(v), nil
 	case uint:
-		return uint16(v)
+		return uint16(v), nil
 	case uint8:
-		return uint16(v)
+		return uint16(v), nil
 	case uint16:
-		return v
+		return v, nil
 	case uint32:
-		return uint16(v)
+		return uint16(v), nil
 	case uint64:
-		return uint16(v)
+		return uint16(v), nil
 	case bool:
 		if v {
-			return 1
+			return 1, nil
 		}
-		return 0
+		return 0, nil
 	case string:
 		s, err := strconv.ParseUint(v, 0, 16)
 		if err == nil {
-			return uint16(s)
+			return uint16(s), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case nil:
-		return 0
+		return 0, nil
 	default:
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// Uint32 converts an interface{} of Result object to a uint32
-func (r *Result) Uint32() uint32 {
+// Uint32 converts an interface{} to a uint32 and returns an error if types don't match.
+func (r *Result) Uint32() (uint32, error) {
+	const fn = "Uint32"
+
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
-			return uint32(v)
+			return uint32(v), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case int8:
 		if v < 0 {
-			return uint32(v)
+			return uint32(v), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case int16:
 		if v < 0 {
-			return uint32(v)
+			return uint32(v), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case int32:
 		if v < 0 {
-			return uint32(v)
+			return uint32(v), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case int64:
 		if v < 0 {
-			return uint32(v)
+			return uint32(v), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case uint:
-		return uint32(v)
+		return uint32(v), nil
 	case uint8:
-		return uint32(v)
+		return uint32(v), nil
 	case uint16:
-		return uint32(v)
+		return uint32(v), nil
 	case uint32:
-		return v
+		return v, nil
 	case uint64:
-		return uint32(v)
+		return uint32(v), nil
 	case bool:
 		if v {
-			return 1
+			return 1, nil
 		}
-		return 0
+		return 0, nil
 	case string:
 		u, err := strconv.ParseUint(v, 0, 32)
 		if err == nil {
-			return uint32(u)
+			return uint32(u), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case nil:
-		return 0
+		return 0, nil
 	default:
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// Uint64 converts an interface{} of Result object to a uint64
-func (r *Result) Uint64() uint64 {
+// Uint64 converts an interface{} to a uint64 and returns an error if types don't match.
+func (r *Result) Uint64() (uint64, error) {
+	const fn = "Uint64"
+
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
-			return uint64(v)
+			return uint64(v), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case int8:
 		if v < 0 {
-			return uint64(v)
+			return uint64(v), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case int16:
 		if v < 0 {
-			return uint64(v)
+			return uint64(v), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case int32:
 		if v < 0 {
-			return uint64(v)
+			return uint64(v), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case int64:
 		if v < 0 {
-			return uint64(v)
+			return uint64(v), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case uint:
-		return uint64(v)
+		return uint64(v), nil
 	case uint8:
-		return uint64(v)
+		return uint64(v), nil
 	case uint16:
-		return uint64(v)
+		return uint64(v), nil
 	case uint32:
-		return uint64(v)
+		return uint64(v), nil
 	case uint64:
-		return v
+		return v, nil
 	case bool:
 		if v {
-			return 1
+			return 1, nil
 		}
-		return 0
+		return 0, nil
 	case string:
 		u, err := strconv.ParseUint(v, 0, 64)
 		if err == nil {
-			return u
+			return u, nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case nil:
-		return 0
+		return 0, nil
 	default:
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// Int8 converts an interface{} of Result object to a int8
-func (r *Result) Int8() int8 {
+// Int8 converts an interface{} to a int8 and returns an error if types don't match.
+func (r *Result) Int8() (int8, error) {
+	const fn = "Int8"
+
 	switch v := r.object.(type) {
 	case int:
-		return int8(v)
+		return int8(v), nil
 	case int8:
-		return int8(v)
+		return int8(v), nil
 	case int16:
-		return int8(v)
+		return int8(v), nil
 	case int32:
-		return int8(v)
+		return int8(v), nil
 	case int64:
-		return int8(v)
+		return int8(v), nil
 	case uint:
-		return int8(v)
+		return int8(v), nil
 	case uint8:
-		return int8(v)
+		return int8(v), nil
 	case uint16:
-		return int8(v)
+		return int8(v), nil
 	case uint32:
-		return int8(v)
+		return int8(v), nil
 	case uint64:
-		return int8(v)
+		return int8(v), nil
 	case bool:
 		if v {
-			return 1
+			return 1, nil
 		}
-		return 0
+		return 0, nil
 	case string:
 		i, err := strconv.ParseInt(v, 0, 8)
 		if err == nil {
-			return int8(i)
+			return int8(i), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case nil:
-		return 0
+		return 0, nil
 	default:
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// Int16 converts an interface{} of Result object to a int16
-func (r *Result) Int16() int16 {
+// Int16 converts an interface{} to a int16 and returns an error if types don't match.
+func (r *Result) Int16() (int16, error) {
+	const fn = "Int16"
+
 	switch v := r.object.(type) {
 	case int:
-		return int16(v)
+		return int16(v), nil
 	case int8:
-		return int16(v)
+		return int16(v), nil
 	case int16:
-		return int16(v)
+		return int16(v), nil
 	case int32:
-		return int16(v)
+		return int16(v), nil
 	case int64:
-		return int16(v)
+		return int16(v), nil
 	case uint:
-		return int16(v)
+		return int16(v), nil
 	case uint8:
-		return int16(v)
+		return int16(v), nil
 	case uint16:
-		return int16(v)
+		return int16(v), nil
 	case uint32:
-		return int16(v)
+		return int16(v), nil
 	case uint64:
-		return int16(v)
+		return int16(v), nil
 	case bool:
 		if v {
-			return 1
+			return 1, nil
 		}
-		return 0
+		return 0, nil
 	case string:
 		i, err := strconv.ParseInt(v, 0, 16)
 		if err == nil {
-			return int16(i)
+			return int16(i), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case nil:
-		return 0
+		return 0, nil
 	default:
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// Int32 converts an interface{} of Result object to a int32
-func (r *Result) Int32() int32 {
+// Int32 converts an interface{} to a int32 and returns an error if types don't match.
+func (r *Result) Int32() (int32, error) {
+	const fn = "Int32"
+
 	switch v := r.object.(type) {
 	case int:
-		return int32(v)
+		return int32(v), nil
 	case int8:
-		return int32(v)
+		return int32(v), nil
 	case int16:
-		return int32(v)
+		return int32(v), nil
 	case int32:
-		return int32(v)
+		return int32(v), nil
 	case int64:
-		return int32(v)
+		return int32(v), nil
 	case uint:
-		return int32(v)
+		return int32(v), nil
 	case uint8:
-		return int32(v)
+		return int32(v), nil
 	case uint16:
-		return int32(v)
+		return int32(v), nil
 	case uint32:
-		return int32(v)
+		return int32(v), nil
 	case uint64:
-		return int32(v)
+		return int32(v), nil
 	case bool:
 		if v {
-			return 1
+			return 1, nil
 		}
-		return 0
+		return 0, nil
 	case string:
 		i, err := strconv.ParseInt(v, 0, 32)
 		if err == nil {
-			return int32(i)
+			return int32(i), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case nil:
-		return 0
+		return 0, nil
 	default:
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// Int64 converts an interface{} of Result object to a int64
-func (r *Result) Int64() int64 {
+// Int64 converts an interface{} to a int64 and returns an error if types don't match.
+func (r *Result) Int64() (int64, error) {
+	const fn = "Int64"
+
 	switch v := r.object.(type) {
 	case int:
-		return int64(v)
+		return int64(v), nil
 	case int8:
-		return int64(v)
+		return int64(v), nil
 	case int16:
-		return int64(v)
+		return int64(v), nil
 	case int32:
-		return int64(v)
+		return int64(v), nil
 	case int64:
-		return int64(v)
+		return int64(v), nil
 	case uint:
-		return int64(v)
+		return int64(v), nil
 	case uint8:
-		return int64(v)
+		return int64(v), nil
 	case uint16:
-		return int64(v)
+		return int64(v), nil
 	case uint32:
-		return int64(v)
+		return int64(v), nil
 	case uint64:
-		return int64(v)
+		return int64(v), nil
 	case bool:
 		if v {
-			return 1
+			return 1, nil
 		}
-		return 0
+		return 0, nil
 	case string:
 		i, err := strconv.ParseInt(v, 0, 64)
 		if err == nil {
-			return i
+			return i, nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case nil:
-		return 0
+		return 0, nil
 	default:
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// Int converts an interface{} of Result object to a int
-func (r *Result) Int() int {
+// Int converts an interface{} to a int and returns an error if types don't match.
+func (r *Result) Int() (int, error) {
+	const fn = "Int"
+
 	switch v := r.object.(type) {
 	case int:
-		return int(v)
+		return int(v), nil
 	case int8:
-		return int(v)
+		return int(v), nil
 	case int16:
-		return int(v)
+		return int(v), nil
 	case int32:
-		return int(v)
+		return int(v), nil
 	case int64:
-		return int(v)
+		return int(v), nil
 	case uint:
-		return int(v)
+		return int(v), nil
 	case uint8:
-		return int(v)
+		return int(v), nil
 	case uint16:
-		return int(v)
+		return int(v), nil
 	case uint32:
-		return int(v)
+		return int(v), nil
 	case uint64:
-		return int(v)
+		return int(v), nil
 	case bool:
 		if v {
-			return 1
+			return 1, nil
 		}
-		return 0
+		return 0, nil
 	case string:
 		i, err := strconv.ParseInt(v, 0, 0)
 		if err == nil {
-			return int(i)
+			return int(i), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case nil:
-		return 0
+		return 0, nil
 	default:
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// Float32 converts an interface{} of Result object to a float32.
-func (r *Result) Float32() float32 {
+// Float32 converts an interface{} to a float32 and returns an error if types don't match.
+func (r *Result) Float32() (float32, error) {
+	const fn = "Float32"
+
 	switch v := r.object.(type) {
 	case int:
-		return float32(v)
+		return float32(v), nil
 	case int8:
-		return float32(v)
+		return float32(v), nil
 	case int16:
-		return float32(v)
+		return float32(v), nil
 	case int32:
-		return float32(v)
+		return float32(v), nil
 	case int64:
-		return float32(v)
+		return float32(v), nil
 	case uint:
-		return float32(v)
+		return float32(v), nil
 	case uint8:
-		return float32(v)
+		return float32(v), nil
 	case uint16:
-		return float32(v)
+		return float32(v), nil
 	case uint32:
-		return float32(v)
+		return float32(v), nil
 	case uint64:
-		return float32(v)
+		return float32(v), nil
 	case bool:
 		if v {
-			return 1
+			return 1, nil
 		}
-		return 0
+		return 0, nil
 	case string:
 		i, err := strconv.ParseFloat(v, 32)
 		if err == nil {
-			return float32(i)
+			return float32(i), nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case nil:
-		return 0
+		return 0, nil
 	default:
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// Float64 converts an interface{} of Result object to a float64.
-func (r *Result) Float64() float64 {
+// Float64 converts an interface{} to a float64 and returns an error if types don't match.
+func (r *Result) Float64() (float64, error) {
+	const fn = "Float64"
+
 	switch v := r.object.(type) {
 	case int:
-		return float64(v)
+		return float64(v), nil
 	case int8:
-		return float64(v)
+		return float64(v), nil
 	case int16:
-		return float64(v)
+		return float64(v), nil
 	case int32:
-		return float64(v)
+		return float64(v), nil
 	case int64:
-		return float64(v)
+		return float64(v), nil
 	case uint:
-		return float64(v)
+		return float64(v), nil
 	case uint8:
-		return float64(v)
+		return float64(v), nil
 	case uint16:
-		return float64(v)
+		return float64(v), nil
 	case uint32:
-		return float64(v)
+		return float64(v), nil
 	case uint64:
-		return float64(v)
+		return float64(v), nil
 	case bool:
 		if v {
-			return 1
+			return 1, nil
 		}
-		return 0
+		return 0, nil
 	case string:
 		i, err := strconv.ParseFloat(v, 64)
 		if err == nil {
-			return i
+			return i, nil
 		}
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	case nil:
-		return 0
+		return 0, nil
 	default:
-		return 0
+		return 0, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// String converts an interface{} of Result object to a string.
-func (r *Result) String() string {
+// String converts an interface{} to a string and returns an error if types don't match.
+func (r *Result) String() (string, error) {
+	const fn = "String"
+
 	switch v := r.object.(type) {
 	case int:
-		return strconv.Itoa(v)
+		return strconv.Itoa(v), nil
 	case int16:
-		return strconv.FormatInt(int64(v), 10)
+		return strconv.FormatInt(int64(v), 10), nil
 	case int32:
-		return strconv.FormatInt(int64(v), 10)
+		return strconv.FormatInt(int64(v), 10), nil
 	case int64:
-		return strconv.FormatInt(v, 10)
+		return strconv.FormatInt(v, 10), nil
 	case uint:
-		return strconv.FormatUint(uint64(v), 10)
+		return strconv.FormatUint(uint64(v), 10), nil
 	case uint8:
-		return strconv.FormatUint(uint64(v), 10)
+		return strconv.FormatUint(uint64(v), 10), nil
 	case uint16:
-		return strconv.FormatUint(uint64(v), 10)
+		return strconv.FormatUint(uint64(v), 10), nil
 	case uint32:
-		return strconv.FormatUint(uint64(v), 10)
+		return strconv.FormatUint(uint64(v), 10), nil
 	case uint64:
-		return strconv.FormatUint(v, 10)
+		return strconv.FormatUint(v, 10), nil
 	case bool:
 		if v {
-			return "true"
+			return "true", nil
 		}
-		return "false"
+		return "false", nil
 	case string:
-		return v
+		return v, nil
 	default:
-		return ""
+		return "", &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// Bool converts an interface{} of Result object to a bool
-func (r *Result) Bool() bool {
+// Bool converts an interface{} to a bool and returns an error if types don't match.
+func (r *Result) Bool() (bool, error) {
+	const fn = "Bool"
+
 	switch v := r.object.(type) {
 	case bool:
-		return v
+		return v, nil
 	case nil:
-		return false
+		return false, nil
 	case string:
 		b, err := strconv.ParseBool(v)
 		if err == nil {
-			return b
+			return b, nil
 		}
-		return false
+		return false, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	default:
-		return false
+		return false, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// MapInterface converts an interface{} of Result object to a map[string]interface{}.
-func (r *Result) MapInterface() map[string]interface{} {
+// MapInterface converts an interface{} to a map[string]interface{} and returns an error if types don't match.
+func (r *Result) MapInterface() (map[string]interface{}, error) {
+	const fn = "MapInterface"
+
 	switch r.object.(type) {
 	case map[string]interface{}:
-		return r.object.(map[string]interface{})
+		return r.object.(map[string]interface{}), nil
 	default:
-		return map[string]interface{}{}
+		return map[string]interface{}{}, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }
 
-// MapInterfaceSlice converts an interface{} of Result object to a []map[string]interface{}.
-func (r *Result) MapInterfaceSlice() []map[string]interface{} {
+// MapInterfaceSlice converts an interface{} to a []map[string]interface{} and returns an error if types don't match.
+func (r *Result) MapInterfaceSlice() ([]map[string]interface{}, error) {
+	const fn = "MapInterfaceSlice"
+
 	switch r.object.(type) {
 	case []map[string]interface{}:
-		return r.object.([]map[string]interface{})
+		return r.object.([]map[string]interface{}), nil
 	default:
-		return []map[string]interface{}{}
+		return []map[string]interface{}{}, &ResultError{fn, r.object, ErrorInvalidSyntax}
 	}
 }

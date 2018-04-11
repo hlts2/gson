@@ -426,7 +426,13 @@ func TestUint8(t *testing.T) {
 			t.Errorf("i = %d GetByKeys(keys) is error: %v", i, err)
 		}
 
-		got := result.Uint8()
+		got, err := result.Uint8()
+
+		isError := !(err == nil)
+
+		if test.isError != isError {
+			t.Errorf("i = %d Uint8() expected isError: %v, got: %v", i, test.isError, isError)
+		}
 
 		if test.expected != got {
 			t.Errorf("i = %d GetByKeys(keys) expected: %v, got: %v", i, test.expected, got)
