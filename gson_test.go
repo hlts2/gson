@@ -98,15 +98,9 @@ func TestNewGsonFromString(t *testing.T) {
 			t.Errorf("i = %d NewGsonFromString(json) expected isError: %v, got: %v", i, test.isError, isError)
 		}
 
-		/*
-			if g == nil || test.expected == nil {
-				t.Errorf("i = %d NewGsonFromString(json) expected isError: %v, got: %v", i, test.isError, isError)
-			}
-
-				if !reflect.DeepEqual(g.jsonObject, test.expected.jsonObject) {
-					t.Errorf("i = %d NewGsonFromString(json) expected: %v, got: %v", i, test.expected.jsonObject, g.jsonObject)
-				}
-		*/
+		// if !reflect.DeepEqual(g, test.expected) {
+		// 	t.Errorf("i = %d NewGsonFromString(json) expected: %v, got: %v", i, test.expected.jsonObject, g.jsonObject)
+		// }
 	}
 }
 
@@ -408,12 +402,10 @@ func TestUint8(t *testing.T) {
 	tests := []struct {
 		json     string
 		expected uint8
-		isError  bool
 	}{
 		{
 			json:     `{"ID": 123}`,
 			expected: uint8(123),
-			isError:  false,
 		},
 	}
 
@@ -432,16 +424,10 @@ func TestUint8(t *testing.T) {
 			t.Errorf("i = %d GetByKeys(keys) is error: %v", i, err)
 		}
 
-		got, err := result.Uint8()
-
-		isError := !(err == nil)
-
-		if test.isError != isError {
-			t.Errorf("i = %d GetByKeys(keys) expected isError: %v, got: %v", i, test.isError, isError)
-		}
+		got := result.Uint8()
 
 		if test.expected != got {
-			t.Errorf("i = %d GetByKeys(keys) expected: %v, got: %v", i, test.expected, got)
+			t.Errorf("i = %d Uint8() expected: %v, got: %v", i, test.expected, got)
 		}
 	}
 }
