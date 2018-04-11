@@ -121,6 +121,4 @@ fmt.Println(str)
     ]
 }
 */
-
-
 ```
