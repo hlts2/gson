@@ -188,8 +188,6 @@ func (r *Result) Indent(prefix, indent string) string {
 
 // Uint8 converts an interface{} of Result object to a uint8
 func (r *Result) Uint8() uint8 {
-	const fn = "Uint8"
-
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
@@ -256,8 +254,6 @@ func (r *Result) Uint8() uint8 {
 
 // Uint16 converts an interface{} of Result object to a uint16
 func (r *Result) Uint16() uint16 {
-	const fn = "Uint16"
-
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
@@ -314,8 +310,6 @@ func (r *Result) Uint16() uint16 {
 
 // Uint32 converts an interface{} of Result object to a uint32
 func (r *Result) Uint32() uint32 {
-	const fn = "Uint32"
-
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
@@ -372,8 +366,6 @@ func (r *Result) Uint32() uint32 {
 
 // Uint64 converts an interface{} of Result object to a uint64
 func (r *Result) Uint64() uint64 {
-	const fn = "Uint64"
-
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
@@ -430,8 +422,6 @@ func (r *Result) Uint64() uint64 {
 
 // Int8 converts an interface{} of Result object to a int8
 func (r *Result) Int8() int8 {
-	const fn = "Int8"
-
 	switch v := r.object.(type) {
 	case int:
 		return int8(v)
@@ -473,8 +463,6 @@ func (r *Result) Int8() int8 {
 
 // Int16 converts an interface{} of Result object to a int16
 func (r *Result) Int16() int16 {
-	const fn = "Int16"
-
 	switch v := r.object.(type) {
 	case int:
 		return int16(v)
@@ -516,8 +504,6 @@ func (r *Result) Int16() int16 {
 
 // Int32 converts an interface{} of Result object to a int32
 func (r *Result) Int32() int32 {
-	const fn = "Int32"
-
 	switch v := r.object.(type) {
 	case int:
 		return int32(v)
@@ -559,8 +545,6 @@ func (r *Result) Int32() int32 {
 
 // Int64 converts an interface{} of Result object to a int64
 func (r *Result) Int64() int64 {
-	const fn = "Int64"
-
 	switch v := r.object.(type) {
 	case int:
 		return int64(v)
@@ -643,8 +627,6 @@ func (r *Result) Int() int {
 
 // Float32 converts an interface{} of Result object to a float32.
 func (r *Result) Float32() float32 {
-	const fn = "Float32"
-
 	switch v := r.object.(type) {
 	case int:
 		return float32(v)
@@ -686,8 +668,6 @@ func (r *Result) Float32() float32 {
 
 // Float64 converts an interface{} of Result object to a float64.
 func (r *Result) Float64() float64 {
-	const fn = "Float64"
-
 	switch v := r.object.(type) {
 	case int:
 		return float64(v)
@@ -762,8 +742,6 @@ func (r *Result) String() string {
 
 // Bool converts an interface{} of Result object to a bool
 func (r *Result) Bool() bool {
-	const fn = "Bool"
-
 	switch v := r.object.(type) {
 	case bool:
 		return v
