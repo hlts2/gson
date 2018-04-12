@@ -48,7 +48,7 @@ var json = `
 }
 `
 
-g, _ := gson.NewGosonFromByte([]byte(json))
+g, _ := gson.NewGsonFromByte([]byte(json))
 
 result, _ := g.GetByPath("likes.1")
 
@@ -79,7 +79,7 @@ var json = `
 }
 `
 
-g, _ := gson.NewGosonFromByte([]byte(json))
+g, _ := gson.NewGsonFromByte([]byte(json))
 
 result, _ := g.GetByKeys("likes", "1")
 
@@ -94,7 +94,7 @@ fmt.Println(str) //strawberry
 ```go
 json := `{"created_at": {"date": "2017-05-10 12:54:18"}}`
 
-g, _ := gson.NewGosonFromByte([]byte(json))
+g, _ := gson.NewGsonFromByte([]byte(json))
 
 result, _ :=  g.GetByKeys("created_at")
 
@@ -112,14 +112,14 @@ for key, value := range m {
 
 json := `{"Likes": ["pen"]}`
 
-g, _ := gson.NewGosonFromByte([]byte(json))
+g, _ := gson.NewGsonFromByte([]byte(json))
 
 result, _ :=  g.GetByKeys("Likes")
 
 slice, _ := result.Slice()
 
 for _, value := range slice {
-    fmt.Printf("value: %v", value.Interface{}) //value: pen
+    fmt.Printf("value: %v", value.Interface()) //value: pen
 }
 
 ```
@@ -132,7 +132,7 @@ for _, value := range slice {
 
 json := `{"Accounts": [{"ID": "1111"}, {"ID": "2222"}]}`
 
-g, _ := gson.NewGosonFromByte([]byte(json))
+g, _ := gson.NewGsonFromByte([]byte(json))
 
 str, _  := g.Indent("", "  ")
 
