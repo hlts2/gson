@@ -260,7 +260,7 @@ func TestGetByPath(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromByte([]byte(test.json))
+		g, err := NewGsonFromByte(*(*[]byte)(unsafe.Pointer(&test.json)))
 		if err != nil {
 			t.Errorf("i = %d NewGsonFromString() is error: %v", i, err)
 		}
@@ -324,7 +324,7 @@ func TestHasWithPath(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromByte([]byte(test.json))
+		g, err := NewGsonFromByte(*(*[]byte)(unsafe.Pointer(&test.json)))
 		if err != nil {
 			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
 		}
@@ -413,7 +413,7 @@ func TestUint8(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromByte([]byte(test.json))
+		g, err := NewGsonFromByte(*(*[]byte)(unsafe.Pointer(&test.json)))
 		if err != nil {
 			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
 		}
@@ -453,7 +453,7 @@ func TestSlice(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromByte([]byte(test.json))
+		g, err := NewGsonFromByte(*(*[]byte)(unsafe.Pointer(&test.json)))
 		if err != nil {
 			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
 		}
@@ -484,7 +484,7 @@ func TestMap(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromByte([]byte(test.json))
+		g, err := NewGsonFromByte(*(*[]byte)(unsafe.Pointer(&test.json)))
 		if err != nil {
 			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
 		}
