@@ -12,22 +12,29 @@ var jsonString = `
 `
 
 func main() {
-	g, err := gson.NewGosonFromString(jsonString)
+	g, err := gson.NewGsonFromByte([]byte(jsonString))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	result, err := g.Path("/friends/1/like/0")
+	result, err := g.GetByKeys("friends")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	str, err := result.String()
+	slice, err := result.Slice()
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(str)
 
-	result, _ = g.Path("/friends")
-	fmt.Println(result.Indent("", " "))
+	for _, value := range slice {
+		fmt.Printf("value: %v\n", value.Interface())
+	}
+
+	m, err := slice[0].Map()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(m["name"].Interface())
 }
