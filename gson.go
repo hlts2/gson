@@ -93,6 +93,7 @@ func indentJSONString(object interface{}, prefix, indent string) (string, error)
 	return buf.String(), nil
 }
 
+/*
 // HasWithKeys returns bool if there is json value coresponding to keys
 func (g *Gson) HasWithKeys(keys ...string) bool {
 	var err error
@@ -120,6 +121,7 @@ func (g *Gson) HasWithPath(path string) bool {
 	}
 	return true
 }
+*/
 
 // GetByKeys returns json value corresponding to keys. keys represents key of hierarchy of json
 func (g *Gson) GetByKeys(keys ...string) (*Result, error) {

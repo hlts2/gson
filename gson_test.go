@@ -282,6 +282,7 @@ func TestGetByPath(t *testing.T) {
 	}
 }
 
+/*
 func TestHasWithPath(t *testing.T) {
 	tests := []struct {
 		json     string
@@ -397,6 +398,7 @@ func TestHasWithKeys(t *testing.T) {
 		}
 	}
 }
+*/
 
 func TestUint8(t *testing.T) {
 	tests := []struct {
