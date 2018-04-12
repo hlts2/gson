@@ -89,6 +89,41 @@ fmt.Println(str) //strawberry
 
 ```
 
+### Iterating objects
+
+```go
+json := `{"created_at": {"date": "2017-05-10 12:54:18"}}`
+
+g, _ := gson.NewGosonFromByte([]byte(json))
+
+result, _ :=  g.GetByKeys("created_at")
+
+m, _ := result.Map()
+
+for key, value := range m {
+    fmt.Printf("key: %s, value: %v", key, value.Interface{}) //key: date, value: 2017-05-10 12:54:18
+}
+
+```
+
+### Iterating slice
+
+```go
+
+json := `{"Likes": ["pen"]}`
+
+g, _ := gson.NewGosonFromByte([]byte(json))
+
+result, _ :=  g.GetByKeys("Likes")
+
+slice, _ := result.Slice()
+
+for _, value := range slice {
+    fmt.Printf("value: %v", value.Interface{}) //value: pen
+}
+
+```
+
 ### Indent String
 
 `Indent` returns the formatted json string
