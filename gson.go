@@ -790,6 +790,7 @@ func (r *Result) Slice() ([]*Result, error) {
 
 	switch slice := r.object.(type) {
 	case []interface{}:
+
 		results := make([]*Result, 0, len(slice))
 
 		for _, val := range slice {

@@ -466,19 +466,19 @@ func TestSlice(t *testing.T) {
 		},
 	}
 
-	for i, test := range tests {
+	for ti, test := range tests {
 		g, err := NewGsonFromByte([]byte(test.json))
 		if err != nil {
-			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
+			t.Errorf("i = %d NewGsonFromString(json) is error: %v", ti, err)
 		}
 
 		if g == nil {
-			t.Errorf("i = %d NewGsonFromString(json) g is nil", i)
+			t.Errorf("i = %d NewGsonFromString(json) g is nil", ti)
 		}
 
 		result, err := g.GetByKeys("IDs")
 		if err != nil {
-			t.Errorf("i = %d GetByKeys(keys) is error: %v", i, err)
+			t.Errorf("i = %d GetByKeys(keys) is error: %v", ti, err)
 		}
 
 		slice, err := result.Slice()
@@ -486,12 +486,12 @@ func TestSlice(t *testing.T) {
 		isError := !(err == nil)
 
 		if test.isError != isError {
-			t.Errorf("i = %d Slice() expected isError: %v, got: %v", i, test.isError, isError)
+			t.Errorf("i = %d Slice() expected isError: %v, got: %v", ti, test.isError, isError)
 		}
 
-		for j, _ := range slice {
-			if !reflect.DeepEqual(test.expected[j].object, slice[j].object) {
-				t.Errorf("i = %d Slice() expected Result: %v, got: %v", i, test.expected[j].object, slice[j].object)
+		for si := range slice {
+			if !reflect.DeepEqual(test.expected[si].object, slice[si].object) {
+				t.Errorf("i = %d Slice() expected Result: %v, got: %v", ti, test.expected[si].object, slice[si].object)
 			}
 		}
 	}
