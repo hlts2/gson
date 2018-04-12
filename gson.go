@@ -16,8 +16,8 @@ var (
 	// ErrorIndexOutOfRange represents index out of range error
 	ErrorIndexOutOfRange = errors.New("index out of range")
 
-	// ErrorNotArray represents error that target object is not array
-	ErrorNotArray = errors.New("not array")
+	// ErrorNotSlice represents error that target object is not slice
+	ErrorNotSlice = errors.New("not slice")
 
 	// ErrorNotMap represents error that target object is not map
 	ErrorNotMap = errors.New("not map")
@@ -158,7 +158,7 @@ func getByKey(object interface{}, key string) (interface{}, error) {
 			}
 			return nil, ErrorIndexOutOfRange
 		}
-		return nil, ErrorNotArray
+		return nil, ErrorNotSlice
 	}
 
 	if m, ok := object.(map[string]interface{}); ok {
@@ -796,12 +796,12 @@ func (r *Result) Slice() ([]*Result, error) {
 
 		return results, nil
 	default:
-		return nil, ErrorInvalidObject
+		return nil, ErrorNotSlice
 	}
 }
 
 // Map converts an Result pointer slice and returns an error if types don't match.
-func (r *Result) Map() map[string]*Result {
+func (r *Result) Map() (map[string]*Result, error) {
 	const fn = "Map"
 
 	switch m := r.object.(type) {
@@ -812,9 +812,9 @@ func (r *Result) Map() map[string]*Result {
 			rMap[key] = &Result{object: val}
 		}
 
-		return rMap
+		return rMap, nil
 	default:
-		return nil
+		return nil, ErrorNotMap
 	}
 }
 
