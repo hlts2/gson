@@ -817,27 +817,3 @@ func (r *Result) Map() (map[string]*Result, error) {
 		return nil, ErrorNotMap
 	}
 }
-
-// MapInterface converts an interface{} to a map[string]interface{} and returns an error if types don't match.
-func (r *Result) MapInterface() (map[string]interface{}, error) {
-	const fn = "MapInterface"
-
-	switch r.object.(type) {
-	case map[string]interface{}:
-		return r.object.(map[string]interface{}), nil
-	default:
-		return map[string]interface{}{}, ErrorInvalidObject
-	}
-}
-
-// MapInterfaceSlice converts an interface{} to a []map[string]interface{} and returns an error if types don't match.
-func (r *Result) MapInterfaceSlice() ([]map[string]interface{}, error) {
-	const fn = "MapInterfaceSlice"
-
-	switch r.object.(type) {
-	case []map[string]interface{}:
-		return r.object.([]map[string]interface{}), nil
-	default:
-		return []map[string]interface{}{}, ErrorInvalidObject
-	}
-}
