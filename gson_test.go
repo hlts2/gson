@@ -442,11 +442,24 @@ func TestUint8(t *testing.T) {
 
 func TestSlice(t *testing.T) {
 	tests := []struct {
-		json    string
-		isError bool
+		json     string
+		expected []*Result
+		isError  bool
 	}{
 		{
-			json:    `{"IDs": [{"ID": "1111"}, {"ID": "2222"}]}`,
+			json: `{"IDs": [{"ID": "1111"}, {"ID": "2222"}]}`,
+			expected: []*Result{
+				{
+					object: map[string]interface{}{
+						"ID": "1111",
+					},
+				},
+				{
+					object: map[string]interface{}{
+						"ID": "2222",
+					},
+				},
+			},
 			isError: false,
 		},
 	}
@@ -466,18 +479,38 @@ func TestSlice(t *testing.T) {
 			t.Errorf("i = %d GetByKeys(keys) is error: %v", i, err)
 		}
 
-		// TODO assertion
-		result.Slice()
+		slice, err := result.Slice()
+
+		isError := !(err == nil)
+
+		if test.isError != isError {
+			t.Errorf("i = %d Slice() expected isError: %v, got: %v", i, test.isError, isError)
+		}
+
+		for j, _ := range slice {
+			if !reflect.DeepEqual(test.expected[j].object, slice[j].object) {
+				t.Errorf("i = %d Slice() expected Result: %v, got: %v", i, test.expected[j].object, slice[j].object)
+			}
+		}
 	}
 }
 
 func TestMap(t *testing.T) {
 	tests := []struct {
-		json    string
-		isError bool
+		json     string
+		expected map[string]*Result
+		isError  bool
 	}{
 		{
-			json:    `{"Accounts": [{"ID": "1111", "Name": "hlts2"}]}`,
+			json: `{"Accounts": [{"ID": "1111", "Name": "hlts2"}]}`,
+			expected: map[string]*Result{
+				"ID": &Result{
+					object: "1111",
+				},
+				"Name": &Result{
+					object: "hlts2",
+				},
+			},
 			isError: false,
 		},
 	}
@@ -494,13 +527,20 @@ func TestMap(t *testing.T) {
 
 		result, err := g.GetByKeys("Accounts", "0")
 
+		if err != nil {
+			t.Errorf("i = %d GetByKeys(keys) is error: %v", i, err)
+		}
+
+		m, err := result.Map()
+
 		isError := !(err == nil)
 
 		if test.isError != isError {
-			t.Errorf("i = %d GetByKeys(keys) expected isError: %v, got: %v", i, test.isError, isError)
+			t.Errorf("i = %d Map() expected isError: %v, got: %v", i, test.isError, isError)
 		}
 
-		// TODO assertion
-		result.Map()
+		if !reflect.DeepEqual(test.expected, m) {
+			t.Errorf("i = %d Map() expected: %v, got: %v", i, test.expected, m)
+		}
 	}
 }
