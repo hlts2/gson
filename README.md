@@ -48,7 +48,7 @@ var json = `
 }
 `
 
-g, _ := gson.NewGosonFromByte(*(*[]byte)(unsafe.Pointer(&json)))
+g, _ := gson.NewGosonFromByte([]byte(json))
 
 result, _ := g.GetByPath("likes.1")
 
@@ -79,7 +79,7 @@ var json = `
 }
 `
 
-g, _ := gson.NewGosonFromByte(*(*[]byte)(unsafe.Pointer(&json)))
+g, _ := gson.NewGosonFromByte([]byte(json))
 
 result, _ := g.GetByKeys("likes", "1")
 
