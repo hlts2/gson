@@ -129,9 +129,10 @@ for _, value := range slice {
 `Indent` returns the formatted json string
 
 ```go
-/*
+
 json := `{"Accounts": [{"ID": "1111"}, {"ID": "2222"}]}`
-*/
+
+g, _ := gson.NewGosonFromByte([]byte(json))
 
 str, _  := g.Indent("", "  ")
 
