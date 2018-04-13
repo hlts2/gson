@@ -73,7 +73,7 @@ func TestNewGsonFromByte(t *testing.T) {
 		{
 			json: `1`,
 			expected: &Gson{
-				jsonObject: 1,
+				jsonObject: float64(1),
 			},
 			isError: false,
 		},
@@ -100,8 +100,8 @@ func TestNewGsonFromByte(t *testing.T) {
 		},
 		{
 			json: `
-					{"friends": [
-      					{
+				{"friends": [
+     					{
         					"id": 0,
 							"name": "hiro"
 						},
@@ -116,18 +116,18 @@ func TestNewGsonFromByte(t *testing.T) {
 					]}
 	  			`,
 			expected: &Gson{
-				jsonObject: map[string][]interface{}{
+				jsonObject: map[string]interface{}{
 					"friends": []interface{}{
 						map[string]interface{}{
-							"id":   0,
+							"id":   float64(0),
 							"name": "hiro",
 						},
 						map[string]interface{}{
-							"id":   1,
+							"id":   float64(1),
 							"name": "hiroto",
 						},
 						map[string]interface{}{
-							"id":   2,
+							"id":   float64(2),
 							"name": "hlts2",
 						},
 					},
@@ -136,20 +136,14 @@ func TestNewGsonFromByte(t *testing.T) {
 			isError: false,
 		},
 		{
-			json: `[{"name": "litt]`,
-			expected: &Gson{
-				jsonObject: []map[string]interface{}{
-					map[string]interface{}{
-						"name": "litt",
-					},
-				},
-			},
-			isError: true,
+			json:     `[{"name": "litt]`,
+			expected: nil,
+			isError:  true,
 		},
 	}
 
 	for i, test := range tests {
-		_, err := NewGsonFromByte([]byte(test.json))
+		g, err := NewGsonFromByte([]byte(test.json))
 
 		isError := !(err == nil)
 
@@ -157,9 +151,9 @@ func TestNewGsonFromByte(t *testing.T) {
 			t.Errorf("i = %d NewGsonFromString(json) expected isError: %v, got: %v", i, test.isError, isError)
 		}
 
-		// if !reflect.DeepEqual(g, test.expected) {
-		// 	t.Errorf("i = %d NewGsonFromString(json) expected: %v, got: %v", i, test.expected.jsonObject, g.jsonObject)
-		// }
+		if !reflect.DeepEqual(g, test.expected) {
+			t.Errorf("i = %d NewGsonFromString(json) expected: %v, got: %v", i, test.expected, g)
+		}
 	}
 }
 
