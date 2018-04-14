@@ -188,8 +188,6 @@ func (r *Result) Interface() interface{} {
 
 // Uint8 converts an interface{} to a uint8 and returns an error if types don't match.
 func (r *Result) Uint8() (uint8, error) {
-	const fn = "Uint8"
-
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
@@ -256,8 +254,6 @@ func (r *Result) Uint8() (uint8, error) {
 
 // Uint16 converts an interface{} to a uint16 and returns an error if types don't match.
 func (r *Result) Uint16() (uint16, error) {
-	const fn = "Uint16"
-
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
@@ -314,8 +310,6 @@ func (r *Result) Uint16() (uint16, error) {
 
 // Uint32 converts an interface{} to a uint32 and returns an error if types don't match.
 func (r *Result) Uint32() (uint32, error) {
-	const fn = "Uint32"
-
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
@@ -372,8 +366,6 @@ func (r *Result) Uint32() (uint32, error) {
 
 // Uint64 converts an interface{} to a uint64 and returns an error if types don't match.
 func (r *Result) Uint64() (uint64, error) {
-	const fn = "Uint64"
-
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
@@ -430,8 +422,6 @@ func (r *Result) Uint64() (uint64, error) {
 
 // Int8 converts an interface{} to a int8 and returns an error if types don't match.
 func (r *Result) Int8() (int8, error) {
-	const fn = "Int8"
-
 	switch v := r.object.(type) {
 	case int:
 		return int8(v), nil
@@ -473,8 +463,6 @@ func (r *Result) Int8() (int8, error) {
 
 // Int16 converts an interface{} to a int16 and returns an error if types don't match.
 func (r *Result) Int16() (int16, error) {
-	const fn = "Int16"
-
 	switch v := r.object.(type) {
 	case int:
 		return int16(v), nil
@@ -516,8 +504,6 @@ func (r *Result) Int16() (int16, error) {
 
 // Int32 converts an interface{} to a int32 and returns an error if types don't match.
 func (r *Result) Int32() (int32, error) {
-	const fn = "Int32"
-
 	switch v := r.object.(type) {
 	case int:
 		return int32(v), nil
@@ -559,8 +545,6 @@ func (r *Result) Int32() (int32, error) {
 
 // Int64 converts an interface{} to a int64 and returns an error if types don't match.
 func (r *Result) Int64() (int64, error) {
-	const fn = "Int64"
-
 	switch v := r.object.(type) {
 	case int:
 		return int64(v), nil
@@ -602,8 +586,6 @@ func (r *Result) Int64() (int64, error) {
 
 // Int converts an interface{} to a int and returns an error if types don't match.
 func (r *Result) Int() (int, error) {
-	const fn = "Int"
-
 	switch v := r.object.(type) {
 	case int:
 		return int(v), nil
@@ -645,8 +627,6 @@ func (r *Result) Int() (int, error) {
 
 // Float32 converts an interface{} to a float32 and returns an error if types don't match.
 func (r *Result) Float32() (float32, error) {
-	const fn = "Float32"
-
 	switch v := r.object.(type) {
 	case int:
 		return float32(v), nil
@@ -688,8 +668,6 @@ func (r *Result) Float32() (float32, error) {
 
 // Float64 converts an interface{} to a float64 and returns an error if types don't match.
 func (r *Result) Float64() (float64, error) {
-	const fn = "Float64"
-
 	switch v := r.object.(type) {
 	case int:
 		return float64(v), nil
@@ -731,8 +709,6 @@ func (r *Result) Float64() (float64, error) {
 
 // String converts an interface{} to a string and returns an error if types don't match.
 func (r *Result) String() (string, error) {
-	const fn = "String"
-
 	switch v := r.object.(type) {
 	case int:
 		return strconv.Itoa(v), nil
@@ -766,8 +742,6 @@ func (r *Result) String() (string, error) {
 
 // Bool converts an interface{} to a bool and returns an error if types don't match.
 func (r *Result) Bool() (bool, error) {
-	const fn = "Bool"
-
 	switch v := r.object.(type) {
 	case bool:
 		return v, nil
@@ -786,8 +760,6 @@ func (r *Result) Bool() (bool, error) {
 
 // Slice converts an Result pointer slice and returns an error if types don't match.
 func (r *Result) Slice() ([]*Result, error) {
-	const fn = "Slice"
-
 	switch slice := r.object.(type) {
 	case []interface{}:
 
@@ -805,8 +777,6 @@ func (r *Result) Slice() ([]*Result, error) {
 
 // Map converts an Result pointer slice and returns an error if types don't match.
 func (r *Result) Map() (map[string]*Result, error) {
-	const fn = "Map"
-
 	switch m := r.object.(type) {
 	case map[string]interface{}:
 		rMap := make(map[string]*Result, len(m))
