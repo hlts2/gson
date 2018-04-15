@@ -314,11 +314,11 @@ func TestGetByPath(t *testing.T) {
 	for i, test := range tests {
 		g, err := NewGsonFromByte([]byte(test.json))
 		if err != nil {
-			t.Errorf("i = %d NewGsonFromString() is error: %v", i, err)
+			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
 		}
 
 		if g == nil {
-			t.Errorf("i = %d NewGsonFromString() g is nil", i)
+			t.Errorf("i = %d NewGsonFromString(json) g is nil", i)
 		}
 
 		result, err := g.GetByPath(test.path)
