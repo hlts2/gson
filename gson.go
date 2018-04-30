@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"strconv"
 	"strings"
@@ -75,22 +74,20 @@ func isJSON(object interface{}) bool {
 }
 
 // Indent converts json object to json string
-func (g *Gson) Indent(prefix, indent string) (string, error) {
-	return indentJSONString(g.jsonObject, prefix, indent)
+func (g *Gson) Indent(buf *bytes.Buffer, prefix, indent string) error {
+	return indentJSON(buf, g.jsonObject, prefix, indent)
 }
 
-func indentJSONString(object interface{}, prefix, indent string) (string, error) {
+func indentJSON(buf *bytes.Buffer, object interface{}, prefix, indent string) error {
 	data, err := ffjson.Marshal(object)
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	var buf bytes.Buffer
-	if err := json.Indent(&buf, data, prefix, indent); err != nil {
-		return "", err
+	if err := json.Indent(buf, data, prefix, indent); err != nil {
+		return err
 	}
-
-	return buf.String(), nil
+	return nil
 }
 
 /*
@@ -172,13 +169,13 @@ func getByKey(object interface{}, key string) (interface{}, error) {
 	return nil, ErrorNotMap
 }
 
-// Indent converts json object to json string
-func (r *Result) Indent(prefix, indent string) string {
-	str, err := indentJSONString(r.object, prefix, indent)
+// Indent converts json object to json buffer
+func (r *Result) Indent(buf *bytes.Buffer, prefix, indent string) error {
+	err := indentJSON(buf, r.object, prefix, indent)
 	if err != nil {
-		return fmt.Sprintf("%v", r.object)
+		return err
 	}
-	return str
+	return nil
 }
 
 // Interface returns json object of Result
