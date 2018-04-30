@@ -134,9 +134,10 @@ json := `{"Accounts": [{"ID": "1111"}, {"ID": "2222"}]}`
 
 g, _ := gson.NewGsonFromByte([]byte(json))
 
-str, _  := g.Indent("", "  ")
+var buf bytes.Buffer
+g.Indent(&bu, "", "  ")
 
-fmt.Println(str)
+fmt.Println(buf.String())
 /*
 {
     "IDs": [
