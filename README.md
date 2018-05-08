@@ -1,5 +1,5 @@
 # gson
-gson is simple json parse library for go.
+gson is simple json parse library for golang.
 
 ## Requirement
 Go 1.8
@@ -135,7 +135,7 @@ json := `{"Accounts": [{"ID": "1111"}, {"ID": "2222"}]}`
 g, _ := gson.NewGsonFromByte([]byte(json))
 
 var buf bytes.Buffer
-g.Indent(&bu, "", "  ")
+g.Indent(&buf, "", "  ")
 
 fmt.Println(buf.String())
 /*
