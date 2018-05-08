@@ -2,7 +2,7 @@
 gson is simple json parse library for golang.
 
 ## Requirement
-Go 1.8
+- go (>= 1.8)
 
 ## Installation
 ```shell
