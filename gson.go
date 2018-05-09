@@ -90,36 +90,6 @@ func indentJSON(buf *bytes.Buffer, object interface{}, prefix, indent string) er
 	return nil
 }
 
-/*
-// HasWithKeys returns bool if there is json value coresponding to keys
-func (g *Gson) HasWithKeys(keys ...string) bool {
-	var err error
-
-	jsonObject := g.jsonObject
-	for _, key := range keys {
-		jsonObject, err = getByKey(jsonObject, key)
-		if err != nil {
-			return false
-		}
-	}
-	return true
-}
-
-// HasWithPath returns bool if there is json value coresponding to path
-func (g *Gson) HasWithPath(path string) bool {
-	var err error
-
-	jsonObject := g.jsonObject
-	for _, key := range strings.Split(path, ".") {
-		jsonObject, err = getByKey(jsonObject, key)
-		if err != nil {
-			return false
-		}
-	}
-	return true
-}
-*/
-
 // GetByKeys returns json value corresponding to keys. keys represents key of hierarchy of json
 func (g *Gson) GetByKeys(keys ...string) (*Result, error) {
 	var err error
