@@ -772,7 +772,7 @@ func (r *Result) Slice() ([]*Result, error) {
 	}
 }
 
-// Map converts an Result pointer slice and returns an error if types don't match.
+// Map converts an Result pointer map and returns an error if types don't match.
 func (r *Result) Map() (map[string]*Result, error) {
 	switch m := r.object.(type) {
 	case map[string]interface{}:
