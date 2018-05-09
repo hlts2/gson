@@ -84,7 +84,8 @@ func indentJSON(buf *bytes.Buffer, object interface{}, prefix, indent string) er
 		return err
 	}
 
-	if err := json.Indent(buf, data, prefix, indent); err != nil {
+	err = json.Indent(buf, data, prefix, indent)
+	if err != nil {
 		return err
 	}
 	return nil
