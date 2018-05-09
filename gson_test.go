@@ -441,10 +441,10 @@ func TestMap(t *testing.T) {
 		{
 			json: `{"Accounts": [{"ID": "1111", "Name": "hlts2"}]}`,
 			expected: map[string]*Result{
-				"ID": &Result{
+				"ID": {
 					object: "1111",
 				},
-				"Name": &Result{
+				"Name": {
 					object: "hlts2",
 				},
 			},
