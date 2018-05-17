@@ -109,8 +109,6 @@ func (g *Gson) getByKeys(keys []string) (*Result, error) {
 			if val, ok := mmap[key]; ok {
 				jsonObject = val
 				continue
-			} else {
-				return nil, ErrorInvalidJSONKey
 			}
 		} else if marray, ok := jsonObject.([]interface{}); ok {
 			if idx, err := strconv.Atoi(key); err == nil {
@@ -120,12 +118,9 @@ func (g *Gson) getByKeys(keys []string) (*Result, error) {
 				} else {
 					return nil, ErrorIndexOutOfRange
 				}
-			} else {
-				return nil, ErrorInvalidJSONKey
 			}
-		} else {
-			return nil, ErrorInvalidJSONKey
 		}
+		return nil, ErrorInvalidJSONKey
 	}
 
 	return &Result{jsonObject}, nil
