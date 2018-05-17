@@ -93,51 +93,42 @@ func indentJSON(buf *bytes.Buffer, object interface{}, prefix, indent string) er
 
 // GetByKeys returns json value corresponding to keys. keys represents key of hierarchy of json
 func (g *Gson) GetByKeys(keys ...string) (*Result, error) {
-	var err error
-	jsonObject := g.jsonObject
-
-	for _, key := range keys {
-		if jsonObject, err = getByKey(jsonObject, key); err != nil {
-			return nil, err
-		}
-	}
-	return &Result{jsonObject}, nil
+	return g.getByKeys(keys)
 }
 
 // GetByPath returns json value corresponding to path.
 func (g *Gson) GetByPath(path string) (*Result, error) {
-	keys := strings.Split(path, ".")
+	return g.getByKeys(strings.Split(path, "."))
+}
 
-	var err error
+func (g *Gson) getByKeys(keys []string) (*Result, error) {
 	jsonObject := g.jsonObject
 
 	for _, key := range keys {
-		if jsonObject, err = getByKey(jsonObject, key); err != nil {
-			return nil, err
-		}
-	}
-	return &Result{jsonObject}, nil
-}
-
-func getByKey(object interface{}, key string) (interface{}, error) {
-	index, err := strconv.Atoi(key)
-	if err == nil {
-		if v, ok := object.([]interface{}); ok {
-			if index >= 0 && index < len(v) {
-				return v[index], nil
+		if mmap, ok := jsonObject.(map[string]interface{}); ok {
+			if val, ok := mmap[key]; ok {
+				jsonObject = val
+				continue
+			} else {
+				return nil, ErrorInvalidJSONKey
 			}
-			return nil, ErrorIndexOutOfRange
+		} else if marray, ok := jsonObject.([]interface{}); ok {
+			if idx, err := strconv.Atoi(key); err == nil {
+				if idx >= 0 && idx < len(marray) {
+					jsonObject = marray[idx]
+					continue
+				} else {
+					return nil, ErrorIndexOutOfRange
+				}
+			} else {
+				return nil, ErrorInvalidJSONKey
+			}
+		} else {
+			return nil, ErrorInvalidJSONKey
 		}
-		return nil, ErrorNotSlice
 	}
 
-	if m, ok := object.(map[string]interface{}); ok {
-		if v, ok := m[key]; ok {
-			return v, nil
-		}
-		return nil, ErrorInvalidJSONKey
-	}
-	return nil, ErrorNotMap
+	return &Result{jsonObject}, nil
 }
 
 // Indent converts json object to json buffer
