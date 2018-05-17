@@ -111,7 +111,9 @@ func (g *Gson) getByKeys(keys []string) (*Result, error) {
 				continue
 			}
 		} else if marray, ok := jsonObject.([]interface{}); ok {
-			if idx, err := strconv.Atoi(key); err == nil {
+			idx64, err := strconv.ParseInt(key, 10, 0)
+			idx := int(idx64)
+			if err == nil {
 				if idx >= 0 && idx < len(marray) {
 					jsonObject = marray[idx]
 					continue
