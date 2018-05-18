@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 
@@ -37,4 +38,8 @@ func main() {
 	}
 
 	fmt.Println(m["name"].Interface())
+
+	var buf bytes.Buffer
+	g.Indent(&buf, "", "    ")
+	fmt.Println(buf.String())
 }

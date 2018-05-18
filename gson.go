@@ -67,17 +67,18 @@ func NewGsonFromReader(reader io.Reader) (*Gson, error) {
 }
 
 // Indent converts json object to json string
-func (g *Gson) Indent(buf *bytes.Buffer, prefix, indent string) error {
-	return indentJSON(buf, g.jsonObject, prefix, indent)
+func (g *Gson) Indent(dist *bytes.Buffer, prefix, indent string) error {
+	return indentJSON(dist, g.jsonObject, prefix, indent)
 }
 
-func indentJSON(buf *bytes.Buffer, object interface{}, prefix, indent string) error {
-	data, err := ffjson.Marshal(object)
+func indentJSON(dist *bytes.Buffer, object interface{}, prefix, indent string) error {
+	var src bytes.Buffer
+	err := ffjson.NewEncoder(&src).Encode(object)
 	if err != nil {
 		return err
 	}
 
-	err = json.Indent(buf, data, prefix, indent)
+	err = json.Indent(dist, src.Bytes(), prefix, indent)
 	if err != nil {
 		return err
 	}
