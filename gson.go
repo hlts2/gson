@@ -66,13 +66,6 @@ func NewGsonFromReader(reader io.Reader) (*Gson, error) {
 	return g, nil
 }
 
-func isJSON(object interface{}) bool {
-	if _, err := ffjson.Marshal(object); err != nil {
-		return false
-	}
-	return true
-}
-
 // Indent converts json object to json string
 func (g *Gson) Indent(buf *bytes.Buffer, prefix, indent string) error {
 	return indentJSON(buf, g.jsonObject, prefix, indent)
