@@ -85,7 +85,7 @@ func (g *Gson) Indent(dist *bytes.Buffer, prefix, indent string) error {
 }
 
 func isJSONObject(object interface{}) bool {
-	if _, err := ffjson.Marshal(object); err != nil {
+	if _, err := ffjson.Marshal(object); err == nil {
 		return true
 	}
 	return false
