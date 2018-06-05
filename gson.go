@@ -71,10 +71,11 @@ func NewGsonFromReader(reader io.Reader) (*Gson, error) {
 func NewGsonFromInterface(object interface{}) (*Gson, error) {
 	g := new(Gson)
 
-	if isJSONObject(object) {
-		g.jsonObject = object
+	if !isJSONObject(object) {
+		return nil, ErrorInvalidObject
 	}
 
+	g.jsonObject = object
 	return g, nil
 }
 
