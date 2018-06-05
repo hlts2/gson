@@ -240,6 +240,8 @@ func (r *Result) Uint16() (uint16, error) {
 		return uint16(v), nil
 	case uint64:
 		return uint16(v), nil
+	case float64:
+		return uint16(v), nil
 	case bool:
 		if v {
 			return 1, nil
@@ -295,6 +297,11 @@ func (r *Result) Uint32() (uint32, error) {
 	case uint32:
 		return v, nil
 	case uint64:
+		return uint32(v), nil
+	case float64:
+		if v < 0 {
+			return 0, ErrorInvalidNumber
+		}
 		return uint32(v), nil
 	case bool:
 		if v {
@@ -352,6 +359,8 @@ func (r *Result) Uint64() (uint64, error) {
 		return uint64(v), nil
 	case uint64:
 		return v, nil
+	case float64:
+		return uint64(v), nil
 	case bool:
 		if v {
 			return 1, nil
@@ -392,6 +401,8 @@ func (r *Result) Int8() (int8, error) {
 	case uint32:
 		return int8(v), nil
 	case uint64:
+		return int8(v), nil
+	case float64:
 		return int8(v), nil
 	case bool:
 		if v {
@@ -434,6 +445,8 @@ func (r *Result) Int16() (int16, error) {
 		return int16(v), nil
 	case uint64:
 		return int16(v), nil
+	case float64:
+		return int16(v), nil
 	case bool:
 		if v {
 			return 1, nil
@@ -474,6 +487,8 @@ func (r *Result) Int32() (int32, error) {
 	case uint32:
 		return int32(v), nil
 	case uint64:
+		return int32(v), nil
+	case float64:
 		return int32(v), nil
 	case bool:
 		if v {
@@ -516,6 +531,8 @@ func (r *Result) Int64() (int64, error) {
 		return int64(v), nil
 	case uint64:
 		return int64(v), nil
+	case float64:
+		return int64(v), nil
 	case bool:
 		if v {
 			return 1, nil
@@ -556,6 +573,8 @@ func (r *Result) Int() (int, error) {
 	case uint32:
 		return int(v), nil
 	case uint64:
+		return int(v), nil
+	case float64:
 		return int(v), nil
 	case bool:
 		if v {
@@ -678,6 +697,8 @@ func (r *Result) String() (string, error) {
 		return strconv.FormatUint(uint64(v), 10), nil
 	case uint64:
 		return strconv.FormatUint(v, 10), nil
+	case float64:
+		return strconv.FormatFloat(v, 'g', 0, 64), nil
 	case bool:
 		if v {
 			return "true", nil
