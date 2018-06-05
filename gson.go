@@ -265,29 +265,29 @@ func (r *Result) Uint32() (uint32, error) {
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
-			return uint32(v), nil
+			return 0, ErrorInvalidNumber
 		}
-		return 0, ErrorInvalidNumber
+		return uint32(v), nil
 	case int8:
 		if v < 0 {
-			return uint32(v), nil
+			return 0, ErrorInvalidNumber
 		}
-		return 0, ErrorInvalidNumber
+		return uint32(v), nil
 	case int16:
 		if v < 0 {
-			return uint32(v), nil
+			return 0, ErrorInvalidNumber
 		}
-		return 0, ErrorInvalidNumber
+		return uint32(v), nil
 	case int32:
 		if v < 0 {
-			return uint32(v), nil
+			return 0, ErrorInvalidNumber
 		}
-		return 0, ErrorInvalidNumber
+		return uint32(v), nil
 	case int64:
 		if v < 0 {
-			return uint32(v), nil
+			return 0, ErrorInvalidNumber
 		}
-		return 0, ErrorInvalidNumber
+		return uint32(v), nil
 	case uint:
 		return uint32(v), nil
 	case uint8:
@@ -326,14 +326,14 @@ func (r *Result) Uint64() (uint64, error) {
 	switch v := r.object.(type) {
 	case int:
 		if v < 0 {
-			return uint64(v), nil
+			return 0, ErrorInvalidNumber
 		}
-		return 0, ErrorInvalidNumber
+		return uint64(v), nil
 	case int8:
 		if v < 0 {
-			return uint64(v), nil
+			return 0, ErrorInvalidNumber
 		}
-		return 0, ErrorInvalidNumber
+		return uint64(v), nil
 	case int16:
 		if v < 0 {
 			return uint64(v), nil
