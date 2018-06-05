@@ -617,6 +617,10 @@ func (r *Result) Float32() (float32, error) {
 		return float32(v), nil
 	case uint64:
 		return float32(v), nil
+	case float32:
+		return v, nil
+	case float64:
+		return float32(v), nil
 	case bool:
 		if v {
 			return 1, nil
@@ -657,6 +661,10 @@ func (r *Result) Float64() (float64, error) {
 	case uint32:
 		return float64(v), nil
 	case uint64:
+		return float64(v), nil
+	case float64:
+		return v, nil
+	case float32:
 		return float64(v), nil
 	case bool:
 		if v {
