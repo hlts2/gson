@@ -67,27 +67,9 @@ func NewGsonFromReader(reader io.Reader) (*Gson, error) {
 	return g, nil
 }
 
-// NewGsonFromInterface returns Gson instance created from interface
-func NewGsonFromInterface(object interface{}) (*Gson, error) {
-	g := new(Gson)
-
-	if isJSONObject(object) {
-		g.jsonObject = object
-	}
-
-	return g, nil
-}
-
 // Indent converts json object to json string
 func (g *Gson) Indent(dist *bytes.Buffer, prefix, indent string) error {
 	return indentJSON(dist, g.jsonObject, prefix, indent)
-}
-
-func isJSONObject(object interface{}) bool {
-	if _, err := ffjson.Marshal(object); err != nil {
-		return true
-	}
-	return false
 }
 
 func indentJSON(dist *bytes.Buffer, object interface{}, prefix, indent string) error {
