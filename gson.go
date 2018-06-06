@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"strconv"
 	"strings"
@@ -754,9 +753,9 @@ func (r *Result) String() (string, error) {
 	case uint64:
 		return strconv.FormatUint(v, 10), nil
 	case float32:
-		return fmt.Sprint(v), nil
+		return strconv.FormatFloat(float64(v), 'G', -1, 32), nil
 	case float64:
-		return fmt.Sprint(v), nil
+		return strconv.FormatFloat(v, 'G', -1, 64), nil
 	case bool:
 		if v {
 			return "true", nil
