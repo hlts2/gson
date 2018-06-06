@@ -26,6 +26,14 @@ Create gson object from a `io.Reader`. Returns an error if the resp.Body are not
 g, err := gson.NewGsonFromReader(resp.Body)
 ```
 
+### Create from interface
+
+Create gson object from a `interface{}`. Returns an error if the v are not valid json.
+
+```go
+g, err := gson.NewGsonFromInterface(v)
+```
+
 ### Get value by path
 
 `GetByPath` gets json value for specified path. The path is syntax such as `created_at.date`. And if you want to get the elements of json array, please put number in keys such as `likes.0`.
