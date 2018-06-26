@@ -78,6 +78,11 @@ func NewGsonFromInterface(object interface{}) (*Gson, error) {
 	return g, nil
 }
 
+// Interface returns json object
+func (g *Gson) Interface() interface{} {
+	return g.jsonObject
+}
+
 // Indent converts json object to json string
 func (g *Gson) Indent(dist *bytes.Buffer, prefix, indent string) error {
 	return indentJSON(dist, g.jsonObject, prefix, indent)
