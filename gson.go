@@ -823,3 +823,8 @@ func (r *Result) Map() (map[string]*Result, error) {
 		return nil, ErrorNotMap
 	}
 }
+
+// Gson converts an Result object to Gson object
+func (r *Result) Gson() *Gson {
+	return &Gson{jsonObject: r.object}
+}
