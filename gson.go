@@ -226,6 +226,10 @@ func (r *Result) Uint8() (uint8, error) {
 	}
 }
 
+func (r *Result) MustUint8() uint8 {
+	return r.object.(uint8)
+}
+
 // Uint16 converts an interface{} to a uint16 and returns an error if types don't match.
 func (r *Result) Uint16() (uint16, error) {
 	switch v := r.object.(type) {
@@ -287,6 +291,10 @@ func (r *Result) Uint16() (uint16, error) {
 	default:
 		return 0, ErrorInvalidObject
 	}
+}
+
+func (r *Result) MustUint16() uint16 {
+	return r.object.(uint16)
 }
 
 // Uint32 converts an interface{} to a uint32 and returns an error if types don't match.
@@ -355,6 +363,10 @@ func (r *Result) Uint32() (uint32, error) {
 	}
 }
 
+func (r *Result) MustUint32() uint32 {
+	return r.object.(uint32)
+}
+
 // Uint64 converts an interface{} to a uint64 and returns an error if types don't match.
 func (r *Result) Uint64() (uint64, error) {
 	switch v := r.object.(type) {
@@ -421,6 +433,10 @@ func (r *Result) Uint64() (uint64, error) {
 	}
 }
 
+func (r *Result) MustUint64() uint64 {
+	return r.object.(uint64)
+}
+
 // Int8 converts an interface{} to a int8 and returns an error if types don't match.
 func (r *Result) Int8() (int8, error) {
 	switch v := r.object.(type) {
@@ -464,6 +480,10 @@ func (r *Result) Int8() (int8, error) {
 	default:
 		return 0, ErrorInvalidObject
 	}
+}
+
+func (r *Result) MustInt8() int8 {
+	return r.object.(int8)
 }
 
 // Int16 converts an interface{} to a int16 and returns an error if types don't match.
@@ -511,6 +531,10 @@ func (r *Result) Int16() (int16, error) {
 	}
 }
 
+func (r *Result) MustInt16() int16 {
+	return r.object.(int16)
+}
+
 // Int32 converts an interface{} to a int32 and returns an error if types don't match.
 func (r *Result) Int32() (int32, error) {
 	switch v := r.object.(type) {
@@ -554,6 +578,10 @@ func (r *Result) Int32() (int32, error) {
 	default:
 		return 0, ErrorInvalidObject
 	}
+}
+
+func (r *Result) MustInt32() int32 {
+	return r.object.(int32)
 }
 
 // Int64 converts an interface{} to a int64 and returns an error if types don't match.
@@ -601,6 +629,10 @@ func (r *Result) Int64() (int64, error) {
 	}
 }
 
+func (r *Result) MustInt64() int64 {
+	return r.object.(int64)
+}
+
 // Int converts an interface{} to a int and returns an error if types don't match.
 func (r *Result) Int() (int, error) {
 	switch v := r.object.(type) {
@@ -644,6 +676,10 @@ func (r *Result) Int() (int, error) {
 	default:
 		return 0, ErrorInvalidObject
 	}
+}
+
+func (r *Result) MustInt() int {
+	return r.object.(int)
 }
 
 // Float32 converts an interface{} to a float32 and returns an error if types don't match.
@@ -691,6 +727,10 @@ func (r *Result) Float32() (float32, error) {
 	}
 }
 
+func (r *Result) MustFloat32() float32 {
+	return r.object.(float32)
+}
+
 // Float64 converts an interface{} to a float64 and returns an error if types don't match.
 func (r *Result) Float64() (float64, error) {
 	switch v := r.object.(type) {
@@ -736,6 +776,10 @@ func (r *Result) Float64() (float64, error) {
 	}
 }
 
+func (r *Result) MustFloat64() float64 {
+	return r.object.(float64)
+}
+
 // String converts an interface{} to a string and returns an error if types don't match.
 func (r *Result) String() (string, error) {
 	switch v := r.object.(type) {
@@ -773,6 +817,10 @@ func (r *Result) String() (string, error) {
 	}
 }
 
+func (r *Result) MustString() string {
+	return r.object.(string)
+}
+
 // Bool converts an interface{} to a bool and returns an error if types don't match.
 func (r *Result) Bool() (bool, error) {
 	switch v := r.object.(type) {
@@ -789,6 +837,10 @@ func (r *Result) Bool() (bool, error) {
 	default:
 		return false, ErrorInvalidObject
 	}
+}
+
+func (r *Result) MustBool() bool {
+	return r.object.(bool)
 }
 
 // Slice converts an Result pointer slice and returns an error if types don't match.
@@ -808,6 +860,16 @@ func (r *Result) Slice() ([]*Result, error) {
 	}
 }
 
+func (r *Result) MustSlice() []*Result {
+	slice := r.object.([]interface{})
+	results := make([]*Result, 0, len(slice))
+
+	for _, val := range slice {
+		results = append(results, &Result{object: val})
+	}
+	return results
+}
+
 // Map converts an Result pointer map and returns an error if types don't match.
 func (r *Result) Map() (map[string]*Result, error) {
 	switch m := r.object.(type) {
@@ -822,6 +884,17 @@ func (r *Result) Map() (map[string]*Result, error) {
 	default:
 		return nil, ErrorNotMap
 	}
+}
+
+func (r *Result) MustMap() map[string]*Result {
+	m := r.object.(map[string]interface{})
+
+	rMap := make(map[string]*Result, len(m))
+
+	for key, val := range m {
+		rMap[key] = &Result{object: val}
+	}
+	return rMap
 }
 
 // Gson converts an Result object to Gson object
