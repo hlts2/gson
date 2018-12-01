@@ -146,6 +146,10 @@ func (g *Gson) getByKeys(keys []string) (*Result, error) {
 	return &Result{jsonObject}, nil
 }
 
+func (g *Gson) Result() *Result {
+	return &Result{object: g.jsonObject}
+}
+
 // Indent converts json object to json buffer
 func (r *Result) Indent(buf *bytes.Buffer, prefix, indent string) error {
 	err := indentJSON(buf, r.object, prefix, indent)
