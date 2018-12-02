@@ -91,7 +91,7 @@ g, _ := gson.NewGsonFromByte([]byte(json))
 
 result, _ := g.GetByKeys("likes", "1")
 
-str, _ := result.String()
+str, _ := result.String() // or str := result.MustString()
 
 fmt.Println(str) //strawberry
 
