@@ -3,35 +3,20 @@ package gson
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"io"
 	"strconv"
 	"strings"
 
+	"github.com/pkg/errors"
 	"github.com/pquerna/ffjson/ffjson"
+	"github.com/spf13/cast"
 )
 
+// Represents errors for searching json's value
 var (
-	// ErrorIndexOutOfRange represents index out of range error
 	ErrorIndexOutOfRange = errors.New("index out of range")
-
-	// ErrorNotSlice represents error that target object is not slice
-	ErrorNotSlice = errors.New("not slice")
-
-	// ErrorNotMap represents error that target object is not map
-	ErrorNotMap = errors.New("not map")
-
-	// ErrorInvalidJSONKey represents error that json key dose not exist
-	ErrorInvalidJSONKey = errors.New("invalid json Key")
-
-	// ErrorInvalidSyntax represents invaild syntax error
-	ErrorInvalidSyntax = errors.New("invalid syntax")
-
-	// ErrorInvalidNumber represents invalid number
-	ErrorInvalidNumber = errors.New("invalid number")
-
-	// ErrorInvalidObject represents invalid object
-	ErrorInvalidObject = errors.New("invalid object")
+	ErrorInvalidJSONKey  = errors.New("invalid json Key")
+	ErrorInvalidObject   = errors.New("invalid object")
 )
 
 // Result represents a json value that is returned from GetByPath() and GetByKeys().
@@ -39,7 +24,7 @@ type Result struct {
 	object interface{}
 }
 
-// Gson is gson base struct
+// Gson is gson base structor
 type Gson struct {
 	jsonObject interface{}
 }
@@ -164,744 +149,242 @@ func (r *Result) Interface() interface{} {
 	return r.object
 }
 
-// Uint8 converts an interface{} to a uint8 and returns an error if types don't match.
-func (r *Result) Uint8() (uint8, error) {
-	switch v := r.object.(type) {
-	case int:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint8(v), nil
-	case int8:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint8(v), nil
-	case int16:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint8(v), nil
-	case int32:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint8(v), nil
-	case int64:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint8(v), nil
-	case uint:
-		return uint8(v), nil
-	case uint8:
-		return v, nil
-	case uint16:
-		return uint8(v), nil
-	case uint32:
-		return uint8(v), nil
-	case uint64:
-		return uint8(v), nil
-	case float32:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint8(v), nil
-	case float64:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint8(v), nil
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case string:
-		u, err := strconv.ParseUint(v, 0, 8)
-		if err == nil {
-			return uint8(u), nil
-		}
-		return 0, err
-	case nil:
-		return 0, nil
-	default:
-		return 0, ErrorInvalidObject
+// Uint8E casts an interface to a uint8 type and returns an error if types don't match.
+func (r *Result) Uint8E() (uint8, error) {
+	v, err := cast.ToUint8E(r.object)
+	if err != nil {
+		return 0, errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustUint8() uint8 {
-	return r.object.(uint8)
+// Uint8 casts an interface to a uint8 type.
+func (r *Result) Uint8() uint8 {
+	return cast.ToUint8(r.object)
 }
 
-// Uint16 converts an interface{} to a uint16 and returns an error if types don't match.
-func (r *Result) Uint16() (uint16, error) {
-	switch v := r.object.(type) {
-	case int:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint16(v), nil
-	case int8:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint16(v), nil
-	case int16:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint16(v), nil
-	case int32:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint16(v), nil
-	case int64:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint16(v), nil
-	case uint:
-		return uint16(v), nil
-	case uint8:
-		return uint16(v), nil
-	case uint16:
-		return v, nil
-	case uint32:
-		return uint16(v), nil
-	case uint64:
-		return uint16(v), nil
-	case float32:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint16(v), nil
-	case float64:
-		return uint16(v), nil
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case string:
-		s, err := strconv.ParseUint(v, 0, 16)
-		if err == nil {
-			return uint16(s), nil
-		}
-		return 0, err
-	case nil:
-		return 0, nil
-	default:
-		return 0, ErrorInvalidObject
+// Uint16E casts an interface to a uint16 type and returns an error if types don't match.
+func (r *Result) Uint16E() (uint16, error) {
+	v, err := cast.ToUint16E(r.object)
+	if err != nil {
+		return 0, errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustUint16() uint16 {
-	return r.object.(uint16)
+// Uint16 casts an interface to a uint16 type.
+func (r *Result) Uint16() uint16 {
+	return cast.ToUint16(r.object)
 }
 
-// Uint32 converts an interface{} to a uint32 and returns an error if types don't match.
-func (r *Result) Uint32() (uint32, error) {
-	switch v := r.object.(type) {
-	case int:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint32(v), nil
-	case int8:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint32(v), nil
-	case int16:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint32(v), nil
-	case int32:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint32(v), nil
-	case int64:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint32(v), nil
-	case uint:
-		return uint32(v), nil
-	case uint8:
-		return uint32(v), nil
-	case uint16:
-		return uint32(v), nil
-	case uint32:
-		return v, nil
-	case uint64:
-		return uint32(v), nil
-	case float32:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint32(v), nil
-	case float64:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint32(v), nil
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case string:
-		u, err := strconv.ParseUint(v, 0, 32)
-		if err == nil {
-			return uint32(u), nil
-		}
-		return 0, err
-	case nil:
-		return 0, nil
-	default:
-		return 0, ErrorInvalidObject
+// Uint32E casts an interface{} to a uint32 type and returns an error if types don't match.
+func (r *Result) Uint32E() (uint32, error) {
+	v, err := cast.ToUint32E(r.object)
+	if err != nil {
+		return 0, errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustUint32() uint32 {
-	return r.object.(uint32)
+// Uint32 casts an interface to a uint32 type.
+func (r *Result) Uint32() uint32 {
+	return cast.ToUint32(r.object)
 }
 
-// Uint64 converts an interface{} to a uint64 and returns an error if types don't match.
-func (r *Result) Uint64() (uint64, error) {
-	switch v := r.object.(type) {
-	case int:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint64(v), nil
-	case int8:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint64(v), nil
-	case int16:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint64(v), nil
-	case int32:
-		if v < 0 {
-			return uint64(v), nil
-		}
-		return uint64(v), nil
-	case int64:
-		if v < 0 {
-			return uint64(v), nil
-		}
-		return 0, ErrorInvalidNumber
-	case uint:
-		return uint64(v), nil
-	case uint8:
-		return uint64(v), nil
-	case uint16:
-		return uint64(v), nil
-	case uint32:
-		return uint64(v), nil
-	case uint64:
-		return v, nil
-	case float32:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint64(v), nil
-	case float64:
-		if v < 0 {
-			return 0, ErrorInvalidNumber
-		}
-		return uint64(v), nil
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case string:
-		u, err := strconv.ParseUint(v, 0, 64)
-		if err == nil {
-			return u, nil
-		}
-		return 0, err
-	case nil:
-		return 0, nil
-	default:
-		return 0, ErrorInvalidObject
+// Uint64E casts an interface to a uint64 type and returns an error if types don't match.
+func (r *Result) Uint64E() (uint64, error) {
+	v, err := cast.ToUint64E(r.object)
+	if err != nil {
+		return 0, errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustUint64() uint64 {
-	return r.object.(uint64)
+// Uint64 casts an interface to a uint64 type.
+func (r *Result) Uint64() uint64 {
+	return cast.ToUint64(r.object)
 }
 
-// Int8 converts an interface{} to a int8 and returns an error if types don't match.
-func (r *Result) Int8() (int8, error) {
-	switch v := r.object.(type) {
-	case int:
-		return int8(v), nil
-	case int8:
-		return int8(v), nil
-	case int16:
-		return int8(v), nil
-	case int32:
-		return int8(v), nil
-	case int64:
-		return int8(v), nil
-	case uint:
-		return int8(v), nil
-	case uint8:
-		return int8(v), nil
-	case uint16:
-		return int8(v), nil
-	case uint32:
-		return int8(v), nil
-	case uint64:
-		return int8(v), nil
-	case float32:
-		return int8(v), nil
-	case float64:
-		return int8(v), nil
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case string:
-		i, err := strconv.ParseInt(v, 0, 8)
-		if err == nil {
-			return int8(i), nil
-		}
-		return 0, err
-	case nil:
-		return 0, nil
-	default:
-		return 0, ErrorInvalidObject
+// Int8E casts an interface to a int8 type and returns an error if types don't match.
+func (r *Result) Int8E() (int8, error) {
+	v, err := cast.ToInt8E(r.object)
+	if err != nil {
+		return 0, errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustInt8() int8 {
-	return r.object.(int8)
+// Int8 casts an interface to a int8 type.
+func (r *Result) Int8() int8 {
+	return cast.ToInt8(r.object)
 }
 
-// Int16 converts an interface{} to a int16 and returns an error if types don't match.
-func (r *Result) Int16() (int16, error) {
-	switch v := r.object.(type) {
-	case int:
-		return int16(v), nil
-	case int8:
-		return int16(v), nil
-	case int16:
-		return int16(v), nil
-	case int32:
-		return int16(v), nil
-	case int64:
-		return int16(v), nil
-	case uint:
-		return int16(v), nil
-	case uint8:
-		return int16(v), nil
-	case uint16:
-		return int16(v), nil
-	case uint32:
-		return int16(v), nil
-	case uint64:
-		return int16(v), nil
-	case float32:
-		return int16(v), nil
-	case float64:
-		return int16(v), nil
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case string:
-		i, err := strconv.ParseInt(v, 0, 16)
-		if err == nil {
-			return int16(i), nil
-		}
-		return 0, err
-	case nil:
-		return 0, nil
-	default:
-		return 0, ErrorInvalidObject
+// Int16E casts an interface to a int16 type and returns an error if types don't match.
+func (r *Result) Int16E() (int16, error) {
+	v, err := cast.ToInt16E(r.object)
+	if err != nil {
+		return 0, errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustInt16() int16 {
-	return r.object.(int16)
+// Int16 casts an interface to a int16 type.
+func (r *Result) Int16() int16 {
+	return cast.ToInt16(r.object)
 }
 
-// Int32 converts an interface{} to a int32 and returns an error if types don't match.
-func (r *Result) Int32() (int32, error) {
-	switch v := r.object.(type) {
-	case int:
-		return int32(v), nil
-	case int8:
-		return int32(v), nil
-	case int16:
-		return int32(v), nil
-	case int32:
-		return int32(v), nil
-	case int64:
-		return int32(v), nil
-	case uint:
-		return int32(v), nil
-	case uint8:
-		return int32(v), nil
-	case uint16:
-		return int32(v), nil
-	case uint32:
-		return int32(v), nil
-	case uint64:
-		return int32(v), nil
-	case float32:
-		return int32(v), nil
-	case float64:
-		return int32(v), nil
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case string:
-		i, err := strconv.ParseInt(v, 0, 32)
-		if err == nil {
-			return int32(i), nil
-		}
-		return 0, err
-	case nil:
-		return 0, nil
-	default:
-		return 0, ErrorInvalidObject
+// Int32E casts an interface to a int32 type and returns an error if types don't match.
+func (r *Result) Int32E() (int32, error) {
+	v, err := cast.ToInt32E(r.object)
+	if err != nil {
+		return 0, errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustInt32() int32 {
-	return r.object.(int32)
+// Int32 casts an interface to a int32 type.
+func (r *Result) Int32() int32 {
+	return cast.ToInt32(r.object)
 }
 
-// Int64 converts an interface{} to a int64 and returns an error if types don't match.
-func (r *Result) Int64() (int64, error) {
-	switch v := r.object.(type) {
-	case int:
-		return int64(v), nil
-	case int8:
-		return int64(v), nil
-	case int16:
-		return int64(v), nil
-	case int32:
-		return int64(v), nil
-	case int64:
-		return int64(v), nil
-	case uint:
-		return int64(v), nil
-	case uint8:
-		return int64(v), nil
-	case uint16:
-		return int64(v), nil
-	case uint32:
-		return int64(v), nil
-	case uint64:
-		return int64(v), nil
-	case float32:
-		return int64(v), nil
-	case float64:
-		return int64(v), nil
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case string:
-		i, err := strconv.ParseInt(v, 0, 64)
-		if err == nil {
-			return i, nil
-		}
-		return 0, err
-	case nil:
-		return 0, nil
-	default:
-		return 0, ErrorInvalidObject
+// Int64E casts an interface to a int64 type and returns an error if types don't match.
+func (r *Result) Int64E() (int64, error) {
+	v, err := cast.ToInt64E(r.object)
+	if err != nil {
+		return 0, errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustInt64() int64 {
-	return r.object.(int64)
+// Int64 casts an interface to a int64 type.
+func (r *Result) Int64() int64 {
+	return cast.ToInt64(r.object)
 }
 
-// Int converts an interface{} to a int and returns an error if types don't match.
-func (r *Result) Int() (int, error) {
-	switch v := r.object.(type) {
-	case int:
-		return int(v), nil
-	case int8:
-		return int(v), nil
-	case int16:
-		return int(v), nil
-	case int32:
-		return int(v), nil
-	case int64:
-		return int(v), nil
-	case uint:
-		return int(v), nil
-	case uint8:
-		return int(v), nil
-	case uint16:
-		return int(v), nil
-	case uint32:
-		return int(v), nil
-	case uint64:
-		return int(v), nil
-	case float32:
-		return int(v), nil
-	case float64:
-		return int(v), nil
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case string:
-		i, err := strconv.ParseInt(v, 0, 0)
-		if err == nil {
-			return int(i), nil
-		}
-		return 0, err
-	case nil:
-		return 0, nil
-	default:
-		return 0, ErrorInvalidObject
+// IntE casts an interface to a int type and returns an error if types don't match.
+func (r *Result) IntE() (int, error) {
+	v, err := cast.ToIntE(r.object)
+	if err != nil {
+		return 0, errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustInt() int {
-	return r.object.(int)
+// Int casts an interface to a int type.
+func (r *Result) Int() int {
+	return cast.ToInt(r.object)
 }
 
-// Float32 converts an interface{} to a float32 and returns an error if types don't match.
-func (r *Result) Float32() (float32, error) {
-	switch v := r.object.(type) {
-	case int:
-		return float32(v), nil
-	case int8:
-		return float32(v), nil
-	case int16:
-		return float32(v), nil
-	case int32:
-		return float32(v), nil
-	case int64:
-		return float32(v), nil
-	case uint:
-		return float32(v), nil
-	case uint8:
-		return float32(v), nil
-	case uint16:
-		return float32(v), nil
-	case uint32:
-		return float32(v), nil
-	case uint64:
-		return float32(v), nil
-	case float32:
-		return v, nil
-	case float64:
-		return float32(v), nil
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case string:
-		i, err := strconv.ParseFloat(v, 32)
-		if err == nil {
-			return float32(i), nil
-		}
-		return 0, err
-	case nil:
-		return 0, nil
-	default:
-		return 0, ErrorInvalidObject
+// Float32E casts an interface to a float32 type and returns an error if types don't match.
+func (r *Result) Float32E() (float32, error) {
+	v, err := cast.ToFloat32E(r.object)
+	if err != nil {
+		return 0, errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustFloat32() float32 {
-	return r.object.(float32)
+// Float32 casts an interface to a float32 type.
+func (r *Result) Float32() float32 {
+	return cast.ToFloat32(r.object)
 }
 
-// Float64 converts an interface{} to a float64 and returns an error if types don't match.
-func (r *Result) Float64() (float64, error) {
-	switch v := r.object.(type) {
-	case int:
-		return float64(v), nil
-	case int8:
-		return float64(v), nil
-	case int16:
-		return float64(v), nil
-	case int32:
-		return float64(v), nil
-	case int64:
-		return float64(v), nil
-	case uint:
-		return float64(v), nil
-	case uint8:
-		return float64(v), nil
-	case uint16:
-		return float64(v), nil
-	case uint32:
-		return float64(v), nil
-	case uint64:
-		return float64(v), nil
-	case float32:
-		return float64(v), nil
-	case float64:
-		return v, nil
-	case bool:
-		if v {
-			return 1, nil
-		}
-		return 0, nil
-	case string:
-		i, err := strconv.ParseFloat(v, 64)
-		if err == nil {
-			return i, nil
-		}
-		return 0, err
-	case nil:
-		return 0, nil
-	default:
-		return 0, ErrorInvalidObject
+// Float64E casts an interface to a float64 type and returns an error if types don't match.
+func (r *Result) Float64E() (float64, error) {
+	v, err := cast.ToFloat64E(r.object)
+	if err != nil {
+		return 0, errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustFloat64() float64 {
-	return r.object.(float64)
+// Float64 casts an interface to a float64 type.
+func (r *Result) Float64() float64 {
+	return cast.ToFloat64(r.object)
 }
 
-// String converts an interface{} to a string and returns an error if types don't match.
-func (r *Result) String() (string, error) {
-	switch v := r.object.(type) {
-	case int:
-		return strconv.Itoa(v), nil
-	case int16:
-		return strconv.FormatInt(int64(v), 10), nil
-	case int32:
-		return strconv.FormatInt(int64(v), 10), nil
-	case int64:
-		return strconv.FormatInt(v, 10), nil
-	case uint:
-		return strconv.FormatUint(uint64(v), 10), nil
-	case uint8:
-		return strconv.FormatUint(uint64(v), 10), nil
-	case uint16:
-		return strconv.FormatUint(uint64(v), 10), nil
-	case uint32:
-		return strconv.FormatUint(uint64(v), 10), nil
-	case uint64:
-		return strconv.FormatUint(v, 10), nil
-	case float32:
-		return strconv.FormatFloat(float64(v), 'G', -1, 32), nil
-	case float64:
-		return strconv.FormatFloat(v, 'G', -1, 64), nil
-	case bool:
-		if v {
-			return "true", nil
-		}
-		return "false", nil
-	case string:
-		return v, nil
-	default:
-		return "", ErrorInvalidObject
+// StringE casts an interface to a string type and returns an error if types don't match.
+func (r *Result) StringE() (string, error) {
+	v, err := cast.ToStringE(r.object)
+	if err != nil {
+		return "", errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustString() string {
-	return r.object.(string)
+// String casts an interface to a string type.
+func (r *Result) String() string {
+	return cast.ToString(r.object)
 }
 
-// Bool converts an interface{} to a bool and returns an error if types don't match.
-func (r *Result) Bool() (bool, error) {
-	switch v := r.object.(type) {
-	case bool:
-		return v, nil
-	case nil:
-		return false, nil
-	case string:
-		b, err := strconv.ParseBool(v)
-		if err == nil {
-			return b, nil
-		}
-		return false, err
-	default:
-		return false, ErrorInvalidObject
+// BoolE casts an interface to a bool type and returns an error if types don't match.
+func (r *Result) BoolE() (bool, error) {
+	v, err := cast.ToBoolE(r.object)
+	if err != nil {
+		return false, errors.WithStack(err)
 	}
+	return v, nil
 }
 
-func (r *Result) MustBool() bool {
-	return r.object.(bool)
+// Bool casts an interface to a bool type.
+func (r *Result) Bool() bool {
+	return cast.ToBool(r.object)
 }
 
-// Slice converts an Result pointer slice and returns an error if types don't match.
-func (r *Result) Slice() ([]*Result, error) {
-	switch slice := r.object.(type) {
-	case []interface{}:
-
-		results := make([]*Result, 0, len(slice))
-
-		for _, val := range slice {
-			results = append(results, &Result{object: val})
-		}
-
-		return results, nil
-	default:
-		return nil, ErrorNotSlice
+// SliceE casts an []Result type and returns an error if types don't match.
+func (r *Result) SliceE() ([]Result, error) {
+	v, err := cast.ToSliceE(r.object)
+	if err != nil {
+		return nil, errors.WithStack(err)
 	}
+
+	return toSlice(v), nil
 }
 
-func (r *Result) MustSlice() []*Result {
-	slice := r.object.([]interface{})
-	results := make([]*Result, 0, len(slice))
+// Slice casts an interface to a []Result type.
+func (r *Result) Slice() []Result {
+	v := cast.ToSlice(r.object)
+	return toSlice(v)
+}
 
-	for _, val := range slice {
-		results = append(results, &Result{object: val})
+func toSlice(s []interface{}) []Result {
+	results := make([]Result, len(s))
+
+	for i, v := range s {
+		results[i] = Result{
+			object: v,
+		}
 	}
 	return results
 }
 
-// Map converts an Result pointer map and returns an error if types don't match.
-func (r *Result) Map() (map[string]*Result, error) {
-	switch m := r.object.(type) {
-	case map[string]interface{}:
-		rMap := make(map[string]*Result, len(m))
+// MapE casts an map[string]Result type and returns an error if types don't match.
+func (r *Result) MapE() (map[string]Result, error) {
+	v, err := cast.ToStringMapE(r.object)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
 
-		for key, val := range m {
-			rMap[key] = &Result{object: val}
+	return toMap(v), nil
+}
+
+// Map casts an interface to a map[string]Resul type.
+func (r *Result) Map() map[string]Result {
+	v := cast.ToStringMap(r.object)
+	return toMap(v)
+}
+
+func toMap(m map[string]interface{}) map[string]Result {
+	results := make(map[string]Result, len(m))
+	for k, v := range m {
+		results[k] = Result{
+			object: v,
 		}
-
-		return rMap, nil
-	default:
-		return nil, ErrorNotMap
 	}
+	return results
 }
 
-func (r *Result) MustMap() map[string]*Result {
-	m := r.object.(map[string]interface{})
-
-	rMap := make(map[string]*Result, len(m))
-
-	for key, val := range m {
-		rMap[key] = &Result{object: val}
-	}
-	return rMap
-}
-
-// Gson converts an Result object to Gson object
+// Gson casts an interface to *Gson type.
 func (r *Result) Gson() *Gson {
 	return &Gson{jsonObject: r.object}
 }
