@@ -29,37 +29,27 @@ type Gson struct {
 	jsonObject interface{}
 }
 
-// NewGsonFromByte returns Gson instance created from byte slice
-func NewGsonFromByte(data []byte) (*Gson, error) {
+// CreateWithBytes creates a Gson instance with []byte.
+func CreateWithBytes(data []byte) (*Gson, error) {
 	g := new(Gson)
 
-	if err := ffjson.Unmarshal(data, &g.jsonObject); err != nil {
+	err := ffjson.Unmarshal(data, &g.jsonObject)
+	if err != nil {
 		return nil, err
 	}
 
 	return g, nil
 }
 
-// NewGsonFromReader returns Gson instance created from io.Reader
-func NewGsonFromReader(reader io.Reader) (*Gson, error) {
+// CreateWithReader creates Gson instance with io.Reader
+func CreateWithReader(reader io.Reader) (*Gson, error) {
 	g := new(Gson)
 
-	if err := ffjson.NewDecoder().DecodeReader(reader, &g.jsonObject); err != nil {
+	err := ffjson.NewDecoder().DecodeReader(reader, &g.jsonObject)
+	if err != nil {
 		return nil, err
 	}
 
-	return g, nil
-}
-
-// NewGsonFromInterface returns Gson instance created from interface
-func NewGsonFromInterface(object interface{}) (*Gson, error) {
-	g := new(Gson)
-
-	if !isJSONObject(object) {
-		return nil, ErrorInvalidObject
-	}
-
-	g.jsonObject = object
 	return g, nil
 }
 
@@ -71,13 +61,6 @@ func (g *Gson) Interface() interface{} {
 // Indent converts json object to json string
 func (g *Gson) Indent(dist *bytes.Buffer, prefix, indent string) error {
 	return indentJSON(dist, g.jsonObject, prefix, indent)
-}
-
-func isJSONObject(object interface{}) bool {
-	if _, err := ffjson.Marshal(object); err == nil {
-		return true
-	}
-	return false
 }
 
 func indentJSON(dist *bytes.Buffer, object interface{}, prefix, indent string) error {
@@ -131,6 +114,7 @@ func (g *Gson) getByKeys(keys []string) (*Result, error) {
 	return &Result{jsonObject}, nil
 }
 
+// Result --
 func (g *Gson) Result() *Result {
 	return &Result{object: g.jsonObject}
 }
