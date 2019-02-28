@@ -61,7 +61,7 @@ func (g *Gson) Interface() interface{} {
 
 // Indent converts json object to json string
 func (g *Gson) Indent(dist *bytes.Buffer, prefix, indent string) error {
-	return indentJSON(dist, g.object, prefix, indent)
+	return errors.WithStack(indentJSON(dist, g.object, prefix, indent))
 }
 
 func indentJSON(dist *bytes.Buffer, object interface{}, prefix, indent string) error {
@@ -73,7 +73,7 @@ func indentJSON(dist *bytes.Buffer, object interface{}, prefix, indent string) e
 
 	err = json.Indent(dist, src.Bytes(), prefix, indent)
 	if err != nil {
-		return errors.Wrap(err, "faild to generate indent")
+		return errors.Wrap(err, "faild to add indent")
 	}
 	return nil
 }
