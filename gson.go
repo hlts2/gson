@@ -78,12 +78,36 @@ func indentJSON(dst *bytes.Buffer, object interface{}, prefix, indent string) er
 	return nil
 }
 
-// GetByKeys returns json value corresponding to keys. keys represents key of hierarchy of json
+// GetByKeys returns JSON value corresponding to keys. keys represents key of hierarchy of json.
+// e.g)
+// {
+//     "key-1": {
+//         "key-2": {
+//             "key-3": [
+//                 "hello",
+//                 "world",
+//             ]
+//         }
+//     }
+// }
+// key-1, key-2, key-3, 0 => "hello"
 func (g *Gson) GetByKeys(keys ...string) (*Result, error) {
 	return g.getByKeys(keys)
 }
 
-// GetByPath returns json value corresponding to path.
+// GetByPath returns JSON value corresponding to the path.
+// e.g)
+// {
+//     "key-1": {
+//         "key-2": {
+//             "key-3": [
+//                 "hello",
+//                 "world",
+//             ]
+//         }
+//     }
+// }
+// key-1.key-2.key-3.0 => "hello"
 func (g *Gson) GetByPath(path string) (*Result, error) {
 	return g.getByKeys(strings.Split(path, "."))
 }
