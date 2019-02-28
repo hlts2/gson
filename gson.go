@@ -19,7 +19,7 @@ var (
 )
 
 type (
-	// Gson is gson base structor.
+	// Gson is gson base structor. Gson wrapps JSON object.
 	Gson struct {
 		object interface{}
 	}
@@ -30,7 +30,7 @@ type (
 	}
 )
 
-// CreateWithBytes creates a Gson instance with []byte.
+// CreateWithBytes creates a Gson object with []byte.
 func CreateWithBytes(data []byte) (*Gson, error) {
 	g := new(Gson)
 
@@ -42,7 +42,7 @@ func CreateWithBytes(data []byte) (*Gson, error) {
 	return g, nil
 }
 
-// CreateWithReader creates Gson instance with io.Reader.
+// CreateWithReader creates Gson object with io.Reader.
 func CreateWithReader(reader io.Reader) (*Gson, error) {
 	g := new(Gson)
 
@@ -54,26 +54,26 @@ func CreateWithReader(reader io.Reader) (*Gson, error) {
 	return g, nil
 }
 
-// Interface returns json object
-func (g *Gson) Interface() interface{} {
+// Object returns JSON object wrapped by Gson.
+func (g *Gson) Object() interface{} {
 	return g.object
 }
 
-// Indent converts json object to json string
-func (g *Gson) Indent(dist *bytes.Buffer, prefix, indent string) error {
-	return errors.WithStack(indentJSON(dist, g.object, prefix, indent))
+// Indent appends indent to dst an indented form of the JSON object wrapped by Gson.
+func (g *Gson) Indent(dst *bytes.Buffer, prefix, indent string) error {
+	return errors.Wrap(indentJSON(dst, g.object, prefix, indent), "faild to generate indent")
 }
 
-func indentJSON(dist *bytes.Buffer, object interface{}, prefix, indent string) error {
+func indentJSON(dst *bytes.Buffer, object interface{}, prefix, indent string) error {
 	var src bytes.Buffer
 	err := ffjson.NewEncoder(&src).Encode(object)
 	if err != nil {
 		return errors.Wrap(err, "faild to encode")
 	}
 
-	err = json.Indent(dist, src.Bytes(), prefix, indent)
+	err = json.Indent(dst, src.Bytes(), prefix, indent)
 	if err != nil {
-		return errors.Wrap(err, "faild to add indent")
+		return errors.Wrap(err, "faild to appends indent")
 	}
 	return nil
 }
@@ -120,7 +120,7 @@ func (g *Gson) Result() *Result {
 	return &Result{object: g.object}
 }
 
-// Indent converts json object to json buffer
+// Indent appends indent to dst an indented form of the JSON object wrapped by Result.
 func (r *Result) Indent(buf *bytes.Buffer, prefix, indent string) error {
 	err := indentJSON(buf, r.object, prefix, indent)
 	if err != nil {
@@ -129,7 +129,7 @@ func (r *Result) Indent(buf *bytes.Buffer, prefix, indent string) error {
 	return nil
 }
 
-// Interface returns json object of Result
+// Interface returns JSON object wrapped by Result.
 func (r *Result) Interface() interface{} {
 	return r.object
 }
