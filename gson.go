@@ -36,7 +36,7 @@ func CreateWithBytes(data []byte) (*Gson, error) {
 
 	err := ffjson.Unmarshal(data, &g.object)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "faild to unmarshal")
 	}
 
 	return g, nil
@@ -48,7 +48,7 @@ func CreateWithReader(reader io.Reader) (*Gson, error) {
 
 	err := ffjson.NewDecoder().DecodeReader(reader, &g.object)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "faild to decode")
 	}
 
 	return g, nil
@@ -68,12 +68,12 @@ func indentJSON(dist *bytes.Buffer, object interface{}, prefix, indent string) e
 	var src bytes.Buffer
 	err := ffjson.NewEncoder(&src).Encode(object)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "faild to encode")
 	}
 
 	err = json.Indent(dist, src.Bytes(), prefix, indent)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "faild to generate indent")
 	}
 	return nil
 }
