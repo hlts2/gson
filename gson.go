@@ -12,28 +12,29 @@ import (
 	"github.com/spf13/cast"
 )
 
-// Represents errors for searching json's value
+// Represents an error when the search fails for the value of json.
 var (
 	ErrorIndexOutOfRange = errors.New("index out of range")
 	ErrorInvalidJSONKey  = errors.New("invalid json Key")
-	ErrorInvalidObject   = errors.New("invalid object")
 )
 
-// Result represents a json value that is returned from GetByPath() and GetByKeys().
-type Result struct {
-	object interface{}
-}
+type (
+	// Gson is gson base structor.
+	Gson struct {
+		object interface{}
+	}
 
-// Gson is gson base structor
-type Gson struct {
-	jsonObject interface{}
-}
+	// Result represents a json value that is returned from GetByPath() and GetByKeys().
+	Result struct {
+		object interface{}
+	}
+)
 
 // CreateWithBytes creates a Gson instance with []byte.
 func CreateWithBytes(data []byte) (*Gson, error) {
 	g := new(Gson)
 
-	err := ffjson.Unmarshal(data, &g.jsonObject)
+	err := ffjson.Unmarshal(data, &g.object)
 	if err != nil {
 		return nil, err
 	}
@@ -41,11 +42,11 @@ func CreateWithBytes(data []byte) (*Gson, error) {
 	return g, nil
 }
 
-// CreateWithReader creates Gson instance with io.Reader
+// CreateWithReader creates Gson instance with io.Reader.
 func CreateWithReader(reader io.Reader) (*Gson, error) {
 	g := new(Gson)
 
-	err := ffjson.NewDecoder().DecodeReader(reader, &g.jsonObject)
+	err := ffjson.NewDecoder().DecodeReader(reader, &g.object)
 	if err != nil {
 		return nil, err
 	}
@@ -55,12 +56,12 @@ func CreateWithReader(reader io.Reader) (*Gson, error) {
 
 // Interface returns json object
 func (g *Gson) Interface() interface{} {
-	return g.jsonObject
+	return g.object
 }
 
 // Indent converts json object to json string
 func (g *Gson) Indent(dist *bytes.Buffer, prefix, indent string) error {
-	return indentJSON(dist, g.jsonObject, prefix, indent)
+	return indentJSON(dist, g.object, prefix, indent)
 }
 
 func indentJSON(dist *bytes.Buffer, object interface{}, prefix, indent string) error {
@@ -88,20 +89,20 @@ func (g *Gson) GetByPath(path string) (*Result, error) {
 }
 
 func (g *Gson) getByKeys(keys []string) (*Result, error) {
-	jsonObject := g.jsonObject
+	object := g.object
 
 	for _, key := range keys {
-		if mmap, ok := jsonObject.(map[string]interface{}); ok {
+		if mmap, ok := object.(map[string]interface{}); ok {
 			if val, ok := mmap[key]; ok {
-				jsonObject = val
+				object = val
 				continue
 			}
-		} else if marray, ok := jsonObject.([]interface{}); ok {
+		} else if marray, ok := object.([]interface{}); ok {
 			idx64, err := strconv.ParseInt(key, 10, 0)
 			idx := int(idx64)
 			if err == nil {
 				if idx >= 0 && idx < len(marray) {
-					jsonObject = marray[idx]
+					object = marray[idx]
 					continue
 				} else {
 					return nil, ErrorIndexOutOfRange
@@ -111,12 +112,12 @@ func (g *Gson) getByKeys(keys []string) (*Result, error) {
 		return nil, ErrorInvalidJSONKey
 	}
 
-	return &Result{jsonObject}, nil
+	return &Result{object}, nil
 }
 
 // Result --
 func (g *Gson) Result() *Result {
-	return &Result{object: g.jsonObject}
+	return &Result{object: g.object}
 }
 
 // Indent converts json object to json buffer
@@ -370,5 +371,5 @@ func toMap(m map[string]interface{}) map[string]Result {
 
 // Gson casts an interface to *Gson type.
 func (r *Result) Gson() *Gson {
-	return &Gson{jsonObject: r.object}
+	return &Gson{object: r.object}
 }
