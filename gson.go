@@ -24,7 +24,7 @@ type (
 		object interface{}
 	}
 
-	// Result represents a json value that is returned from GetByPath() and GetByKeys().
+	// Result represents a JSON value object.
 	Result struct {
 		object interface{}
 	}
@@ -92,17 +92,17 @@ func (g *Gson) getByKeys(keys []string) (*Result, error) {
 	object := g.object
 
 	for _, key := range keys {
-		if mmap, ok := object.(map[string]interface{}); ok {
-			if val, ok := mmap[key]; ok {
+		if m, ok := object.(map[string]interface{}); ok {
+			if val, ok := m[key]; ok {
 				object = val
 				continue
 			}
-		} else if marray, ok := object.([]interface{}); ok {
+		} else if s, ok := object.([]interface{}); ok {
 			idx64, err := strconv.ParseInt(key, 10, 0)
 			idx := int(idx64)
 			if err == nil {
-				if idx >= 0 && idx < len(marray) {
-					object = marray[idx]
+				if idx >= 0 && idx < len(s) {
+					object = s[idx]
 					continue
 				} else {
 					return nil, ErrorIndexOutOfRange
