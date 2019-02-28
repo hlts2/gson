@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cast"
 )
 
-// Represents an error when the search fails for the value of json.
+// Represents an error when the search fails for the value of JSON.
 var (
 	ErrorIndexOutOfRange = errors.New("index out of range")
 	ErrorInvalidJSONKey  = errors.New("invalid json Key")
@@ -24,7 +24,7 @@ type (
 		object interface{}
 	}
 
-	// Result represents a JSON value object.
+	// Result represents a JSON value.
 	Result struct {
 		object interface{}
 	}
