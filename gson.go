@@ -117,23 +117,20 @@ func (g *Gson) getByKeys(keys []string) (*Result, error) {
 
 	for _, key := range keys {
 		if m, ok := object.(map[string]interface{}); ok {
-			if val, ok := m[key]; ok {
-				object = val
-				continue
+			if object, ok = m[key]; !ok {
+				return nil, ErrorInvalidJSONKey
 			}
 		} else if s, ok := object.([]interface{}); ok {
-			idx64, err := strconv.ParseInt(key, 10, 0)
-			idx := int(idx64)
-			if err == nil {
-				if idx >= 0 && idx < len(s) {
-					object = s[idx]
-					continue
-				} else {
-					return nil, ErrorIndexOutOfRange
-				}
+			idx, err := strconv.Atoi(key)
+			if err != nil {
+				return nil, ErrorInvalidJSONKey
 			}
+
+			if idx < 0 || idx > len(s) {
+				return nil, ErrorIndexOutOfRange
+			}
+			object = s[idx]
 		}
-		return nil, ErrorInvalidJSONKey
 	}
 
 	return &Result{object}, nil
