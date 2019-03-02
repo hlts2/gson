@@ -8,23 +8,23 @@ import (
 
 func TestCreate(t *testing.T) {
 	tests := []struct {
-		json     string
-		want     *Gson
-		hasError bool
+		json  string
+		want  *Gson
+		iserr bool
 	}{
 		{
 			json: `1`,
 			want: &Gson{
 				object: float64(1),
 			},
-			hasError: false,
+			iserr: false,
 		},
 		{
 			json: `"2"`,
 			want: &Gson{
 				object: "2",
 			},
-			hasError: false,
+			iserr: false,
 		},
 		{
 			json: `{"picture": "http://hogehoge"}`,
@@ -33,12 +33,12 @@ func TestCreate(t *testing.T) {
 					"picture": "http://hogehoge",
 				},
 			},
-			hasError: false,
+			iserr: false,
 		},
 		{
-			json:     `{afsf: adfaasf`,
-			want:     nil,
-			hasError: true,
+			json:  `{afsf: adfaasf`,
+			want:  nil,
+			iserr: true,
 		},
 		{
 			json: `
@@ -75,12 +75,12 @@ func TestCreate(t *testing.T) {
 					},
 				},
 			},
-			hasError: false,
+			iserr: false,
 		},
 		{
-			json:     `[{"name": "litt]`,
-			want:     nil,
-			hasError: true,
+			json:  `[{"name": "litt]`,
+			want:  nil,
+			iserr: true,
 		},
 	}
 
@@ -88,10 +88,10 @@ func TestCreate(t *testing.T) {
 		t.Run("CreateWithBytes", func(t *testing.T) {
 			g, err := CreateWithBytes([]byte(test.json))
 
-			hasError := !(err == nil)
+			iserr := !(err == nil)
 
-			if test.hasError != hasError {
-				t.Errorf("tests[%d] - want: %v, but got: %v", i, test.hasError, hasError)
+			if test.iserr != iserr {
+				t.Errorf("tests[%d] - want: %v, but got: %v", i, test.iserr, iserr)
 			}
 
 			if !reflect.DeepEqual(g, test.want) {
@@ -102,7 +102,7 @@ func TestCreate(t *testing.T) {
 		t.Run("CreateWithReader", func(t *testing.T) {
 			g, err := CreateWithReader(strings.NewReader(test.json))
 
-			if want, got := test.hasError, !(err == nil); want != got {
+			if want, got := test.iserr, !(err == nil); want != got {
 				t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
 			}
 
@@ -115,28 +115,28 @@ func TestCreate(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	tests := []struct {
-		json     string
-		keys     []string
-		want     *Result
-		hasError bool
+		json  string
+		keys  []string
+		want  *Result
+		iserr bool
 	}{
 		{
-			json:     `{"name": "hlts2"}`,
-			keys:     []string{"name"},
-			want:     &Result{"hlts2"},
-			hasError: false,
+			json:  `{"name": "hlts2"}`,
+			keys:  []string{"name"},
+			want:  &Result{"hlts2"},
+			iserr: false,
 		},
 		{
-			json:     `[{"name": "hlts2"}]`,
-			keys:     []string{"0"},
-			want:     &Result{map[string]interface{}{"name": "hlts2"}},
-			hasError: false,
+			json:  `[{"name": "hlts2"}]`,
+			keys:  []string{"0"},
+			want:  &Result{map[string]interface{}{"name": "hlts2"}},
+			iserr: false,
 		},
 		{
-			json:     `[{"name": "hlts2"}]`,
-			keys:     []string{"10"},
-			want:     nil,
-			hasError: true,
+			json:  `[{"name": "hlts2"}]`,
+			keys:  []string{"10"},
+			want:  nil,
+			iserr: true,
 		},
 		{
 			json: `
@@ -156,7 +156,7 @@ func TestGet(t *testing.T) {
 				map[string]interface{}{"id": "0", "name": "hiro"},
 				map[string]interface{}{"id": "1", "name": "hlts2"}},
 			},
-			hasError: false,
+			iserr: false,
 		},
 		{
 			json: `
@@ -175,9 +175,9 @@ func TestGet(t *testing.T) {
 					}
 				]}
 			`,
-			keys:     []string{"friends", "100", "name"},
-			want:     nil,
-			hasError: true,
+			keys:  []string{"friends", "100", "name"},
+			want:  nil,
+			iserr: true,
 		},
 	}
 
@@ -194,7 +194,7 @@ func TestGet(t *testing.T) {
 		t.Run("GetByKeys", func(t *testing.T) {
 			r, err := g.GetByKeys(test.keys...)
 
-			if want, got := test.hasError, !(err == nil); want != got {
+			if want, got := test.iserr, !(err == nil); want != got {
 				t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
 			}
 
@@ -206,7 +206,7 @@ func TestGet(t *testing.T) {
 		t.Run("GetByPath", func(t *testing.T) {
 			r, err := g.GetByPath(strings.Join(test.keys, "."))
 
-			if want, got := test.hasError, !(err == nil); want != got {
+			if want, got := test.iserr, !(err == nil); want != got {
 				t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
 			}
 
@@ -217,52 +217,6 @@ func TestGet(t *testing.T) {
 	}
 }
 
-func TestCastUint8(t *testing.T) {
-	tests := []struct {
-		result   *Result
-		want     uint8
-		hasError bool
-	}{
-		{
-			result: &Result{
-				object: 123,
-			},
-			want:     uint8(123),
-			hasError: false,
-		},
-		{
-			result: &Result{
-				object: -123,
-			},
-			want:     0,
-			hasError: true,
-		},
-	}
-
-	for i, test := range tests {
-		t.Run("Uint8E", func(t *testing.T) {
-			got, err := test.result.Uint8E()
-
-			if want, got := test.hasError, !(err == nil); want != got {
-				t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
-			}
-
-			if test.want != got {
-				t.Errorf("test[%d] - want: %v, but got: %v", i, test.want, got)
-			}
-		})
-
-		t.Run("Uint8", func(t *testing.T) {
-			got := test.result.Uint8()
-
-			if test.want != got {
-				t.Errorf("test[%d] - want: %v, but got: %v", i, test.want, got)
-			}
-		})
-	}
-}
-
-//
 // func TestSlice(t *testing.T) {
 // 	tests := []struct {
 // 		json     string
