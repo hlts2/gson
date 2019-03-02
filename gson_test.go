@@ -223,48 +223,34 @@ func TestGet(t *testing.T) {
 	}
 }
 
-//
-// func TestUint8(t *testing.T) {
-// 	tests := []struct {
-// 		json     string
-// 		expected uint8
-// 		isError  bool
-// 	}{
-// 		{
-// 			json:     `{"ID": 123}`,
-// 			expected: uint8(123),
-// 			isError:  false,
-// 		},
-// 	}
-//
-// 	for i, test := range tests {
-// 		g, err := NewGsonFromByte([]byte(test.json))
-// 		if err != nil {
-// 			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
-// 		}
-//
-// 		if g == nil {
-// 			t.Errorf("i = %d NewGsonFromString(json) g is nil", i)
-// 		}
-//
-// 		result, err := g.GetByKeys("ID")
-// 		if err != nil {
-// 			t.Errorf("i = %d GetByKeys(keys) is error: %v", i, err)
-// 		}
-//
-// 		got, err := result.Uint8()
-//
-// 		isError := !(err == nil)
-//
-// 		if test.isError != isError {
-// 			t.Errorf("i = %d Uint8() expected isError: %v, got: %v", i, test.isError, isError)
-// 		}
-//
-// 		if test.expected != got {
-// 			t.Errorf("i = %d GetByKeys(keys) expected: %v, got: %v", i, test.expected, got)
-// 		}
-// 	}
-// }
+func TestUint8E(t *testing.T) {
+	tests := []struct {
+		result   *Result
+		want     uint8
+		hasError bool
+	}{
+		{
+			result: &Result{
+				object: 123,
+			},
+			want:     uint8(123),
+			hasError: false,
+		},
+	}
+
+	for i, test := range tests {
+		got, err := test.result.Uint8E()
+
+		if want, got := test.hasError, !(err == nil); want != got {
+			t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
+		}
+
+		if test.want != got {
+			t.Errorf("test[%d] - want: %v, but got: %v", i, test.want, got)
+		}
+	}
+}
+
 //
 // func TestSlice(t *testing.T) {
 // 	tests := []struct {
