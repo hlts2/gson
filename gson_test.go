@@ -1,129 +1,120 @@
 package gson
 
-import "testing"
+import (
+	"reflect"
+	"strings"
+	"testing"
+)
 
-// FIXME(@hlts2): create test code.
 func TestCreateWithBytes(t *testing.T) {
-	json := `
-		{"friends": [
-      		{
-        		"id": 0,
-				"name": "hiro"
+	tests := []struct {
+		json     string
+		want     *Gson
+		hasError bool
+	}{
+		{
+			json: `1`,
+			want: &Gson{
+				object: float64(1),
 			},
-			{
-				"id": 1,
-				"name": "hiroto"
+			hasError: false,
+		},
+		{
+			json: `"2"`,
+			want: &Gson{
+				object: "2",
 			},
-			{
-				"id": 2,
-				"name": "hlts2"
-			}
-		]}
-		`
-
-	g, err := CreateWithBytes([]byte(json))
-	if err != nil {
-		t.Errorf("CreateWithBytes returned error: %v", err)
+			hasError: false,
+		},
+		{
+			json: `{"picture": "http://hogehoge"}`,
+			want: &Gson{
+				object: map[string]interface{}{
+					"picture": "http://hogehoge",
+				},
+			},
+			hasError: false,
+		},
+		{
+			json:     `{afsf: adfaasf`,
+			want:     nil,
+			hasError: true,
+		},
+		{
+			json: `
+				{"friends": [
+     					{
+        					"id": 0,
+							"name": "hiro"
+						},
+						{
+							"id": 1,
+							"name": "hiroto"
+						},
+						{
+							"id": 2,
+							"name": "hlts2"
+						}
+					]}
+	  			`,
+			want: &Gson{
+				object: map[string]interface{}{
+					"friends": []interface{}{
+						map[string]interface{}{
+							"id":   float64(0),
+							"name": "hiro",
+						},
+						map[string]interface{}{
+							"id":   float64(1),
+							"name": "hiroto",
+						},
+						map[string]interface{}{
+							"id":   float64(2),
+							"name": "hlts2",
+						},
+					},
+				},
+			},
+			hasError: false,
+		},
+		{
+			json:     `[{"name": "litt]`,
+			want:     nil,
+			hasError: true,
+		},
 	}
 
-	if g == nil {
-		t.Error("CreateWithBytes returned nil")
+	for i, test := range tests {
+		t.Run("CreateWithBytes", func(t *testing.T) {
+			g, err := CreateWithBytes([]byte(test.json))
+
+			hasError := !(err == nil)
+
+			if test.hasError != hasError {
+				t.Errorf("tests[%d] - want: %v, but got: %v", i, test.hasError, hasError)
+			}
+
+			if !reflect.DeepEqual(g, test.want) {
+				t.Errorf("tests[%d] - want: %v, but got: %v", i, test.want, g)
+			}
+		})
+
+		t.Run("CreateWithReader", func(t *testing.T) {
+			g, err := CreateWithReader(strings.NewReader(test.json))
+
+			hasError := !(err == nil)
+
+			if test.hasError != hasError {
+				t.Errorf("tests[%d] - want: %v, but got: %v", i, test.hasError, hasError)
+			}
+
+			if !reflect.DeepEqual(g, test.want) {
+				t.Errorf("tests[%d] - want: %v, but got: %v", i, test.want, g)
+			}
+		})
 	}
 }
 
-//
-// func TestNewGsonFromByte(t *testing.T) {
-// 	tests := []struct {
-// 		json     string
-// 		expected *Gson
-// 		isError  bool
-// 	}{
-// 		{
-// 			json: `1`,
-// 			expected: &Gson{
-// 				jsonObject: float64(1),
-// 			},
-// 			isError: false,
-// 		},
-// 		{
-// 			json: `"2"`,
-// 			expected: &Gson{
-// 				jsonObject: "2",
-// 			},
-// 			isError: false,
-// 		},
-// 		{
-// 			json: `{"picture": "http://hogehoge"}`,
-// 			expected: &Gson{
-// 				jsonObject: map[string]interface{}{
-// 					"picture": "http://hogehoge",
-// 				},
-// 			},
-// 			isError: false,
-// 		},
-// 		{
-// 			json:     `{afsf: adfaasf`,
-// 			expected: nil,
-// 			isError:  true,
-// 		},
-// 		{
-// 			json: `
-// 				{"friends": [
-//      					{
-//         					"id": 0,
-// 							"name": "hiro"
-// 						},
-// 						{
-// 							"id": 1,
-// 							"name": "hiroto"
-// 						},
-// 						{
-// 							"id": 2,
-// 							"name": "hlts2"
-// 						}
-// 					]}
-// 	  			`,
-// 			expected: &Gson{
-// 				jsonObject: map[string]interface{}{
-// 					"friends": []interface{}{
-// 						map[string]interface{}{
-// 							"id":   float64(0),
-// 							"name": "hiro",
-// 						},
-// 						map[string]interface{}{
-// 							"id":   float64(1),
-// 							"name": "hiroto",
-// 						},
-// 						map[string]interface{}{
-// 							"id":   float64(2),
-// 							"name": "hlts2",
-// 						},
-// 					},
-// 				},
-// 			},
-// 			isError: false,
-// 		},
-// 		{
-// 			json:     `[{"name": "litt]`,
-// 			expected: nil,
-// 			isError:  true,
-// 		},
-// 	}
-//
-// 	for i, test := range tests {
-// 		g, err := NewGsonFromByte([]byte(test.json))
-//
-// 		isError := !(err == nil)
-//
-// 		if test.isError != isError {
-// 			t.Errorf("i = %d NewGsonFromString(json) expected isError: %v, got: %v", i, test.isError, isError)
-// 		}
-//
-// 		if !reflect.DeepEqual(g, test.expected) {
-// 			t.Errorf("i = %d NewGsonFromString(json) expected: %v, got: %v", i, test.expected, g)
-// 		}
-// 	}
-// }
 //
 // func TestGetByKeys(t *testing.T) {
 // 	tests := []struct {
