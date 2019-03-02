@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestCreateWithBytes(t *testing.T) {
+func TestCreate(t *testing.T) {
 	tests := []struct {
 		json     string
 		want     *Gson
@@ -115,7 +115,7 @@ func TestCreateWithBytes(t *testing.T) {
 	}
 }
 
-func TestGetByKeys(t *testing.T) {
+func TestGet(t *testing.T) {
 	tests := []struct {
 		json     string
 		keys     []string
