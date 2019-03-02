@@ -145,7 +145,7 @@ func (g *Gson) Result() *Result {
 func (r *Result) Indent(buf *bytes.Buffer, prefix, indent string) error {
 	err := indentJSON(buf, r.object, prefix, indent)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "faild to generate indent")
 	}
 	return nil
 }
