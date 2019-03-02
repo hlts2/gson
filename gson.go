@@ -92,7 +92,11 @@ func indentJSON(dst *bytes.Buffer, object interface{}, prefix, indent string) er
 // }
 // key-1, key-2, key-3, 0 => "hello"
 func (g *Gson) GetByKeys(keys ...string) (*Result, error) {
-	return g.getByKeys(keys)
+	r, err := g.getByKeys(keys)
+	if err != nil {
+		return nil, errors.Wrap(err, "faild to get JSON value")
+	}
+	return r, nil
 }
 
 // GetByPath returns JSON value corresponding to the path.
@@ -109,7 +113,11 @@ func (g *Gson) GetByKeys(keys ...string) (*Result, error) {
 // }
 // key-1.key-2.key-3.0 => "hello"
 func (g *Gson) GetByPath(path string) (*Result, error) {
-	return g.getByKeys(strings.Split(path, "."))
+	r, err := g.getByKeys(strings.Split(path, "."))
+	if err != nil {
+		return nil, errors.Wrap(err, "faild to get JSON value")
+	}
+	return r, nil
 }
 
 func (g *Gson) getByKeys(keys []string) (*Result, error) {
