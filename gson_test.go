@@ -2,101 +2,43 @@ package gson
 
 import (
 	"reflect"
+	"strings"
 	"testing"
 )
 
-func TestBasic(t *testing.T) {
-	json := `
-		{"friends": [
-      		{
-        		"id": 0,
-				"name": "hiro"
-			},
-			{
-				"id": 1,
-				"name": "hiroto"
-			},
-			{
-				"id": 2,
-				"name": "hlts2"
-			}
-		]}
-		`
-
-	g, err := NewGsonFromByte([]byte(json))
-	if err != nil {
-		t.Errorf("NewGsonFromByte(json) is error: %v", err)
-	}
-
-	if g == nil {
-		t.Error("NewGsonFromByte(json) g is nil")
-	}
-
-	result, err := g.GetByKeys("friends")
-	if err != nil {
-		t.Errorf("GetByKeys(keys) is error: %v", err)
-	}
-
-	if result == nil {
-		t.Errorf("GetByKeys(keys) result is nil")
-	}
-
-	slice, err := result.Slice()
-	if err != nil {
-		t.Errorf("Slice() is error: %v", err)
-	}
-
-	if slice == nil {
-		t.Error("Slice() is nil")
-	}
-
-	for _, value := range slice {
-		m, err := value.Map()
-		if err != nil {
-			t.Errorf("%v.Map() is error: %v", value, err)
-		}
-
-		_, err = m["name"].String()
-		if err != nil {
-			t.Errorf("%v.String() is error: %v", m["name"], err)
-		}
-	}
-
-}
-
-func TestNewGsonFromByte(t *testing.T) {
+func TestCreate(t *testing.T) {
 	tests := []struct {
-		json     string
-		expected *Gson
-		isError  bool
+		json  string
+		want  *Gson
+		iserr bool
 	}{
 		{
 			json: `1`,
-			expected: &Gson{
-				jsonObject: float64(1),
+			want: &Gson{
+				object: float64(1),
 			},
-			isError: false,
+			iserr: false,
 		},
 		{
 			json: `"2"`,
-			expected: &Gson{
-				jsonObject: "2",
+			want: &Gson{
+				object: "2",
 			},
-			isError: false,
+			iserr: false,
 		},
 		{
 			json: `{"picture": "http://hogehoge"}`,
-			expected: &Gson{
-				jsonObject: map[string]interface{}{
+			want: &Gson{
+				object: map[string]interface{}{
 					"picture": "http://hogehoge",
 				},
 			},
-			isError: false,
+			iserr: false,
 		},
 		{
-			json:     `{afsf: adfaasf`,
-			expected: nil,
-			isError:  true,
+			json:  `{afsf: adfaasf`,
+			want:  nil,
+			iserr: true,
 		},
 		{
 			json: `
@@ -115,8 +57,8 @@ func TestNewGsonFromByte(t *testing.T) {
 						}
 					]}
 	  			`,
-			expected: &Gson{
-				jsonObject: map[string]interface{}{
+			want: &Gson{
+				object: map[string]interface{}{
 					"friends": []interface{}{
 						map[string]interface{}{
 							"id":   float64(0),
@@ -133,54 +75,68 @@ func TestNewGsonFromByte(t *testing.T) {
 					},
 				},
 			},
-			isError: false,
+			iserr: false,
 		},
 		{
-			json:     `[{"name": "litt]`,
-			expected: nil,
-			isError:  true,
+			json:  `[{"name": "litt]`,
+			want:  nil,
+			iserr: true,
 		},
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromByte([]byte(test.json))
+		t.Run("CreateWithBytes", func(t *testing.T) {
+			g, err := CreateWithBytes([]byte(test.json))
 
-		isError := !(err == nil)
+			iserr := !(err == nil)
 
-		if test.isError != isError {
-			t.Errorf("i = %d NewGsonFromString(json) expected isError: %v, got: %v", i, test.isError, isError)
-		}
+			if test.iserr != iserr {
+				t.Errorf("tests[%d] - want: %v, but got: %v", i, test.iserr, iserr)
+			}
 
-		if !reflect.DeepEqual(g, test.expected) {
-			t.Errorf("i = %d NewGsonFromString(json) expected: %v, got: %v", i, test.expected, g)
-		}
+			if !reflect.DeepEqual(g, test.want) {
+				t.Errorf("tests[%d] - want: %v, but got: %v", i, test.want, g)
+			}
+		})
+
+		t.Run("CreateWithReader", func(t *testing.T) {
+			g, err := CreateWithReader(strings.NewReader(test.json))
+
+			if want, got := test.iserr, !(err == nil); want != got {
+				t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
+			}
+
+			if !reflect.DeepEqual(g, test.want) {
+				t.Errorf("tests[%d] - want: %v, but got: %v", i, test.want, g)
+			}
+		})
 	}
 }
 
-func TestGetByKeys(t *testing.T) {
+func TestGet(t *testing.T) {
 	tests := []struct {
-		json     string
-		keys     []string
-		expected *Result
-		isError  bool
+		json  string
+		keys  []string
+		want  *Result
+		iserr bool
 	}{
 		{
-			json:     `{"name": "hlts2"}`,
-			keys:     []string{"name"},
-			expected: &Result{"hlts2"},
-			isError:  false,
+			json:  `{"name": "hlts2"}`,
+			keys:  []string{"name"},
+			want:  &Result{"hlts2"},
+			iserr: false,
 		},
 		{
-			json:     `[{"name": "hlts2"}]`,
-			keys:     []string{"0"},
-			expected: &Result{map[string]interface{}{"name": "hlts2"}},
-			isError:  false,
+			json:  `[{"name": "hlts2"}]`,
+			keys:  []string{"0"},
+			want:  &Result{map[string]interface{}{"name": "hlts2"}},
+			iserr: false,
 		},
 		{
-			json:     `[{"name": "hlts2"}]`,
-			keys:     []string{"10"},
-			expected: nil,
-			isError:  true,
+			json:  `[{"name": "hlts2"}]`,
+			keys:  []string{"10"},
+			want:  nil,
+			iserr: true,
 		},
 		{
 			json: `
@@ -196,11 +152,11 @@ func TestGetByKeys(t *testing.T) {
 				]}
 			`,
 			keys: []string{"friends"},
-			expected: &Result{[]interface{}{
+			want: &Result{[]interface{}{
 				map[string]interface{}{"id": "0", "name": "hiro"},
 				map[string]interface{}{"id": "1", "name": "hlts2"}},
 			},
-			isError: false,
+			iserr: false,
 		},
 		{
 			json: `
@@ -219,173 +175,57 @@ func TestGetByKeys(t *testing.T) {
 					}
 				]}
 			`,
-			keys:     []string{"friends", "100", "name"},
-			expected: nil,
-			isError:  true,
-		},
-	}
-
-	for _, test := range tests {
-		g, err := NewGsonFromByte([]byte(test.json))
-		if err != nil {
-			t.Errorf("NewGsonFromString(json) is error: %v", err)
-		}
-
-		if g == nil {
-			t.Error("NewGsonFromString(json) g is nil")
-		}
-
-		result, err := g.GetByKeys(test.keys...)
-
-		isError := !(err == nil)
-
-		if test.isError != isError {
-			t.Errorf("GetByKeys(keys) expected isError: %v, got: %v", test.isError, isError)
-		}
-
-		if !reflect.DeepEqual(test.expected, result) {
-			t.Errorf("GetByKeys(keys) expected: %v, got: %v", test.expected, result)
-		}
-	}
-}
-
-func TestGetByPath(t *testing.T) {
-	tests := []struct {
-		json     string
-		path     string
-		expected *Result
-		isError  bool
-	}{
-		{
-			json:     `{"name": "hlts2"}`,
-			path:     "name",
-			expected: &Result{"hlts2"},
-			isError:  false,
-		},
-		{
-			json:     `[{"name": "hlts2"}]`,
-			path:     "10",
-			expected: nil,
-			isError:  true,
-		},
-		{
-			json: `
-				{"friends": [
-      				{
-						"id": "0",
-						"name": "hiro"
-					},
-      				{
-						"id": "1",
-						"name": "hlts2"
-					}
-				]}
-			`,
-			path: "friends",
-			expected: &Result{[]interface{}{
-				map[string]interface{}{"id": "0", "name": "hiro"},
-				map[string]interface{}{"id": "1", "name": "hlts2"}},
-			},
-			isError: false,
-		},
-		{
-			json: `
-				{"friends": [
-      				{
-        				"id": 0,
-						"name": "hiro"
-					},
-					{
-						"id": 1,
-						"name": "hiroto"
-					},
-					{
-						"id": 2,
-						"name": "hlts2"
-					}
-				]}
-			`,
-			path:     "friends.100.name",
-			expected: nil,
-			isError:  true,
+			keys:  []string{"friends", "100", "name"},
+			want:  nil,
+			iserr: true,
 		},
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromByte([]byte(test.json))
+		g, err := CreateWithBytes([]byte(test.json))
 		if err != nil {
-			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
+			t.Errorf("CreateWithBytes returned error: %v", err)
 		}
 
 		if g == nil {
-			t.Errorf("i = %d NewGsonFromString(json) g is nil", i)
+			t.Error("CreateWithBytes returned nil")
 		}
 
-		result, err := g.GetByPath(test.path)
+		t.Run("GetByKeys", func(t *testing.T) {
+			r, err := g.GetByKeys(test.keys...)
 
-		isError := !(err == nil)
+			if want, got := test.iserr, !(err == nil); want != got {
+				t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
+			}
 
-		if test.isError != isError {
-			t.Errorf("i = %d GetByPath(path) expected isError: %v, got: %v", i, test.isError, isError)
-		}
+			if !reflect.DeepEqual(test.want, r) {
+				t.Errorf("tests[%d] - want: %v, got: %v", i, test.want, r)
+			}
+		})
 
-		if !reflect.DeepEqual(test.expected, result) {
-			t.Errorf("i = %d GetByPath(path) expected: %v, got: %v", i, test.expected, result)
-		}
+		t.Run("GetByPath", func(t *testing.T) {
+			r, err := g.GetByPath(strings.Join(test.keys, "."))
+
+			if want, got := test.iserr, !(err == nil); want != got {
+				t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
+			}
+
+			if !reflect.DeepEqual(test.want, r) {
+				t.Errorf("tests[%d] - want: %v, got: %v", i, test.want, r)
+			}
+		})
 	}
 }
 
-func TestUint8(t *testing.T) {
+func TestSliceE(t *testing.T) {
 	tests := []struct {
-		json     string
-		expected uint8
-		isError  bool
+		json  string
+		want  []*Result
+		iserr bool
 	}{
 		{
-			json:     `{"ID": 123}`,
-			expected: uint8(123),
-			isError:  false,
-		},
-	}
-
-	for i, test := range tests {
-		g, err := NewGsonFromByte([]byte(test.json))
-		if err != nil {
-			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
-		}
-
-		if g == nil {
-			t.Errorf("i = %d NewGsonFromString(json) g is nil", i)
-		}
-
-		result, err := g.GetByKeys("ID")
-		if err != nil {
-			t.Errorf("i = %d GetByKeys(keys) is error: %v", i, err)
-		}
-
-		got, err := result.Uint8()
-
-		isError := !(err == nil)
-
-		if test.isError != isError {
-			t.Errorf("i = %d Uint8() expected isError: %v, got: %v", i, test.isError, isError)
-		}
-
-		if test.expected != got {
-			t.Errorf("i = %d GetByKeys(keys) expected: %v, got: %v", i, test.expected, got)
-		}
-	}
-}
-
-func TestSlice(t *testing.T) {
-	tests := []struct {
-		json     string
-		expected []*Result
-		isError  bool
-	}{
-		{
-			json: `{"IDs": [{"ID": "1111"}, {"ID": "2222"}]}`,
-			expected: []*Result{
+			json: `{"Users": [{"ID": "1111"}, {"ID": "2222"}]}`,
+			want: []*Result{
 				{
 					object: map[string]interface{}{
 						"ID": "1111",
@@ -397,50 +237,42 @@ func TestSlice(t *testing.T) {
 					},
 				},
 			},
-			isError: false,
+			iserr: false,
 		},
 	}
 
-	for ti, test := range tests {
-		g, err := NewGsonFromByte([]byte(test.json))
+	for i, test := range tests {
+		g, err := CreateWithBytes([]byte(test.json))
 		if err != nil {
-			t.Errorf("i = %d NewGsonFromString(json) is error: %v", ti, err)
+			t.Errorf("tests[%d] - CreateWithBytes returned error: %v", i, err)
 		}
 
-		if g == nil {
-			t.Errorf("i = %d NewGsonFromString(json) g is nil", ti)
-		}
-
-		result, err := g.GetByKeys("IDs")
+		result, err := g.GetByKeys("Users")
 		if err != nil {
-			t.Errorf("i = %d GetByKeys(keys) is error: %v", ti, err)
+			t.Errorf("tests[%d] - GetByKeys returned error: %v", i, err)
 		}
 
-		slice, err := result.Slice()
+		s, err := result.SliceE()
 
-		isError := !(err == nil)
-
-		if test.isError != isError {
-			t.Errorf("i = %d Slice() expected isError: %v, got: %v", ti, test.isError, isError)
+		if want, got := test.iserr, !(err == nil); want != got {
+			t.Errorf("tests[%d] - want: %v, got: %v", i, want, got)
 		}
 
-		for si := range slice {
-			if !reflect.DeepEqual(test.expected[si].object, slice[si].object) {
-				t.Errorf("i = %d Slice() expected Result: %v, got: %v", ti, test.expected[si].object, slice[si].object)
-			}
+		if want, got := test.want, s; !reflect.DeepEqual(want, got) {
+			t.Errorf("tests[%d] - want: %v, got: %v", i, want, got)
 		}
 	}
 }
 
 func TestMap(t *testing.T) {
 	tests := []struct {
-		json     string
-		expected map[string]*Result
-		isError  bool
+		json  string
+		want  map[string]*Result
+		iserr bool
 	}{
 		{
 			json: `{"Accounts": [{"ID": "1111", "Name": "hlts2"}]}`,
-			expected: map[string]*Result{
+			want: map[string]*Result{
 				"ID": {
 					object: "1111",
 				},
@@ -448,36 +280,34 @@ func TestMap(t *testing.T) {
 					object: "hlts2",
 				},
 			},
-			isError: false,
+			iserr: false,
 		},
 	}
 
 	for i, test := range tests {
-		g, err := NewGsonFromByte([]byte(test.json))
+		g, err := CreateWithBytes([]byte(test.json))
 		if err != nil {
-			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
+			t.Errorf("tests[%d] - CreateWithBytes returned error: %v", i, err)
 		}
 
 		if g == nil {
-			t.Errorf("i = %d NewGsonFromString(json) g is nil", i)
+			t.Errorf("tests[%d] - CreateWithBytes returned nil", i)
 		}
 
 		result, err := g.GetByKeys("Accounts", "0")
 
 		if err != nil {
-			t.Errorf("i = %d GetByKeys(keys) is error: %v", i, err)
+			t.Errorf("tests[%d] - GetByKeys returned error: %v", i, err)
 		}
 
-		m, err := result.Map()
+		m, err := result.MapE()
 
-		isError := !(err == nil)
-
-		if test.isError != isError {
-			t.Errorf("i = %d Map() expected isError: %v, got: %v", i, test.isError, isError)
+		if want, got := test.iserr, !(err == nil); want != got {
+			t.Errorf("tests[%d] - want: %v, got: %v", i, want, got)
 		}
 
-		if !reflect.DeepEqual(test.expected, m) {
-			t.Errorf("i = %d Map() expected: %v, got: %v", i, test.expected, m)
+		if want, got := test.want, m; !reflect.DeepEqual(want, got) {
+			t.Errorf("tests[%d] - want: %v, got: %v", i, want, got)
 		}
 	}
 }

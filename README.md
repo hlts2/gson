@@ -1,13 +1,9 @@
 # gson  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![Go Report Card](https://goreportcard.com/badge/github.com/hlts2/gson)](https://goreportcard.com/report/github.com/hlts2/gson) [![GoDoc](http://godoc.org/github.com/hlts2/gson?status.svg)](http://godoc.org/github.com/hlts2/gson) [![Join the chat at https://gitter.im/hlts2/gson](https://badges.gitter.im/hlts2/gson.svg)](https://gitter.im/hlts2/gson?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-Simple json parse library written in golang.
+Get JSON values quickly
 
 ## Requirement
-- go (>= 1.8)
+- go (>= 1.11)
 
-## Installation
-```shell
-go get github.com/hlts2/gson
-```
 ## Example
 
 ### Create from byte
@@ -15,7 +11,7 @@ go get github.com/hlts2/gson
 Create gson object from `[]byte`. Returns an error if the bytes are not valid json.
 
 ```go
-g, err := gson.NewGsonFromByte(data)
+g, err := gson.CreateWithBytes(data)
 ```
 
 ### Create from io.Reader
@@ -23,15 +19,7 @@ g, err := gson.NewGsonFromByte(data)
 Create gson object from a `io.Reader`. Returns an error if the resp.Body are not valid json.
 
 ```go
-g, err := gson.NewGsonFromReader(resp.Body)
-```
-
-### Create from interface
-
-Create gson object from a `interface{}`. Returns an error if the v are not valid json.
-
-```go
-g, err := gson.NewGsonFromInterface(v)
+g, err := gson.CreateWithReader(resp.Body)
 ```
 
 ### Get value by path
@@ -56,11 +44,11 @@ var json = `
 }
 `
 
-g, _ := gson.NewGsonFromByte([]byte(json))
+g, _ := gson.CreateWithBytes([]byte(json))
 
 result, _ := g.GetByPath("likes.1")
 
-str, _ := result.String()
+str := result.String() // str, err := result.StringE()
 
 fmt.Println(str) //strawberry
 
@@ -87,11 +75,11 @@ var json = `
 }
 `
 
-g, _ := gson.NewGsonFromByte([]byte(json))
+g, _ := gson.CreateWithBytes([]byte(json))
 
 result, _ := g.GetByKeys("likes", "1")
 
-str, _ := result.String() // or str := result.MustString()
+str := result.String() // str, err := result.StringE()
 
 fmt.Println(str) //strawberry
 
@@ -102,11 +90,11 @@ fmt.Println(str) //strawberry
 ```go
 json := `{"created_at": {"date": "2017-05-10 12:54:18"}}`
 
-g, _ := gson.NewGsonFromByte([]byte(json))
+g, _ := gson.CreateWithBytes([]byte(json))
 
 result, _ :=  g.GetByKeys("created_at")
 
-m, _ := result.Map()
+m := result.Map() // m, err := result.MapE()
 
 for key, value := range m {
     fmt.Printf("key: %s, value: %v", key, value.Interface{}) //key: date, value: 2017-05-10 12:54:18
@@ -120,13 +108,13 @@ for key, value := range m {
 
 json := `{"Likes": ["pen"]}`
 
-g, _ := gson.NewGsonFromByte([]byte(json))
+g, _ := gson.CreateWithBytes([]byte(json))
 
 result, _ :=  g.GetByKeys("Likes")
 
-slice, _ := result.Slice()
+s := result.Slice() // s, err := result.SliceE()
 
-for _, value := range slice {
+for _, value := range s {
     fmt.Printf("value: %v", value.Interface()) //value: pen
 }
 
@@ -140,7 +128,7 @@ for _, value := range slice {
 
 json := `{"Accounts": [{"ID": "1111"}, {"ID": "2222"}]}`
 
-g, _ := gson.NewGsonFromByte([]byte(json))
+g, _ := gson.CreateWithBytes([]byte(json))
 
 var buf bytes.Buffer
 g.Indent(&buf, "", "  ")
