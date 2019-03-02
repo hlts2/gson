@@ -263,53 +263,50 @@ func TestSliceE(t *testing.T) {
 	}
 }
 
-//
-// func TestMap(t *testing.T) {
-// 	tests := []struct {
-// 		json     string
-// 		expected map[string]*Result
-// 		isError  bool
-// 	}{
-// 		{
-// 			json: `{"Accounts": [{"ID": "1111", "Name": "hlts2"}]}`,
-// 			expected: map[string]*Result{
-// 				"ID": {
-// 					object: "1111",
-// 				},
-// 				"Name": {
-// 					object: "hlts2",
-// 				},
-// 			},
-// 			isError: false,
-// 		},
-// 	}
-//
-// 	for i, test := range tests {
-// 		g, err := NewGsonFromByte([]byte(test.json))
-// 		if err != nil {
-// 			t.Errorf("i = %d NewGsonFromString(json) is error: %v", i, err)
-// 		}
-//
-// 		if g == nil {
-// 			t.Errorf("i = %d NewGsonFromString(json) g is nil", i)
-// 		}
-//
-// 		result, err := g.GetByKeys("Accounts", "0")
-//
-// 		if err != nil {
-// 			t.Errorf("i = %d GetByKeys(keys) is error: %v", i, err)
-// 		}
-//
-// 		m, err := result.Map()
-//
-// 		isError := !(err == nil)
-//
-// 		if test.isError != isError {
-// 			t.Errorf("i = %d Map() expected isError: %v, got: %v", i, test.isError, isError)
-// 		}
-//
-// 		if !reflect.DeepEqual(test.expected, m) {
-// 			t.Errorf("i = %d Map() expected: %v, got: %v", i, test.expected, m)
-// 		}
-// 	}
-// }
+func TestMap(t *testing.T) {
+	tests := []struct {
+		json  string
+		want  map[string]*Result
+		iserr bool
+	}{
+		{
+			json: `{"Accounts": [{"ID": "1111", "Name": "hlts2"}]}`,
+			want: map[string]*Result{
+				"ID": {
+					object: "1111",
+				},
+				"Name": {
+					object: "hlts2",
+				},
+			},
+			iserr: false,
+		},
+	}
+
+	for i, test := range tests {
+		g, err := CreateWithBytes([]byte(test.json))
+		if err != nil {
+			t.Errorf("tests[%d] - CreateWithBytes returned error: %v", i, err)
+		}
+
+		if g == nil {
+			t.Errorf("tests[%d] - CreateWithBytes returned nil", i)
+		}
+
+		result, err := g.GetByKeys("Accounts", "0")
+
+		if err != nil {
+			t.Errorf("tests[%d] - GetByKeys returned error: %v", i, err)
+		}
+
+		m, err := result.MapE()
+
+		if want, got := test.iserr, !(err == nil); want != got {
+			t.Errorf("tests[%d] - want: %v, got: %v", i, want, got)
+		}
+
+		if want, got := test.want, m; !reflect.DeepEqual(want, got) {
+			t.Errorf("tests[%d] - want: %v, got: %v", i, want, got)
+		}
+	}
+}
