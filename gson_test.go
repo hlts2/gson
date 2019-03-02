@@ -1,64 +1,36 @@
 package gson
 
+import "testing"
+
 // FIXME(@hlts2): create test code.
-// func TestBasic(t *testing.T) {
-// 	json := `
-// 		{"friends": [
-//       		{
-//         		"id": 0,
-// 				"name": "hiro"
-// 			},
-// 			{
-// 				"id": 1,
-// 				"name": "hiroto"
-// 			},
-// 			{
-// 				"id": 2,
-// 				"name": "hlts2"
-// 			}
-// 		]}
-// 		`
-//
-// 	g, err := NewGsonFromByte([]byte(json))
-// 	if err != nil {
-// 		t.Errorf("NewGsonFromByte(json) is error: %v", err)
-// 	}
-//
-// 	if g == nil {
-// 		t.Error("NewGsonFromByte(json) g is nil")
-// 	}
-//
-// 	result, err := g.GetByKeys("friends")
-// 	if err != nil {
-// 		t.Errorf("GetByKeys(keys) is error: %v", err)
-// 	}
-//
-// 	if result == nil {
-// 		t.Errorf("GetByKeys(keys) result is nil")
-// 	}
-//
-// 	slice, err := result.Slice()
-// 	if err != nil {
-// 		t.Errorf("Slice() is error: %v", err)
-// 	}
-//
-// 	if slice == nil {
-// 		t.Error("Slice() is nil")
-// 	}
-//
-// 	for _, value := range slice {
-// 		m, err := value.Map()
-// 		if err != nil {
-// 			t.Errorf("%v.Map() is error: %v", value, err)
-// 		}
-//
-// 		_, err = m["name"].String()
-// 		if err != nil {
-// 			t.Errorf("%v.String() is error: %v", m["name"], err)
-// 		}
-// 	}
-//
-// }
+func TestCreateWithBytes(t *testing.T) {
+	json := `
+		{"friends": [
+      		{
+        		"id": 0,
+				"name": "hiro"
+			},
+			{
+				"id": 1,
+				"name": "hiroto"
+			},
+			{
+				"id": 2,
+				"name": "hlts2"
+			}
+		]}
+		`
+
+	g, err := CreateWithBytes([]byte(json))
+	if err != nil {
+		t.Errorf("CreateWithBytes returned error: %v", err)
+	}
+
+	if g == nil {
+		t.Error("CreateWithBytes returned nil")
+	}
+}
+
 //
 // func TestNewGsonFromByte(t *testing.T) {
 // 	tests := []struct {
