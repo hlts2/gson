@@ -102,10 +102,8 @@ func TestCreate(t *testing.T) {
 		t.Run("CreateWithReader", func(t *testing.T) {
 			g, err := CreateWithReader(strings.NewReader(test.json))
 
-			hasError := !(err == nil)
-
-			if test.hasError != hasError {
-				t.Errorf("tests[%d] - want: %v, but got: %v", i, test.hasError, hasError)
+			if want, got := test.hasError, !(err == nil); want != got {
+				t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
 			}
 
 			if !reflect.DeepEqual(g, test.want) {
@@ -196,10 +194,8 @@ func TestGet(t *testing.T) {
 		t.Run("GetByKeys", func(t *testing.T) {
 			r, err := g.GetByKeys(test.keys...)
 
-			hasError := !(err == nil)
-
-			if test.hasError != hasError {
-				t.Errorf("tests[%d] - want: %v, but got: %v", i, test.hasError, hasError)
+			if want, got := test.hasError, !(err == nil); want != got {
+				t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
 			}
 
 			if !reflect.DeepEqual(test.want, r) {
@@ -210,10 +206,8 @@ func TestGet(t *testing.T) {
 		t.Run("GetByPath", func(t *testing.T) {
 			r, err := g.GetByPath(strings.Join(test.keys, "."))
 
-			hasError := !(err == nil)
-
-			if test.hasError != hasError {
-				t.Errorf("tests[%d] - want: %v, but got: %v", i, test.hasError, hasError)
+			if want, got := test.hasError, !(err == nil); want != got {
+				t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
 			}
 
 			if !reflect.DeepEqual(test.want, r) {
