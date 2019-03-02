@@ -346,7 +346,7 @@ func (r *Result) Bool() bool {
 }
 
 // SliceE casts an []Result type and returns an error if types don't match.
-func (r *Result) SliceE() ([]Result, error) {
+func (r *Result) SliceE() ([]*Result, error) {
 	v, err := cast.ToSliceE(r.object)
 	if err != nil {
 		return nil, errors.WithStack(err)
@@ -356,16 +356,16 @@ func (r *Result) SliceE() ([]Result, error) {
 }
 
 // Slice casts an interface to a []Result type.
-func (r *Result) Slice() []Result {
+func (r *Result) Slice() []*Result {
 	v := cast.ToSlice(r.object)
 	return toSlice(v)
 }
 
-func toSlice(s []interface{}) []Result {
-	results := make([]Result, len(s))
+func toSlice(s []interface{}) []*Result {
+	results := make([]*Result, len(s))
 
 	for i, v := range s {
-		results[i] = Result{
+		results[i] = &Result{
 			object: v,
 		}
 	}
@@ -373,7 +373,7 @@ func toSlice(s []interface{}) []Result {
 }
 
 // MapE casts an map[string]Result type and returns an error if types don't match.
-func (r *Result) MapE() (map[string]Result, error) {
+func (r *Result) MapE() (map[string]*Result, error) {
 	v, err := cast.ToStringMapE(r.object)
 	if err != nil {
 		return nil, errors.WithStack(err)
@@ -383,15 +383,15 @@ func (r *Result) MapE() (map[string]Result, error) {
 }
 
 // Map casts an interface to a map[string]Resul type.
-func (r *Result) Map() map[string]Result {
+func (r *Result) Map() map[string]*Result {
 	v := cast.ToStringMap(r.object)
 	return toMap(v)
 }
 
-func toMap(m map[string]interface{}) map[string]Result {
-	results := make(map[string]Result, len(m))
+func toMap(m map[string]interface{}) map[string]*Result {
+	results := make(map[string]*Result, len(m))
 	for k, v := range m {
-		results[k] = Result{
+		results[k] = &Result{
 			object: v,
 		}
 	}
