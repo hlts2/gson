@@ -217,7 +217,7 @@ func TestGet(t *testing.T) {
 	}
 }
 
-func TestUint8E(t *testing.T) {
+func TestCastUint8(t *testing.T) {
 	tests := []struct {
 		result   *Result
 		want     uint8
@@ -240,15 +240,25 @@ func TestUint8E(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		got, err := test.result.Uint8E()
+		t.Run("Uint8E", func(t *testing.T) {
+			got, err := test.result.Uint8E()
 
-		if want, got := test.hasError, !(err == nil); want != got {
-			t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
-		}
+			if want, got := test.hasError, !(err == nil); want != got {
+				t.Errorf("test[%d] - want: %v, but got: %v", i, want, got)
+			}
 
-		if test.want != got {
-			t.Errorf("test[%d] - want: %v, but got: %v", i, test.want, got)
-		}
+			if test.want != got {
+				t.Errorf("test[%d] - want: %v, but got: %v", i, test.want, got)
+			}
+		})
+
+		t.Run("Uint8", func(t *testing.T) {
+			got := test.result.Uint8()
+
+			if test.want != got {
+				t.Errorf("test[%d] - want: %v, but got: %v", i, test.want, got)
+			}
+		})
 	}
 }
 
