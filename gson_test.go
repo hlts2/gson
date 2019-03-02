@@ -219,21 +219,12 @@ func TestGet(t *testing.T) {
 
 func TestSliceE(t *testing.T) {
 	tests := []struct {
-		result *Result
-		want   []*Result
-		iserr  bool
+		json  string
+		want  []*Result
+		iserr bool
 	}{
 		{
-			result: &Result{
-				object: []map[string]interface{}{
-					{
-						"ID": "1111",
-					},
-					{
-						"ID": "2222",
-					},
-				},
-			},
+			json: `{"Users": [{"ID": "1111"}, {"ID": "2222"}]}`,
 			want: []*Result{
 				{
 					object: map[string]interface{}{
@@ -251,7 +242,17 @@ func TestSliceE(t *testing.T) {
 	}
 
 	for i, test := range tests {
-		s, err := test.result.SliceE()
+		g, err := CreateWithBytes([]byte(test.json))
+		if err != nil {
+			t.Errorf("tests[%d] - CreateWithBytes returned error: %v", i, err)
+		}
+
+		result, err := g.GetByKeys("Users")
+		if err != nil {
+			t.Errorf("tests[%d] - GetByKeys returned error: %v", i, err)
+		}
+
+		s, err := result.SliceE()
 
 		if want, got := test.iserr, !(err == nil); want != got {
 			t.Errorf("tests[%d] - want: %v, got: %v", i, want, got)
