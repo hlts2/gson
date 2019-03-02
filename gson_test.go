@@ -230,6 +230,13 @@ func TestUint8E(t *testing.T) {
 			want:     uint8(123),
 			hasError: false,
 		},
+		{
+			result: &Result{
+				object: -123,
+			},
+			want:     0,
+			hasError: true,
+		},
 	}
 
 	for i, test := range tests {
