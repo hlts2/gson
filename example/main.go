@@ -1,19 +1,18 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"log"
 
 	"github.com/hlts2/gson"
 )
 
-var jsonString = `
+var json = `
 {"friends": [{"id": "1111", "name": "hlts2", "like": ["apple", "strawberry", "pineapple"]}, {"id": "2121", "name": "hiroto", "like": ["watermelon"]}]}
 `
 
 func main() {
-	g, err := gson.NewGsonFromByte([]byte(jsonString))
+	g, err := gson.CreateWithBytes([]byte(json))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -23,23 +22,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	slice, err := result.Slice()
+	s, err := result.SliceE()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	for _, value := range slice {
+	for _, value := range s {
 		fmt.Printf("value: %v\n", value.Interface())
 	}
-
-	m, err := slice[0].Map()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(m["name"].Interface())
-
-	var buf bytes.Buffer
-	g.Indent(&buf, "", "    ")
-	fmt.Println(buf.String())
 }
