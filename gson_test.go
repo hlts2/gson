@@ -217,60 +217,52 @@ func TestGet(t *testing.T) {
 	}
 }
 
-// func TestSlice(t *testing.T) {
-// 	tests := []struct {
-// 		json     string
-// 		expected []*Result
-// 		isError  bool
-// 	}{
-// 		{
-// 			json: `{"IDs": [{"ID": "1111"}, {"ID": "2222"}]}`,
-// 			expected: []*Result{
-// 				{
-// 					object: map[string]interface{}{
-// 						"ID": "1111",
-// 					},
-// 				},
-// 				{
-// 					object: map[string]interface{}{
-// 						"ID": "2222",
-// 					},
-// 				},
-// 			},
-// 			isError: false,
-// 		},
-// 	}
-//
-// 	for ti, test := range tests {
-// 		g, err := NewGsonFromByte([]byte(test.json))
-// 		if err != nil {
-// 			t.Errorf("i = %d NewGsonFromString(json) is error: %v", ti, err)
-// 		}
-//
-// 		if g == nil {
-// 			t.Errorf("i = %d NewGsonFromString(json) g is nil", ti)
-// 		}
-//
-// 		result, err := g.GetByKeys("IDs")
-// 		if err != nil {
-// 			t.Errorf("i = %d GetByKeys(keys) is error: %v", ti, err)
-// 		}
-//
-// 		slice, err := result.Slice()
-//
-// 		isError := !(err == nil)
-//
-// 		if test.isError != isError {
-// 			t.Errorf("i = %d Slice() expected isError: %v, got: %v", ti, test.isError, isError)
-// 		}
-//
-// 		for si := range slice {
-// 			if !reflect.DeepEqual(test.expected[si].object, slice[si].object) {
-// 				t.Errorf("i = %d Slice() expected Result: %v, got: %v", ti, test.expected[si].object, slice[si].object)
-// 			}
-// 		}
-// 	}
-// }
+func TestSliceE(t *testing.T) {
+	tests := []struct {
+		result *Result
+		want   []*Result
+		iserr  bool
+	}{
+		{
+			result: &Result{
+				object: []map[string]interface{}{
+					{
+						"ID": "1111",
+					},
+					{
+						"ID": "2222",
+					},
+				},
+			},
+			want: []*Result{
+				{
+					object: map[string]interface{}{
+						"ID": "1111",
+					},
+				},
+				{
+					object: map[string]interface{}{
+						"ID": "2222",
+					},
+				},
+			},
+			iserr: false,
+		},
+	}
+
+	for i, test := range tests {
+		s, err := test.result.SliceE()
+
+		if want, got := test.iserr, !(err == nil); want != got {
+			t.Errorf("tests[%d] - want: %v, got: %v", i, want, got)
+		}
+
+		if want, got := test.want, s; !reflect.DeepEqual(want, got) {
+			t.Errorf("tests[%d] - want: %v, got: %v", i, want, got)
+		}
+	}
+}
+
 //
 // func TestMap(t *testing.T) {
 // 	tests := []struct {
