@@ -3,6 +3,7 @@ package gson
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"strconv"
 	"strings"
@@ -354,7 +355,11 @@ func (r *Result) StringE() (string, error) {
 
 // String casts an interface to a string type.
 func (r *Result) String() string {
-	return cast.ToString(r.object)
+	v, err := r.StringE()
+	if err != nil {
+		return fmt.Sprintf("%v", r.object)
+	}
+	return v
 }
 
 // BoolE casts an interface to a bool type and returns an error if types don't match.
