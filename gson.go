@@ -171,7 +171,7 @@ func getByKeysFromSlice(keys []string, s []interface{}) (*Result, error) {
 	return &Result{objects}, nil
 }
 
-// Result --
+// Result cast object wrapped by Result to object wrapped by Gson.
 func (g *Gson) Result() *Result {
 	return &Result{g.object}
 }
@@ -425,7 +425,7 @@ func toMap(m map[string]interface{}) map[string]*Result {
 	return results
 }
 
-// Gson casts an interface to *Gson type.
+// Gson cast object wrapped by Gson to object wrapped by Result.
 func (r *Result) Gson() *Gson {
 	return &Gson{r.object}
 }
