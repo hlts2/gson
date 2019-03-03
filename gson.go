@@ -153,6 +153,10 @@ func getByKeys(keys []string, object interface{}) (*Result, error) {
 }
 
 func getByKeysFromSlice(keys []string, s []interface{}) (*Result, error) {
+	if len(keys) == 0 {
+		return &Result{s}, nil
+	}
+
 	objects := make([]interface{}, 0, len(s))
 	for _, v := range s {
 		r, err := getByKeys(keys, v)
@@ -163,9 +167,7 @@ func getByKeysFromSlice(keys []string, s []interface{}) (*Result, error) {
 		objects = append(objects, r.Interface())
 	}
 
-	return &Result{
-		objects,
-	}, nil
+	return &Result{objects}, nil
 }
 
 // Result --
