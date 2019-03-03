@@ -134,7 +134,7 @@ func (g *Gson) getByKeys(keys []string) (*Result, error) {
 				return nil, ErrorInvalidJSONKey
 			}
 
-			if idx < 0 || idx > len(s) {
+			if idx < 0 || idx >= len(s) {
 				return nil, ErrorIndexOutOfRange
 			}
 			object = s[idx]
