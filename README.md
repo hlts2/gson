@@ -54,6 +54,40 @@ fmt.Println(str) //strawberry
 
 ```
 
+#### Path and Syntax
+
+
+```json
+{  
+    "name":{"first":"little", "last":"tiny"},
+    "age":24,
+    "children":["hiroto", "haruki"],
+    "friends":[  
+        {  
+            "id":0,
+            "name":"Beck Hansen"
+        },
+        {  
+            "id":1,
+            "name":"Cleveland Gomez"
+        },
+        {  
+            "id":2,
+            "name":"Norton Duncan"
+        }
+    ]
+}
+```
+```
+"name.last"          >> "tiny"
+"age"                >> 24
+"children"           >> ["hiroto", "haruki"]
+"children.1"         >> "haruki"
+"friends.1"          >> {"id":1,"name":"Cleveland Gomez"}
+"friends.1.id"       >> 1
+"friends.#.id"       >> [0, 1, 2]
+```
+
 ### Get value by keys
 
 `GetByKeys` gets json value for specified keys. keys are given as string slice such as `[]string{"created_at", "date"}`. And if you want to get the elements of json array, please put number in keys such as `[]string{"likes", "0"}`.
