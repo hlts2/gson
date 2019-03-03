@@ -161,7 +161,7 @@ func getByKeysFromSlice(keys []string, s []interface{}) (*Result, error) {
 	for _, v := range s {
 		r, err := getByKeys(keys, v)
 		if err != nil {
-			return nil, err
+			return nil, errors.Wrap(err, "faild to get JSON value")
 		}
 
 		objects = append(objects, r.Interface())
