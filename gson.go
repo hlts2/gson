@@ -92,7 +92,7 @@ func indentJSON(dst *bytes.Buffer, object interface{}, prefix, indent string) er
 // }
 // key-1, key-2, key-3, 0 => "hello"
 func (g *Gson) GetByKeys(keys ...string) (*Result, error) {
-	r, err := g.getByKeys(keys)
+	r, err := getByKeys(keys, g.object)
 	if err != nil {
 		return nil, errors.Wrap(err, "faild to get JSON value")
 	}
@@ -113,22 +113,28 @@ func (g *Gson) GetByKeys(keys ...string) (*Result, error) {
 // }
 // key-1.key-2.key-3.0 => "hello"
 func (g *Gson) GetByPath(path string) (*Result, error) {
-	r, err := g.getByKeys(strings.Split(path, "."))
+	r, err := getByKeys(strings.Split(path, "."), g.object)
 	if err != nil {
 		return nil, errors.Wrap(err, "faild to get JSON value")
 	}
 	return r, nil
 }
 
-func (g *Gson) getByKeys(keys []string) (*Result, error) {
-	object := g.object
-
-	for _, key := range keys {
+func getByKeys(keys []string, object interface{}) (*Result, error) {
+	for i, key := range keys {
 		if m, ok := object.(map[string]interface{}); ok {
 			if object, ok = m[key]; !ok {
 				return nil, ErrorInvalidJSONKey
 			}
 		} else if s, ok := object.([]interface{}); ok {
+			if key == "#" {
+				r, err := getByKeysFromSlice(keys[i+1:], s)
+				if err != nil {
+					return nil, errors.Wrap(err, "faild to get get")
+				}
+				return r, nil
+			}
+
 			idx, err := strconv.Atoi(key)
 			if err != nil {
 				return nil, ErrorInvalidJSONKey
@@ -142,6 +148,22 @@ func (g *Gson) getByKeys(keys []string) (*Result, error) {
 	}
 
 	return &Result{object}, nil
+}
+
+func getByKeysFromSlice(keys []string, s []interface{}) (*Result, error) {
+	objects := make([]interface{}, 0, len(s))
+	for _, v := range s {
+		r, err := getByKeys(keys, v)
+		if err != nil {
+			return nil, err
+		}
+
+		objects = append(objects, r.Interface())
+	}
+
+	return &Result{
+		objects,
+	}, nil
 }
 
 // Result --
