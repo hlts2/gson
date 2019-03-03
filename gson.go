@@ -91,6 +91,7 @@ func indentJSON(dst *bytes.Buffer, object interface{}, prefix, indent string) er
 //     }
 // }
 // key-1, key-2, key-3, 0 => "hello"
+// key-1, key-2, key-3, # => "hello", "world"
 func (g *Gson) GetByKeys(keys ...string) (*Result, error) {
 	r, err := getByKeys(keys, g.object)
 	if err != nil {
@@ -112,6 +113,7 @@ func (g *Gson) GetByKeys(keys ...string) (*Result, error) {
 //     }
 // }
 // key-1.key-2.key-3.0 => "hello"
+// key-1, key-2, key-3, # => "hello", "world"
 func (g *Gson) GetByPath(path string) (*Result, error) {
 	r, err := getByKeys(strings.Split(path, "."), g.object)
 	if err != nil {
