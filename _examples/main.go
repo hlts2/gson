@@ -22,12 +22,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	s, err := result.SliceE()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, value := range s {
+	for _, value := range result.Slice() {
 		fmt.Printf("value: %v\n", value.Interface())
 	}
 }
