@@ -132,7 +132,7 @@ func getByKeys(keys []string, object interface{}) (*Result, error) {
 			if key == "#" {
 				r, err := getByKeysFromSlice(keys[i+1:], s)
 				if err != nil {
-					return nil, errors.Wrap(err, "faild to get get")
+					return nil, errors.Wrap(err, "faild to get JSON value from slice")
 				}
 				return r, nil
 			}
