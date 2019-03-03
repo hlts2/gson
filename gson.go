@@ -172,7 +172,7 @@ func getByKeysFromSlice(keys []string, s []interface{}) (*Result, error) {
 
 // Result --
 func (g *Gson) Result() *Result {
-	return &Result{object: g.object}
+	return &Result{g.object}
 }
 
 // Indent appends indent to dst an indented form of the JSON object wrapped by Result.
@@ -391,9 +391,7 @@ func toSlice(s []interface{}) []*Result {
 	results := make([]*Result, len(s))
 
 	for i, v := range s {
-		results[i] = &Result{
-			object: v,
-		}
+		results[i] = &Result{v}
 	}
 	return results
 }
@@ -417,14 +415,12 @@ func (r *Result) Map() map[string]*Result {
 func toMap(m map[string]interface{}) map[string]*Result {
 	results := make(map[string]*Result, len(m))
 	for k, v := range m {
-		results[k] = &Result{
-			object: v,
-		}
+		results[k] = &Result{v}
 	}
 	return results
 }
 
 // Gson casts an interface to *Gson type.
 func (r *Result) Gson() *Gson {
-	return &Gson{object: r.object}
+	return &Gson{r.object}
 }
